@@ -1,54 +1,42 @@
-const express = require('express');
-const morgan = require('morgan');
-const createError = require('http-errors');
-const jwt = require('jsonwebtoken');
-require('express-async-errors');
+var express = require('express'),
+	bodyParser = require('body-parser'),
+	morgan = require('morgan'),
+	cors = require('cors'),
+	path = require('path');
 
-const app = express();
+var categoryCtrl = require('./apiControllers/categoryController'),
+	productCtrl = require('./apiControllers/productController'),
+	userCtrl = require('./apiControllers/userController'),
+	orderCtrl = require('./apiControllers/orderController');
+	customerCtrl = require('./apiControllers/customerController');
+
+var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
+
+var app = express();
 
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.json({
-    msg: 'hello from nodejs express api'
-  });
-})
+var staticDir = express.static(
+    path.resolve(__dirname, 'public')
+);
+app.use(staticDir);
 
-app.use('/api/auth', require('./routes/auth.route'));
-app.use('/api/users', require('./routes/user.route'));
+// app.get('/', (req, res) => {
+// 	var ret = {
+// 		msg: 'hello from nodejs api'
+// 	};
+// 	res.json(ret);
+// });
 
-function verifyAccessToken(req, res, next) {
-  // console.log(req.headers);
-  const token = req.headers['x-access-token'];
-  if (token) {
-    jwt.verify(token, 'shhhhh', function (err, payload) {
-      if (err) throw createError(403, err);
+app.use('/categories', categoryCtrl);
+app.use('/users', userCtrl);
+app.use('/products', productCtrl);
+app.use('/orders', verifyAccessToken, orderCtrl);
+app.use('/customer',  customerCtrl);
 
-      console.log(payload);
-      next();
-    });
-  } else {
-    throw createError(401, 'NO_TOKEN');
-  }
-}
-
-app.use('/api/categories', verifyAccessToken, require('./routes/category.route'));
-
-app.use((req, res, next) => {
-  throw createError(404, 'Resource not found.');
-})
-
-app.use(function (err, req, res, next) {
-  if (typeof err.status === 'undefined' || err.status === 500) {
-    console.error(err.stack);
-    res.status(500).send('View error log on console.');
-  } else {
-    res.status(err.status).send(err);
-  }
-})
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`API is running at http://localhost:${PORT}`);
-})
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+	console.log(`API running on port ${port}`);
+});;
