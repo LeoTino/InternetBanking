@@ -52,6 +52,9 @@ export default {
           })
           .then(res => {
             this.auth = !res.data.auth;
+            if(res.data.auth == true){
+              this.$router.push(`/customer/getAccounts/${res.data.user.MaKhachHang}`);
+            }
           })
           .catch(err => {
             console.log(err);

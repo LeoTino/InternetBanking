@@ -3,10 +3,10 @@
     <NavBar />
     <b-container class="mt-4">
       <b-row>
-        <b-col sm="3">
+        <!-- <b-col sm="3">
           <Categories />
-        </b-col>
-        <b-col sm="9">
+        </b-col> -->
+        <b-col sm="12">
           <router-view></router-view>
         </b-col>
       </b-row>
@@ -16,12 +16,11 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import Categories from '@/components/Categories.vue';
+// import Categories from '@/components/Categories.vue';
 
 export default {
   components: {
-    NavBar,
-    Categories
+    NavBar
   }
 };
 </script>
