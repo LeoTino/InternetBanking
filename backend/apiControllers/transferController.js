@@ -1,68 +1,47 @@
 var express = require('express');
-var productRepo = require('../repos/transferRepo');
+var transferRepo = require('../repos/transferRepo');
 
 var router = express.Router();
 
-router.get('/', (req, res) => {
-    productRepo.loadAll().then(rows => {
-        res.json(rows);
-    }).catch(err => {
-        console.log(err);
-        res.statusCode = 500;
-        res.end('View error log on console.');
-    });
+router.post('/internal', (req, res) => {
+    var thongTinCT = {
+        soTienNguoiNhan : 0,
+        soTaiKhoanNguoiNhan:"",
+        soTienNguoiChuyen : 0,
+        soTaiKhoanNguoiChuyen:""
 
-    // var page = 1;
-    // if (req.query.page) {
-    //     page = +req.query.page;
-    // }
-
-    // productRepo.loadPage(page).then(rows => {
-    //     var hasMore = rows.length > constants.PRODUCTS_PER_PAGE;
-    //     if (hasMore) {
-    //         rows.pop();
-    //     }
-
-    //     var data = {
-    //         products: rows,
-    //         hasMore: hasMore
-    //     }
-    //     res.json(data);
-    // }).catch(err => {
-    //     console.log(err);
-    //     res.statusCode = 500;
-    //     res.end('View error log on console.');
-    // });
-});
-
-router.get('/:id', (req, res) => {
-    if (req.params.id) {
-        var id = req.params.id;
-
-        if (isNaN(id)) {
-            res.statusCode = 400;
-            res.end();
-            return;
-        }
-
-        productRepo.load(id).then(rows => {
-            if (rows.length > 0) {
-                res.json(rows[0]);
-            } else {
-                res.statusCode = 204;
-                res.end();
-            }
-        }).catch(err => {
+    }
+    console.log(req.body);
+    transferRepo.transferInternal(req.body)
+        .then(insertId => {
+            var poco = {
+                status : "success"
+            };
+            res.statusCode = 201;
+            res.json(poco);
+        })
+        .catch(err => {
             console.log(err);
             res.statusCode = 500;
             res.end('View error log on console.');
         });
-    } else {
-        res.statusCode = 400;
-        res.json({
-            msg: 'error'
+});
+
+router.post('/outsite', (req, res) => {
+    categoryRepo.add(req.body)
+        .then(insertId => {
+            var poco = {
+                CatID: insertId,
+                CatName: req.body.CatName
+            };
+            res.statusCode = 201;
+            res.json(poco);
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
         });
-    }
 });
 
 module.exports = router;

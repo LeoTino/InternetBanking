@@ -1,11 +1,13 @@
 var db = require('../fn/mysql-db');
 
-var insertDetail = (orderID, detail) => {
-    var sql =
-        `insert into orderdetails(OrderID, ProID, Quantity, Price, Amount)
-         values(${orderID}, ${detail.ProID}, ${detail.Quantity}, ${detail.Price}, ${detail.Amount})`;
-
-    return db.insert(sql);
+exports.transferInternal = data=> {
+    console.log("value is :123 "+data.soTienChuyen);
+    var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
+        WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
+    var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
+    WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
+    db.update(sqlNguoiNhan);
+    return db.update2(sqlNguoiChuyen);
 }
 
 exports.insert = (userID, poco) => {
@@ -27,8 +29,9 @@ exports.insert = (userID, poco) => {
     // }
 
     return new Promise((resolve, reject) => {
-        var sql = `insert into orders(OrderDate, UserID, Total) values('${poco.OrderDate}', ${userID}, ${poco.Total})`;
-        db.insert(sql)
+        var sql = `UPDATE tai_khoan SET SoTien=${soTien}
+        WHERE SoTaiKhoan = ${soTaiKhoan}`;
+        db.update(sql)
             .then(id => {
                 var promises = [];
                 for (d of poco.Details) {

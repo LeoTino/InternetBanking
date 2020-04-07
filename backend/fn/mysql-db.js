@@ -58,3 +58,35 @@ exports.delete = function(sql) {
         });
     });
 }
+
+exports.update = function(sql) {
+    new Promise((resolve, reject) => {
+        var cn = createConnection();
+        cn.connect();
+        cn.query(sql, function(error, value) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(value.insertId);
+            }
+
+            cn.end();
+        });
+    });
+}
+
+exports.update2 = function(sql) {
+    return new Promise((resolve, reject) => {
+        var cn = createConnection();
+        cn.connect();
+        cn.query(sql, function(error, value) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(value.insertId);
+            }
+
+            cn.end();
+        });
+    });
+}
