@@ -7,7 +7,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
+          <b-nav-item href="#">Danh sách tài khoản</b-nav-item>
           <b-nav-item href="#" disabled>Disabled</b-nav-item>
         </b-navbar-nav>
 
@@ -25,16 +25,46 @@
             <b-dropdown-item href="#">FA</b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <b-nav-item-dropdown right>
-            <!-- Using 'button-content' slot -->
-            <template v-slot:button-content>
-              <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <div v-show="username != null">
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template v-slot:button-content>
+                <em>{{username}}</em>
+              </template>
+              <b-dropdown-item href="#">Profile</b-dropdown-item>
+              <b-dropdown-item v-on:click="clickSignOut">Sign Out</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </div>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
   </div>
 </template>
+
+<script>
+export default {
+    data () {
+        return {
+          username: localStorage.getItem("username")
+        };
+    },
+    mounted() {
+      this.fetchData();
+    },
+    watch: {
+      $route() {
+        this.fetchData();
+      }
+    },
+    methods: {
+      fetchData() {
+        this.username = localStorage.getItem("username");
+      },
+      clickSignOut(evt) {
+        evt.preventDefault()
+        localStorage.clear();
+        this.$router.push(`/login`);
+      }
+    }    
+};
+</script>

@@ -38,7 +38,8 @@ export default {
         user: '',
         pwd: ''
       },
-      auth: false
+      auth: false,
+      customerUrl: "/customer/getAccounts/"
     }
   },
   methods: {
@@ -53,7 +54,12 @@ export default {
           .then(res => {
             this.auth = !res.data.auth;
             if(res.data.auth == true){
-              this.$router.push(`/customer/getAccounts/${res.data.user.MaKhachHang}`);
+              console.log(res);
+              localStorage.setItem('currentUser', res.data.user.MaKhachHang);
+              localStorage.setItem('username', res.data.user.Ten);
+              localStorage.setItem('token', res.data.access_token);
+              console.log(localStorage);
+              this.$router.push(this.customerUrl + `${localStorage.getItem("currentUser")}`);
             }
           })
           .catch(err => {

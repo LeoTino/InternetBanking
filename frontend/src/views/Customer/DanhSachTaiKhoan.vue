@@ -49,12 +49,12 @@ export default {
   },
 
   mounted() {
-    this.fetchProducts(this.$route.params.MaKhachHang);
+    this.fetchData(this.$route.params.MaKhachHang);
   },
 
   watch: {
     $route(to) {
-      this.fetchProducts(to.params.MaKhachHang);
+      this.fetchData(to.params.MaKhachHang);
     }
   },
 
@@ -62,17 +62,19 @@ export default {
     format(val) {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
-
-    fetchProducts(MaKhachHang) {
+    fetchData(MaKhachHang) {
       axios
         .get(`http://localhost:3000/customer/getAccounts/${MaKhachHang}`)
         .then(res => {
           this.listTT = res.data.filter(i => i.LoaiTaiKhoan == 1);
           this.listTK = res.data.filter(i => i.LoaiTaiKhoan == 2);
           this.empty = res.data.length === 0;
-          console.log(res);
+          console.log(axios.defaults.headers.common);
         })
         .catch(err => {
+          this.listTT = [];
+          this.listTK = [];
+          this.empty = true;
           console.log(err);
         });
     }
