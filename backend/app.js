@@ -8,7 +8,8 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	productCtrl = require('./apiControllers/productController'),
 	userCtrl = require('./apiControllers/userController'),
 	transferCtrl = require('./apiControllers/transferController');
-	customerCtrl = require('./apiControllers/customerController');
+	customerCtrl = require('./apiControllers/customerController'); 
+	transferHistoryCtrl = require('./apiControllers/transferHistoryController');
 
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
 
@@ -36,6 +37,7 @@ app.use('/products', productCtrl);
 //app.use('/orders', verifyAccessToken, orderCtrl);
 app.use('/customer',  customerCtrl);
 app.use('/transfer',  transferCtrl);
+app.use('/transfer-history',  transferHistoryCtrl);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
