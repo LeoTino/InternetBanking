@@ -51,6 +51,12 @@ const routes = [
     component: () => import('../views/Customer/DanhSachTaiKhoan.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/transfer/internal',
+    name: 'ChuyenKhoanNoiBo',
+    component: () => import('../views/Customer/ChuyenKhoanNoiBo.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({

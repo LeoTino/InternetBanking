@@ -11,6 +11,7 @@
     "axios": "^0.19.1",
     "bootstrap-vue": "^2.1.0",
     "core-js": "^3.4.4",
+    "v-select2-component": "^0.4.3",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3"
   },
