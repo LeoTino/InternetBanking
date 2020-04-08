@@ -10,6 +10,7 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	transferCtrl = require('./apiControllers/transferController');
 	customerCtrl = require('./apiControllers/customerController'); 
 	transferHistoryCtrl = require('./apiControllers/transferHistoryController');
+	accountCtrl = require('./apiControllers/accountController');
 
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
 
@@ -38,6 +39,8 @@ app.use('/products', productCtrl);
 app.use('/customer',  customerCtrl);
 app.use('/transfer',  transferCtrl);
 app.use('/transfer-history',  transferHistoryCtrl);
+//Employment
+app.use('/employment',accountCtrl);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -1,7 +1,6 @@
 var db = require('../fn/mysql-db');
 
 exports.transferInternal = data=> {
-    console.log("value is :123 "+data.soTienChuyen);
     var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
         WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
     var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}

@@ -90,3 +90,19 @@ exports.update2 = function(sql) {
         });
     });
 }
+
+exports.sqlCreateAcc = function(sql) {
+     new Promise((resolve, reject) => {
+        var cn = createConnection();
+        cn.connect();
+        cn.query(sql, function(error, value) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(value.insertId);
+            }
+
+            cn.end();
+        });
+    });
+}
