@@ -154,6 +154,7 @@ export default {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
     onComplete: function() {
+      this.$store.dispatch("callApiChuyenTien")
       alert("Yay. Done!");
     },
     beforeTabSwitch: function() {

@@ -1,3 +1,5 @@
+import axios from "axios"
+
 const state = {
     srcAccount: "",
     lstSrc: [
@@ -49,7 +51,7 @@ const getters = {
     },
     nguoitraphi: state => {
         return state.nguoitraphi;
-    }   
+    }
 };
 const mutations = {
     srcAccount: (state, payload) => {
@@ -72,6 +74,25 @@ const mutations = {
     },
     nguoitraphi: (state, payload) => {
         state.nguoitraphi = payload;
+    },
+    callApiChuyenTien: (state) => {
+        axios
+            .post('http://localhost:3000/transfer/internal', {
+                taiKhoanNguon: state.srcAccount,
+                tentaiKhoanNguon: "Tran Van A",
+                soTaikhoanNhan: state.receiveAccount,
+                tenTaikhoanNhan: "Tran Van B",
+                soTienChuyen: state.soTienChuyen,
+                noiDungChuyen: state.messageTransfer,
+                phi: state.nguoitraphi
+            })
+            .then(res => {
+                console.log(res);
+                alert("called");
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 };
 const actions = {
@@ -95,6 +116,9 @@ const actions = {
     },
     nguoitraphi: ({ commit }, payload) => {
         commit("nguoitraphi", payload);
+    },
+    callApiChuyenTien: ({ commit }) => {
+        commit("callApiChuyenTien");
     }
 };
 export default {
