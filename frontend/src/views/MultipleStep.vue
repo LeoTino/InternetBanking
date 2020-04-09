@@ -2,14 +2,14 @@
   <form-wizard @on-complete="onComplete" shape="tab" color="#9b59b6">
     <div slot="title">Chuyển khoản nội bộ</div>
     <tab-content title="Step 1" :before-change="beforeTabSwitch">
-      <b-alert show variant="primary">Chọn tài khoản nguồn: {{ srcAccount }}</b-alert>
+      <b-alert show variant="primary">Chọn tài khoản nguồn: {{ selected }}</b-alert>
       <div>
-        <b-form-select v-model="srcAccount" :options="lstSrc" :select-size="8"></b-form-select>
+        <b-form-select v-model="selected" :options="options" :select-size="8"></b-form-select>
       </div>
     </tab-content>
     <tab-content title="Step 2">
       <b-alert show variant="primary">
-        Chọn người nhận: {{ receiveAccount }}
+        Chọn người nhận: {{ selected }}
         <sup>
           <br />
           <font size="2" color="red">
@@ -18,12 +18,12 @@
         </sup>
       </b-alert>
       <div>
-        <b-form-select v-model="receiveAccount" :options="lstReceive" :select-size="8"></b-form-select>
+        <b-form-select v-model="selected" :options="options" :select-size="8"></b-form-select>
       </div>
     </tab-content>
     <tab-content title="Step 3">
       <b-alert show variant="primary">
-        Điền STK người nhận: {{ receiveAccount }}
+        Điền STK người nhận: {{ selected }}
         <sup>
           <br />
           <font size="2" color="red">
@@ -31,17 +31,17 @@
           </font>
         </sup>
       </b-alert>
-      <b-form-input v-model="receiveAccount" type="number" placeholder="Nhập vào số tài khoản người nhận"></b-form-input>
+      <b-form-input v-model="selected" type="number" placeholder="Nhập vào số tài khoản người nhận"></b-form-input>
       <b-card border-variant="info" header="Thông tin người nhận" align="center">
         <b-card-text>
-          <p>Số tài khoản: {{receiveAccount}}</p>
-          <p>Tên tài khoản: {{receiveAccount}}</p>
+          <p>Số tài khoản: {{selected}}</p>
+          <p>Tên tài khoản: {{selected}}</p>
         </b-card-text>
       </b-card>
     </tab-content>
     <tab-content title="Step 4">
-      <b-alert show variant="primary">Số tiền chuyển khoản: {{ format(soTienChuyen) }}</b-alert>
-      <b-form-input v-model="soTienChuyen" type="range" min="500000" max="5000000" step="500000"></b-form-input>
+      <b-alert show variant="primary">Số tiền chuyển khoản: {{ selected }}</b-alert>
+      <b-form-input v-model="selected" type="range" min="500000" max="5000000" step="500000"></b-form-input>
     </tab-content>
     <tab-content title="Step 5">
       <b-alert show variant="primary">Nội dung chuyển khoản:</b-alert>
@@ -50,22 +50,17 @@
         rows="5"
         size="lg"
         placeholder="Nhập nội dung chuyển khoản"
-        v-model="messageTransfer"
       ></b-form-textarea>
     </tab-content>
     <tab-content title="Step 6">
       <b-alert show variant="primary">Chọn hình thức thanh toán phí</b-alert>
-      <b-form-radio-group v-model="nguoitraphi" :options="radioOptions" stacked name="radio-inline"></b-form-radio-group>
+      <b-form-radio-group v-model="selected" :options="radioOptions" stacked name="radio-inline"></b-form-radio-group>
     </tab-content>
     <tab-content title="Step 7">
       <b-alert show variant="primary">Preview</b-alert>
       <b-card border-variant="info" header="Thông tin chuyển khoản" align="left">
-        <p>Tài khoản nguồn: {{srcAccount}}</p>
-        <p>Tài khoản nhận: {{receiveAccount}}</p>
-        <p>Số tiền chuyển khoản: {{ format(soTienChuyen) }}</p>
-        <p>Nội dung chuyển khoản: {{ messageTransfer }}</p>
-        <p v-if="nguoitraphi == 0">Người chuyển thanh toán phí chuyển khoản</p>
-        <p v-if="nguoitraphi == 1">Người nhận thanh toán phí chuyển khoản </p>
+        <p>Tài khoản nguồn: {{selected}}</p>
+        <p>Tài khoản nhận: {{selected}}</p>bla bla
       </b-card>
     </tab-content>
     <tab-content title="Finish">
@@ -84,6 +79,22 @@ export default {
       radioOptions: [
         { value: 0, text: "Người chuyển trả" },
         { value: 1, text: "Người nhận trả" }
+      ],
+      selected: null,
+      options: [
+        { value: null, text: "Please select some item" },
+        {
+          text: "Tran Van A - 02810002324343",
+          value: "02810002324343"
+        },
+        {
+          text: "Tran Van A1 - 02810002324343",
+          value: "aa02810002324343"
+        },
+        {
+          text: "Tran Van A2 - 02810002324343",
+          value: "aaaaa02810002324343"
+        }
       ]
     };
   },
@@ -150,9 +161,6 @@ export default {
     }
   },
   methods: {
-    format(val) {
-      return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
-    },
     onComplete: function() {
       alert("Yay. Done!");
     },

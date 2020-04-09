@@ -57,6 +57,12 @@ const routes = [
     component: () => import('../views/Customer/ChuyenKhoanNoiBo.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/step',
+    name: 'MultipleStep',
+    component: () => import('../views/MultipleStep.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({
