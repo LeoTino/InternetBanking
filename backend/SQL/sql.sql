@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 08, 2020 lúc 07:04 PM
+-- Thời gian đã tạo: Th4 11, 2020 lúc 06:59 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -59,7 +59,7 @@ CREATE TABLE `khach_hang` (
 --
 
 INSERT INTO `khach_hang` (`Id`, `MaKhachHang`, `Ten`, `DiaChi`, `Role`, `TenDangNhap`, `MatKhau`, `Email`, `Phone`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin@gmail.com', '0984344343'),
+(1, 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'quocquoc42@gmail.com', '0984344343'),
 (2, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co'),
 (3, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co'),
 (4, '202033235754', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co');
@@ -80,6 +80,26 @@ CREATE TABLE `lich_su_giao_dich` (
   `GHICHU` varchar(20) NOT NULL,
   `HINH_THUC_THANH_TOAN` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `otp`
+--
+
+CREATE TABLE `otp` (
+  `Id` bigint(20) NOT NULL,
+  `TenDangNhap` varchar(20) NOT NULL,
+  `OtpCode` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `otp`
+--
+
+INSERT INTO `otp` (`Id`, `TenDangNhap`, `OtpCode`) VALUES
+(1, 'admin', 1234),
+(5, 'undefined}', 5712463);
 
 -- --------------------------------------------------------
 
@@ -162,6 +182,13 @@ ALTER TABLE `lich_su_giao_dich`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Chỉ mục cho bảng `otp`
+--
+ALTER TABLE `otp`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `TenDangNhap` (`TenDangNhap`);
+
+--
 -- Chỉ mục cho bảng `tai_khoan`
 --
 ALTER TABLE `tai_khoan`
@@ -187,7 +214,7 @@ ALTER TABLE `danh_sach_nguoi_nhan`
 -- AUTO_INCREMENT cho bảng `khach_hang`
 --
 ALTER TABLE `khach_hang`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `lich_su_giao_dich`
@@ -196,10 +223,16 @@ ALTER TABLE `lich_su_giao_dich`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `otp`
+--
+ALTER TABLE `otp`
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
 -- AUTO_INCREMENT cho bảng `tai_khoan`
 --
 ALTER TABLE `tai_khoan`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `thong_tin_no`
