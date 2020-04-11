@@ -26,7 +26,13 @@ exports.load = function(sql) {
         });
     });
 }
-
+exports.loadNotPromise = function(sql) {
+    
+        var cn = createConnection();
+        cn.connect();
+        console.log(sql);
+        return cn.query(sql);
+}
 exports.insert = function(sql) {
     return new Promise((resolve, reject) => {
         var cn = createConnection();

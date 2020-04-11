@@ -38,3 +38,20 @@ exports.load = function(id) {
     var sql = `select * from users where f_ID = ${id}`;
     return db.load(sql);
 }
+
+exports.findByTenDangNhap =  function(userName) {
+    return new Promise((resolve, reject) => {
+        //var md5_password = md5(password);
+        var sql = `select * from khach_hang where TenDangNhap = '${userName}'`;
+        db.load(sql)
+            .then(rows => {
+                if (rows.length === 0) {
+                    resolve(null);
+                } else {
+                    var user = rows[0];
+                    resolve(user);
+                }
+            })
+            .catch(err => reject(err));
+    });
+}

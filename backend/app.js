@@ -11,6 +11,7 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	customerCtrl = require('./apiControllers/customerController'); 
 	transferHistoryCtrl = require('./apiControllers/transferHistoryController');
 	accountCtrl = require('./apiControllers/accountController');
+	otpCtrl = require('./apiControllers/otpController');
 
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
 
@@ -41,6 +42,7 @@ app.use('/transfer',  transferCtrl);
 app.use('/transfer-history',  transferHistoryCtrl);
 //Employment
 app.use('/employment',accountCtrl);
+app.use('/otp',otpCtrl);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
