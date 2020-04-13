@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import GiaoDich from './modules/GiaoDich'
+import Authentication from './modules/Authentication'
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
     actions: {
     },
     modules: {
-        GiaoDich
+        GiaoDich,
+        Authentication
     }
 });

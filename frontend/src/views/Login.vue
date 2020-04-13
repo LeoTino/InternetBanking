@@ -2,26 +2,17 @@
   <div class="login">
     <h1>Login</h1>
     <b-form @submit="onSubmit">
-      <span v-if="auth" class="badge badge-danger"><h5>Username hoặc password không tồn tại</h5></span>
+      <span v-if="msgLoginFailed" class="badge badge-danger">
+        <h5>Username hoặc password không tồn tại</h5>
+      </span>
       <b-form-group id="user" label="Username" label-for="user">
-        <b-form-input
-          id="user"
-          v-model="form.user"
-          required
-          placeholder="Username"
-        ></b-form-input>
+        <b-form-input id="user" v-model="user" required placeholder="Username"></b-form-input>
       </b-form-group>
 
       <b-form-group id="pwd" label="Password" label-for="pwd">
-        <b-form-input
-          id="pwd"
-          v-model="form.pwd"
-          required
-          placeholder="Password"
-          type="password"
-        ></b-form-input>
+        <b-form-input id="pwd" v-model="pwd" required placeholder="Password" type="password"></b-form-input>
       </b-form-group>
-      <br/>
+      <br />
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
   </div>
@@ -29,44 +20,40 @@
 
 
 <script>
-import axios from 'axios';
-
 export default {
-  data() {
-    return {
-      form: {
-        user: '',
-        pwd: ''
+  computed: {
+    user: {
+      get() {
+        return this.$store.getters.user;
       },
-      auth: false,
-      customerUrl: "/customer/getAccounts/"
+      set(user) {
+        this.$store.dispatch("user", user);
+      }
+    },
+    pwd: {
+      get() {
+        return this.$store.getters.pwd;
+      },
+      set(pwd) {
+        this.$store.dispatch("pwd", pwd);
+      }
+    },
+    msgLoginFailed: {
+      get() {
+        return this.$store.getters.msgLoginFailed;
+      },
+      set(msgLoginFailed) {
+        this.$store.dispatch("msgLoginFailed", msgLoginFailed);
+      }
     }
   },
   methods: {
     onSubmit(evt) {
-      evt.preventDefault()
-      if(JSON.stringify(this.form)){
-        axios
-          .post('http://localhost:3000/users/login',{
-            user: this.form.user,
-            pwd: this.form.pwd
-          })
-          .then(res => {
-            this.auth = !res.data.auth;
-            if(res.data.auth == true){
-              console.log(res);
-              localStorage.setItem('currentUser', res.data.user.MaKhachHang);
-              localStorage.setItem('username', res.data.user.Ten);
-              localStorage.setItem('token', res.data.access_token);
-              console.log(localStorage);
-              this.$router.push(this.customerUrl + `${localStorage.getItem("currentUser")}`);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+      evt.preventDefault();
+      if (JSON.stringify(this.$store.getters.user) && JSON.stringify(this.$store.getters.pwd)) {
+        this.$store.dispatch("callApiLogin");
       }
     }
   }
-}
+};
 </script>
