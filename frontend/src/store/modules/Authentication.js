@@ -46,11 +46,12 @@ const mutations = {
                     localStorage.setItem('token', res.data.access_token);
                     console.log(localStorage);
                     state.role = res.data.user.Role;
-                    if(state.role == 0){
-                        return false;
-                    } else {
-                        router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
-                    }                    
+                    router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
+                    // if(state.role == 0){
+                    //     return false;
+                    // } else {
+                    //     router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
+                    // }                    
                 }
             })
             .catch(err => {

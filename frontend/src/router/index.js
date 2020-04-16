@@ -63,6 +63,12 @@ const routes = [
     component: () => import('../views/MultipleStep.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/employee/createAccount',
+    name: 'CreateAccount',
+    component: () => import('../views/Employee/CreateAccount.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({
