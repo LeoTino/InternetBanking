@@ -60,3 +60,30 @@ exports.loadOrderDetails = orderID => {
 
     return db.load(sql);
 }
+
+// {
+//     "maKH":"123434",
+//     "soTk":"028100024343",
+//     "tenGoiNho":"Nguyen Van A",
+//     "nganHang":"VCB"
+//   }
+  
+exports.setupUserReceive = function(data) {
+    
+    var sql = `INSERT INTO danh_sach_nguoi_nhan(MA_KHACH_HANG,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG) 
+         values('${data.maKH}','${data.soTk}','${data.tenGoiNho}','${data.nganHang}')
+                ON DUPLICATE KEY UPDATE
+                SO_TAI_KHOAN_NGUOI_NHAN = '${data.soTk}'`;
+    return db.insert(sql);
+}
+
+// {
+//     "tenGoiNho":"Nguyen Van A"
+//  }
+
+exports.loadUserReceive = function(data) {
+    
+    var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE TEN_GOI_NHO like '%${data.tenGoiNho}%'`;
+    console.log("sql la "+sql);
+    return db.load(sql);
+}
