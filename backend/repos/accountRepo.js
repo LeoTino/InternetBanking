@@ -24,7 +24,6 @@ exports.createAccount = infoAcc => {
 //     "maGiaoDichVien": "admin"//Mã giao dịch viên thực hiện nạp tiền.
 //   }
 exports.refill = infoTransfer => {
-    var sql
     var sqlNguoiNhan = `UPDATE TAI_KHOAN T
         left join KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang
         set T.SoTien = T.SoTien + ${infoTransfer.soTien}
@@ -36,3 +35,17 @@ exports.refill = infoTransfer => {
     db.update(sqlNguoiNhan);
     return db.update2(sqlNguoiChuyen);
 }
+
+
+// {
+//     "soTaiKhoan":"0281000232299",
+//     "loaiGd":"NHAN_TIEN",
+// }
+exports.getHistTransaction = data => {
+     var sqlLichSuGD = `SELECT * FROM lich_su_giao_dich 
+        WHERE (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}' OR SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}') 
+        AND LOAIGIAODICH ='${data.loaiGd}' ORDER BY LOAIGIAODICH DESC` 
+        return db.load(sqlNguoiChuyen);
+}
+
+

@@ -51,14 +51,10 @@ router.post('/refill', (req, res) => {
         });
 });
 router.post('/history-account', (req, res) => {
-    categoryRepo.add(req.body)
-        .then(insertId => {
-            var poco = {
-                CatID: insertId,
-                CatName: req.body.CatName
-            };
-            res.statusCode = 201;
-            res.json(poco);
+    accountRepo.getHistTransaction(req.body)
+        .then(dataResp => {
+            res.statusCode = 200;
+            res.json(dataResp);
         })
         .catch(err => {
             console.log(err);
