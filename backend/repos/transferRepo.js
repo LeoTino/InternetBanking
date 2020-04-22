@@ -10,23 +10,6 @@ exports.transferInternal = data=> {
 }
 
 exports.insert = (userID, poco) => {
-    // poco = {
-    //     OrderID: 1,
-    //     OrderDate: '2018-08-23 16:00:00',
-    //     Total: 30000;
-    //     Details: [{
-    //         ProID: 1,
-    //         Quantity: 1,
-    //         Price: 100000,
-    //         Amount: 100000
-    //     }, {
-    //         ProID: 2,
-    //         Quantity: 2,
-    //         Price: 40000,
-    //         Amount: 80000
-    //     }]
-    // }
-
     return new Promise((resolve, reject) => {
         var sql = `UPDATE tai_khoan SET SoTien=${soTien}
         WHERE SoTaiKhoan = ${soTaiKhoan}`;

@@ -12,7 +12,10 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	transferHistoryCtrl = require('./apiControllers/transferHistoryController');
 	accountCtrl = require('./apiControllers/accountController');
 	otpCtrl = require('./apiControllers/otpController');
+	otherBankCtrl = require('./apiControllers/otherBankController');
+	debtCtr = require('./apiControllers/debtController');
 
+	
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
 
 var app = express();
@@ -36,13 +39,22 @@ app.use(staticDir);
 app.use('/categories', categoryCtrl);
 app.use('/users', userCtrl);
 app.use('/products', productCtrl);
+
 //app.use('/orders', verifyAccessToken, orderCtrl);
 app.use('/customer',  customerCtrl);
 app.use('/transfer',  transferCtrl);
 app.use('/transfer-history',  transferHistoryCtrl);
+
 //Employment
 app.use('/employment',accountCtrl);
 app.use('/otp',otpCtrl);
+
+//Other bank
+app.use('/api/ib-hn',otherBankCtrl);
+
+//Manager debt
+app.use('/debt',debtCtr);
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

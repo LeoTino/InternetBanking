@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 11, 2020 lúc 06:59 PM
+-- Thời gian đã tạo: Th4 22, 2020 lúc 06:33 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -35,6 +35,14 @@ CREATE TABLE `danh_sach_nguoi_nhan` (
   `TEN_GOI_NHO` varchar(20) NOT NULL,
   `NGAN_HANG` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `danh_sach_nguoi_nhan`
+--
+
+INSERT INTO `danh_sach_nguoi_nhan` (`ID`, `MA_KHACH_HANG`, `SO_TAI_KHOAN_NGUOI_NHAN`, `TEN_GOI_NHO`, `NGAN_HANG`) VALUES
+(1, '123434}', '028100024343', 'Nguyen Van A', 'VCB'),
+(2, '123434}', '028100024343', 'Nguyen Van A', 'VCB');
 
 -- --------------------------------------------------------
 
@@ -121,7 +129,7 @@ CREATE TABLE `tai_khoan` (
 --
 
 INSERT INTO `tai_khoan` (`Id`, `MaTaiKhoan`, `MaKhachHang`, `SoTaiKhoan`, `LoaiTaiKhoan`, `SoTien`) VALUES
-(1, '1', 'admin', '02810002324343', '1', '99200000'),
+(1, '1', 'admin', '02810002324343', '1', '0'),
 (2, '3', 'admin', '0281434', '2', '1000000'),
 (3, '12033235754', '202033235754', '0281202033235754', '0', '0');
 
@@ -137,7 +145,8 @@ CREATE TABLE `thong_tin_no` (
   `TAIKHOANNO` varchar(20) NOT NULL,
   `SOTIEN` varchar(20) NOT NULL,
   `LOAINO` varchar(20) NOT NULL,
-  `TRANG_THAI` varchar(20) NOT NULL
+  `TRANG_THAI` varchar(20) NOT NULL,
+  `TAI_KHOAN_DOI_NO` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -208,7 +217,7 @@ ALTER TABLE `thong_tin_no`
 -- AUTO_INCREMENT cho bảng `danh_sach_nguoi_nhan`
 --
 ALTER TABLE `danh_sach_nguoi_nhan`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `khach_hang`

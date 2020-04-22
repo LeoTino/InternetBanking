@@ -1,11 +1,13 @@
 var express = require('express');
-var transferRepo = require('../repos/transferRepo');
+var debtRepo = require('../repos/debtRepo');
 
 var router = express.Router();
 
-router.post('/internal', (req, res) => {
+//Tạo nhắc nợ
 
-    transferRepo.transferInternal(req.body)
+router.post('/add-debt', (req, res) => {
+
+    debtRepo.addDebt(req.body)
         .then(insertId => {
             var poco = {
                 status : "success"
@@ -19,6 +21,8 @@ router.post('/internal', (req, res) => {
             res.end('View error log on console.');
         });
 });
+
+//Xem danh sách nhắc nợ
 
 router.post('/outsite', (req, res) => {
     categoryRepo.add(req.body)
@@ -37,6 +41,8 @@ router.post('/outsite', (req, res) => {
         });
 });
 
+//Hủy nhắc nợ :
+
 router.post('/set-up-user-receive', (req, res) => {
     transferRepo.setupUserReceive(req.body)
         .then(insertId => {
@@ -53,6 +59,9 @@ router.post('/set-up-user-receive', (req, res) => {
         });
 });
 
+
+//Thanh toán nhắc nợ : 
+
 router.post('/getUserReceive', (req, res) => {
 
     transferRepo.loadUserReceive(req.body).then(rows => {
@@ -68,4 +77,5 @@ router.post('/getUserReceive', (req, res) => {
             res.end('View error log on console.');
         });
 });
+
 module.exports = router;
