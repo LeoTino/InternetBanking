@@ -14,6 +14,7 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	otpCtrl = require('./apiControllers/otpController');
 	otherBankCtrl = require('./apiControllers/otherBankController');
 	debtCtr = require('./apiControllers/debtController');
+	notifyCtr = require('./apiControllers/notifyController');
 
 	
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
@@ -54,6 +55,9 @@ app.use('/api/ib-hn',otherBankCtrl);
 
 //Manager debt
 app.use('/debt',debtCtr);
+
+//Notify
+app.use('/notify',notifyCtr);
 
 
 const port = process.env.PORT || 3000;

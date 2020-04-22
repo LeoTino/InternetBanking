@@ -1,13 +1,13 @@
 var express = require('express');
-var debtRepo = require('../repos/debtRepo');
+var notifyRepo = require('../repos/notifyRepo');
 
 var router = express.Router();
 
-//Tạo nhắc nợ
+//Tạo thông báo 
 
-router.post('/add-debt', (req, res) => {
+router.post('/add-notify', (req, res) => {
 
-    debtRepo.addDebt(req.body)
+    notifyRepo.addNotify(req.body)
         .then(insertId => {
             var poco = {
                 status : "success"
@@ -22,10 +22,10 @@ router.post('/add-debt', (req, res) => {
         });
 });
 
-//Xem danh sách nhắc nợ
+//Xem danh sách thông báo
 
-router.post('/load-debt', (req, res) => {
-    debtRepo.loadDebt(req.body)
+router.post('/load-notify', (req, res) => {
+    notifyRepo.loadNotify(req.body)
         .then(rows => {
             res.statusCode = 201;
             res.json(rows);
@@ -37,10 +37,10 @@ router.post('/load-debt', (req, res) => {
         });
 });
 
-//Hủy nhắc nợ :
+//Chấp nhận thông báo :
 
-router.post('/delete-debt', (req, res) => {
-    debtRepo.deleteDebt(req.body)
+router.post('/accept-notify', (req, res) => {
+    notifyRepo.acceptNotify(req.body)
         .then(insertId => {
             res.statusCode = 201;
             res.json("success");
@@ -53,10 +53,10 @@ router.post('/delete-debt', (req, res) => {
 });
 
 
-//Thanh toán nhắc nợ : 
+//Hủy thông báo : 
 
-router.post('/payment-debt', (req, res) => {
-    debtRepo.paymentDebt(req.body)
+router.post('/reject-notify', (req, res) => {
+    notifyRepo.rejectNotify(req.body)
         .then(insertId => {
             res.statusCode = 201;
             res.json("success");
