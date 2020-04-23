@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 23, 2020 lúc 04:33 AM
+-- Thời gian đã tạo: Th4 23, 2020 lúc 05:42 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `danh_sach_nguoi_nhan` (
   `ID` bigint(20) NOT NULL,
-  `MA_KHACH_HANG` varchar(20) NOT NULL,
+  `TEN_DANG_NHAP` varchar(20) NOT NULL,
   `SO_TAI_KHOAN_NGUOI_NHAN` varchar(20) NOT NULL,
   `TEN_GOI_NHO` varchar(20) NOT NULL,
   `NGAN_HANG` varchar(20) NOT NULL
@@ -40,7 +40,7 @@ CREATE TABLE `danh_sach_nguoi_nhan` (
 -- Đang đổ dữ liệu cho bảng `danh_sach_nguoi_nhan`
 --
 
-INSERT INTO `danh_sach_nguoi_nhan` (`ID`, `MA_KHACH_HANG`, `SO_TAI_KHOAN_NGUOI_NHAN`, `TEN_GOI_NHO`, `NGAN_HANG`) VALUES
+INSERT INTO `danh_sach_nguoi_nhan` (`ID`, `TEN_DANG_NHAP`, `SO_TAI_KHOAN_NGUOI_NHAN`, `TEN_GOI_NHO`, `NGAN_HANG`) VALUES
 (1, '123434}', '028100024343', 'Nguyen Van A', 'VCB'),
 (2, '123434}', '028100024343', 'Nguyen Van A', 'VCB');
 
@@ -107,7 +107,7 @@ CREATE TABLE `otp` (
 
 INSERT INTO `otp` (`Id`, `TenDangNhap`, `OtpCode`) VALUES
 (1, 'admin', 1234),
-(5, 'undefined}', 5712463);
+(22, 'khoatq}', 5215572);
 
 -- --------------------------------------------------------
 
@@ -129,8 +129,8 @@ CREATE TABLE `tai_khoan` (
 --
 
 INSERT INTO `tai_khoan` (`Id`, `MaTaiKhoan`, `MaKhachHang`, `SoTaiKhoan`, `LoaiTaiKhoan`, `SoTien`) VALUES
-(1, '1', 'admin', '02810002324343', '1', '0'),
-(2, '3', 'admin', '0281434', '2', '1000000'),
+(1, '1', 'admin', '02810002324343', '1', '300000'),
+(2, '3', 'admin', '0281434', '2', '1100000'),
 (3, '12033235754', '202033235754', '0281202033235754', '0', '0');
 
 -- --------------------------------------------------------
@@ -261,7 +261,7 @@ ALTER TABLE `lich_su_giao_dich`
 -- AUTO_INCREMENT cho bảng `otp`
 --
 ALTER TABLE `otp`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `tai_khoan`
