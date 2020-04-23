@@ -27,22 +27,7 @@ exports.insert = (userID, poco) => {
     });
 }
 
-exports.loadOrdersByUser = userID => {
-    var sql = `select * from orders where UserID = ${userID}`;
-    return db.load(sql);
-}
 
-exports.loadOrderDetails = orderID => {
-    var sql =
-        `select orderdetails.*, 
-            products.ProName, products.TinyDes, products.FullDes, products.Quantity as InStock, 
-            categories.CatID, categories.CatName
-        from orderdetails inner join products on orderdetails.ProID = products.ProID
-            inner join categories on products.CatID = categories.CatID
-        where OrderID = ${orderID}`;
-
-    return db.load(sql);
-}
 
 // {
 //     "maKH":"123434",
@@ -67,6 +52,23 @@ exports.setupUserReceive = function(data) {
 exports.loadUserReceive = function(data) {
     
     var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE TEN_GOI_NHO like '%${data.tenGoiNho}%'`;
+    console.log("sql la "+sql);
+    return db.load(sql);
+}
+
+
+//Method : post 
+//Api :localhost:3000/transfer/load-info-receive
+// {
+//     "soTaiKhoan":"02810002324343"
+// }
+exports.loadInfoReceive = function(data) {
+    
+    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
+    FROM TAI_KHOAN T 
+    LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
+    WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
+    `;
     console.log("sql la "+sql);
     return db.load(sql);
 }

@@ -68,4 +68,23 @@ router.post('/getUserReceive', (req, res) => {
             res.end('View error log on console.');
         });
 });
+
+
+
+
+router.post('/load-info-receive', (req, res) => {
+
+    transferRepo.loadInfoReceive(req.body).then(rows => {
+            if (rows.length > 0) {
+                res.json(rows[0]);
+            } else {
+                res.statusCode = 204;
+                res.end();
+            }
+        }).catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
 module.exports = router;
