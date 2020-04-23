@@ -37,12 +37,9 @@ router.post('/createAccount', (req, res) => {
 router.post('/refill', (req, res) => {
     accountRepo.refill(req.body)
         .then(insertId => {
-            var poco = {
-                CatID: insertId,
-                CatName: req.body.CatName
-            };
+            
             res.statusCode = 201;
-            res.json(poco);
+            res.json("success");
         })
         .catch(err => {
             console.log(err);

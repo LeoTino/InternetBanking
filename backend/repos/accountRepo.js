@@ -31,7 +31,7 @@ exports.refill = infoTransfer => {
     var sqlNguoiChuyen = `UPDATE TAI_KHOAN T
         left join KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang
         set T.SoTien = T.SoTien + ${infoTransfer.soTien}
-        WHERE (K.TenDangNhap = '${infoTransfer.maGiaoDichVien}'`;
+        WHERE K.TenDangNhap = '${infoTransfer.maGiaoDichVien}'`;
     db.update(sqlNguoiNhan);
     return db.update2(sqlNguoiChuyen);
 }

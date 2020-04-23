@@ -3,7 +3,7 @@ var db = require('../fn/mysql-db');
 
 exports.add = function(tenDangNhap,otpCode) {
 
-    var sql = `INSERT INTO OTP(TenDangNhap,OtpCode) values('${tenDangNhap}}','${otpCode}')
+    var sql = `INSERT INTO OTP(TenDangNhap,OtpCode) values('${tenDangNhap}','${otpCode}')
                 ON DUPLICATE KEY UPDATE
                 OtpCode = '${otpCode}'`;
     return db.insert(sql);
