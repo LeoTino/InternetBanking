@@ -2,23 +2,7 @@ import axios from "axios"
 
 const state = {
     srcAccount: "",
-    lstSrc: [
-        {
-            id: "02810002324343",
-            text: "Tran Van A - 02810002324343",
-            value: "02810002324343"
-        },
-        {
-            id: "02810002324343",
-            text: "Tran Van A1 - 02810002324343",
-            value: "02810002324343"
-        },
-        {
-            id: "02810002324343",
-            text: "Tran Van A2 - 02810002324343",
-            value: "02810002324343"
-        }
-    ],
+    lstSrc: [],
     receiveAccount: "",
     lstReceive: [
         { id: "-1", text: "Nonne", value: "-1" },
@@ -28,7 +12,9 @@ const state = {
     ],
     soTienChuyen: "",
     messageTransfer: "",
-    nguoitraphi: ""
+    nguoitraphi: "",
+    isSendOTP: false,
+    otpCode: ""
 };
 const getters = {
     srcAccount: state => {
@@ -51,6 +37,12 @@ const getters = {
     },
     nguoitraphi: state => {
         return state.nguoitraphi;
+    },
+    isSendOTP: state => {
+        return state.isSendOTP;
+    },
+    otpCode: state => {
+        return state.otpCode;
     }
 };
 const mutations = {
@@ -75,6 +67,12 @@ const mutations = {
     nguoitraphi: (state, payload) => {
         state.nguoitraphi = payload;
     },
+    isSendOTP: (state, payload) => {
+        state.isSendOTP = payload;
+    },
+    otpCode: (state, payload) => {
+        state.otpCode = payload;
+    },
     callApiChuyenTien: (state) => {
         axios
             .post('http://localhost:3000/transfer/internal', {
@@ -93,14 +91,24 @@ const mutations = {
             .catch(err => {
                 console.log(err);
             });
+    },
+    callApiGetOTP: (state) => {
+        axios
+            .post('http://localhost:3000/otp/send', {
+                tenDangNhap: `${localStorage.getItem("username")}`
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        state.isSendOTP = true;
     }
 };
 const actions = {
     srcAccount: ({ commit }, payload) => {
         commit("srcAccount", payload);
-    },
-    lstSrc: ({ commit }, payload) => {
-        commit("lstSrc", payload);
     },
     receiveAccount: ({ commit }, payload) => {
         commit("receiveAccount", payload);
@@ -117,10 +125,51 @@ const actions = {
     nguoitraphi: ({ commit }, payload) => {
         commit("nguoitraphi", payload);
     },
+    otpCode: ({ commit }, payload) => {
+        commit("otpCode", payload);
+    },
     callApiChuyenTien: ({ commit }) => {
         commit("callApiChuyenTien");
+    },
+    callApiGetOTP: ({ commit }) => {
+        commit("callApiGetOTP");
+    },
+    compareOTP: () => {
+        axios
+            .post('http://localhost:3000/otp/compare', {
+                tenDangNhap: `${localStorage.getItem("username")}`,
+                otpcode: state.otpCode
+            })
+            .then(res => {
+                console.log(res.data.result);
+                return res.data.result;
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
+    genLstSrc: ({ commit }) => {
+        axios
+            .get('http://localhost:3000/customer/getAccounts/' + `${localStorage.getItem("username")}`)
+            .then(res => {
+                var arr = [];
+                arr = res.data.map(function (val, ) {
+                    return {
+                        "id": val.SoTaiKhoan,
+                        "text": val.SoTaiKhoan + " - " + format(val.SoTien),
+                        "value": val.SoTaiKhoan
+                    }
+                });
+                commit("lstSrc", arr);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 };
+function format(val) {
+    return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
+}
 export default {
     state, getters, mutations, actions
 }

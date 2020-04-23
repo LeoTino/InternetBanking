@@ -7,7 +7,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">Danh sách tài khoản</b-nav-item>
+          <b-nav-item v-bind:href="urlCustomerDashboard">Dashboard</b-nav-item>
           <b-nav-item href="#" disabled>Disabled</b-nav-item>
         </b-navbar-nav>
 
@@ -45,7 +45,8 @@
 export default {
     data () {
         return {
-          username: localStorage.getItem("username")
+          username: localStorage.getItem("username"),
+          urlCustomerDashboard: "http://localhost:8080/#/customer/dashboard"
         };
     },
     mounted() {
@@ -64,6 +65,7 @@ export default {
         evt.preventDefault()
         localStorage.clear();
         this.$router.push(`/login`);
+        window.location.reload(true); 
       }
     }    
 };

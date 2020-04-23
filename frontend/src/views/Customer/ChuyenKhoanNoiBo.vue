@@ -31,7 +31,11 @@
           </font>
         </sup>
       </b-alert>
-      <b-form-input v-model="receiveAccount" type="number" placeholder="Nhập vào số tài khoản người nhận"></b-form-input>
+      <b-form-input
+        v-model="receiveAccount"
+        type="number"
+        placeholder="Nhập vào số tài khoản người nhận"
+      ></b-form-input>
       <b-card border-variant="info" header="Thông tin người nhận" align="center">
         <b-card-text>
           <p>Số tài khoản: {{receiveAccount}}</p>
@@ -57,7 +61,7 @@
       <b-alert show variant="primary">Chọn hình thức thanh toán phí</b-alert>
       <b-form-radio-group v-model="nguoitraphi" :options="radioOptions" stacked name="radio-inline"></b-form-radio-group>
     </tab-content>
-    <tab-content title="Step 7">
+    <tab-content title="Step 7" :before-change="getOTP">
       <b-alert show variant="primary">Preview</b-alert>
       <b-card border-variant="info" header="Thông tin chuyển khoản" align="left">
         <p>Tài khoản nguồn: {{srcAccount}}</p>
@@ -65,12 +69,12 @@
         <p>Số tiền chuyển khoản: {{ format(soTienChuyen) }}</p>
         <p>Nội dung chuyển khoản: {{ messageTransfer }}</p>
         <p v-if="nguoitraphi == 0">Người chuyển thanh toán phí chuyển khoản</p>
-        <p v-if="nguoitraphi == 1">Người nhận thanh toán phí chuyển khoản </p>
+        <p v-if="nguoitraphi == 1">Người nhận thanh toán phí chuyển khoản</p>
       </b-card>
     </tab-content>
-    <tab-content title="Finish">
+    <tab-content title="Finish" :before-change="compareOTP">
       <b-alert show variant="primary">Xác thực OTP</b-alert>
-      <b-form-input id="input-large" size="lg" placeholder="Nhập mã OTP đã gửi qua email"></b-form-input>
+      <b-form-input v-model="otpCode" id="input-large" size="lg" placeholder="Nhập mã OTP đã gửi qua email"></b-form-input>
     </tab-content>
   </form-wizard>
 </template>
@@ -91,7 +95,10 @@ export default {
     FormWizard,
     TabContent
   },
-  computed:{
+  mounted () {
+    this.$store.dispatch("genLstSrc")
+  },
+  computed: {
     srcAccount: {
       get() {
         return this.$store.getters.srcAccount;
@@ -102,10 +109,11 @@ export default {
     },
     lstSrc: {
       get() {
+        // this.$store.dispatch("genLstSrc");
         return this.$store.getters.lstSrc;
       },
-      set(lstSrc) {
-        this.$store.dispatch("lstSrc", lstSrc);
+      set() {
+        this.$store.dispatch("genLstSrc");
       }
     },
     receiveAccount: {
@@ -147,6 +155,14 @@ export default {
       set(nguoitraphi) {
         this.$store.dispatch("nguoitraphi", nguoitraphi);
       }
+    },
+    otpCode: {
+      get() {
+        return this.$store.getters.otpCode;
+      },
+      set(otpCode) {
+        this.$store.dispatch("otpCode", otpCode);
+      }
     }
   },
   methods: {
@@ -154,12 +170,25 @@ export default {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
     onComplete: function() {
-      this.$store.dispatch("callApiChuyenTien")
+      this.$store.dispatch("callApiChuyenTien");
       alert("Yay. Done!");
     },
     beforeTabSwitch: function() {
       alert("This is called before switching tabs");
       return true;
+    },
+    getOTP: function() {
+      this.$store.dispatch("callApiGetOTP");
+      if (this.$store.getters.isSendOTP == false) {
+        alert("Cannot send OTP! Please contact administrator");
+        return false;
+      }
+      alert("OTP has sent! Please check your email!");
+      return true;
+    },
+    compareOTP: function() {
+      let x = this.$store.dispatch("compareOTP");
+      alert(x);
     }
   }
 };
