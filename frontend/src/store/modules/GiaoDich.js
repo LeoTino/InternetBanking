@@ -4,12 +4,7 @@ const state = {
     srcAccount: "",
     lstSrc: [],
     receiveAccount: "",
-    lstReceive: [
-        { id: "-1", text: "Nonne", value: "-1" },
-        { id: "0281434", text: "Tran Van B - 0281434", value: "0281434" },
-        { id: "0281434", text: "Tran Van B1 - 0281434", value: "0281434" },
-        { id: "0281434", text: "Tran Van B2 - 0281434", value: "0281434" }
-    ],
+    lstReceive: [],
     soTienChuyen: "",
     messageTransfer: "",
     nguoitraphi: "",
@@ -161,6 +156,25 @@ const actions = {
                     }
                 });
                 commit("lstSrc", arr);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    genLstReceive: ({ commit }) => {
+        axios
+            .get('http://localhost:3000/customer/getAccounts/' + `${localStorage.getItem("username")}`)
+            .then(res => {
+                var arr = [];
+                arr = res.data.map(function (val, ) {
+                    return {
+                        "id": val.SoTaiKhoan,
+                        "text": val.SoTaiKhoan + " - " + format(val.SoTien),
+                        "value": val.SoTaiKhoan,
+                        "name": val.SoTien
+                    }
+                });
+                commit("lstReceive", arr);
             })
             .catch(err => {
                 console.log(err);

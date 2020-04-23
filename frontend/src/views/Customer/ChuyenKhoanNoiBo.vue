@@ -96,7 +96,8 @@ export default {
     TabContent
   },
   mounted () {
-    this.$store.dispatch("genLstSrc")
+    this.$store.dispatch("genLstSrc");
+    this.$store.dispatch("genLstReceive");
   },
   computed: {
     srcAccount: {
