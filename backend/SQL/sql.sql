@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 22, 2020 lúc 06:33 PM
+-- Thời gian đã tạo: Th4 23, 2020 lúc 04:33 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -136,18 +136,38 @@ INSERT INTO `tai_khoan` (`Id`, `MaTaiKhoan`, `MaKhachHang`, `SoTaiKhoan`, `LoaiT
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `thong_bao`
+--
+
+CREATE TABLE `thong_bao` (
+  `Id` bigint(20) NOT NULL,
+  `USER_NHAN` varchar(20) NOT NULL,
+  `NOI_DUNG` varchar(50) NOT NULL,
+  `TRANG_THAI` varchar(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `thong_tin_no`
 --
 
 CREATE TABLE `thong_tin_no` (
   `ID` bigint(20) NOT NULL,
-  `NOIDUNG` varchar(20) NOT NULL,
+  `NOIDUNG` varchar(20) DEFAULT NULL,
   `TAIKHOANNO` varchar(20) NOT NULL,
   `SOTIEN` varchar(20) NOT NULL,
-  `LOAINO` varchar(20) NOT NULL,
   `TRANG_THAI` varchar(20) NOT NULL,
-  `TAI_KHOAN_DOI_NO` varchar(20) NOT NULL
+  `TAI_KHOAN_DOI_NO` varchar(20) NOT NULL,
+  `PhanHoi` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `thong_tin_no`
+--
+
+INSERT INTO `thong_tin_no` (`ID`, `NOIDUNG`, `TAIKHOANNO`, `SOTIEN`, `TRANG_THAI`, `TAI_KHOAN_DOI_NO`, `PhanHoi`) VALUES
+(4, 'Tien dien', 'user01', '9000000', '0', 'admin', '');
 
 -- --------------------------------------------------------
 
@@ -204,6 +224,12 @@ ALTER TABLE `tai_khoan`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Chỉ mục cho bảng `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- Chỉ mục cho bảng `thong_tin_no`
 --
 ALTER TABLE `thong_tin_no`
@@ -244,10 +270,16 @@ ALTER TABLE `tai_khoan`
   MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT cho bảng `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `thong_tin_no`
 --
 ALTER TABLE `thong_tin_no`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
