@@ -25,7 +25,7 @@ router.post('/send', (req, res) => {
           pass: 'n12345678@'
         }
       });
-      otpRepo.add(req.tenDangNhap,otpCode);
+      otpRepo.add(req.body.tenDangNhap,otpCode);
       var content = `<div>${user.Ten},</div>
                     <div>You have selected ${user.Email}<br>verification page:    </div> 
                      <h1>${otpCode}</h1>
