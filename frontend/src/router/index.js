@@ -67,6 +67,12 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/customer/receivemanagement',
+    name: 'ReceiveManagement',
+    component: () => import('../views/Customer/DanhSachNguoiNhan.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/step',
     name: 'MultipleStep',
     component: () => import('../views/MultipleStep.vue'),
