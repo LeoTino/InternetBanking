@@ -90,7 +90,7 @@ router.post('/load-info-receive', (req, res) => {
 
 router.post('/load-list-info-receive', (req, res) => {
 
-    transferRepo.loadInfoReceive(req.body).then(rows => {
+    transferRepo.loadListInfoReceive(req.body).then(rows => {
             if (rows.length > 0) {
                 res.json(rows);
             } else {
