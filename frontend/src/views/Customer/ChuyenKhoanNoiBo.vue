@@ -35,6 +35,7 @@
         v-model="receiveAccount"
         type="number"
         placeholder="Nhập vào số tài khoản người nhận"
+        v-on:input="findReceiver()"
       ></b-form-input>
       <b-card border-variant="info" header="Thông tin người nhận" align="center">
         <b-card-text>
@@ -74,7 +75,12 @@
     </tab-content>
     <tab-content title="Finish" :before-change="compareOTP">
       <b-alert show variant="primary">Xác thực OTP</b-alert>
-      <b-form-input v-model="otpCode" id="input-large" size="lg" placeholder="Nhập mã OTP đã gửi qua email"></b-form-input>
+      <b-form-input
+        v-model="otpCode"
+        id="input-large"
+        size="lg"
+        placeholder="Nhập mã OTP đã gửi qua email"
+      ></b-form-input>
     </tab-content>
   </form-wizard>
 </template>
@@ -95,7 +101,7 @@ export default {
     FormWizard,
     TabContent
   },
-  mounted () {
+  mounted() {
     this.$store.dispatch("genLstSrc");
     this.$store.dispatch("genLstReceive");
   },
@@ -188,8 +194,12 @@ export default {
       return true;
     },
     compareOTP: function() {
-      let x = this.$store.dispatch("compareOTP");
-      alert(x);
+      //let x = this.$store.dispatch("compareOTP");
+      alert("x");
+      return true;
+    },
+    findReceiver: function() {
+      alert("fdsfds");
     }
   }
 };

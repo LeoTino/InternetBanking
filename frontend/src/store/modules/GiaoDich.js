@@ -163,15 +163,17 @@ const actions = {
     },
     genLstReceive: ({ commit }) => {
         axios
-            .get('http://localhost:3000/customer/getAccounts/' + `${localStorage.getItem("username")}`)
+            .post('http://localhost:3000/transfer/load-list-info-receive', {
+                tenDangNhap: `${localStorage.getItem("username")}`
+            })
             .then(res => {
                 var arr = [];
                 arr = res.data.map(function (val, ) {
                     return {
-                        "id": val.SoTaiKhoan,
-                        "text": val.SoTaiKhoan + " - " + format(val.SoTien),
-                        "value": val.SoTaiKhoan,
-                        "name": val.SoTien
+                        "id": val.SO_TAI_KHOAN_NGUOI_NHAN,
+                        "text": val.SO_TAI_KHOAN_NGUOI_NHAN + " - " + val.TEN_GOI_NHO,
+                        "value": val.SO_TAI_KHOAN_NGUOI_NHAN,
+                        "name": val.TEN_GOI_NHO
                     }
                 });
                 commit("lstReceive", arr);
