@@ -9,7 +9,9 @@ const state = {
     messageTransfer: "",
     nguoitraphi: "",
     isSendOTP: false,
-    otpCode: ""
+    otpCode: "",
+    infoName: "Tài khoản không tồn tại",
+    isMatchOTP: "none"
 };
 const getters = {
     srcAccount: state => {
@@ -38,6 +40,12 @@ const getters = {
     },
     otpCode: state => {
         return state.otpCode;
+    },
+    infoName: state => {
+        return state.infoName;
+    },
+    isMatchOTP: state => {
+        return state.isMatchOTP;
     }
 };
 const mutations = {
@@ -68,6 +76,12 @@ const mutations = {
     otpCode: (state, payload) => {
         state.otpCode = payload;
     },
+    infoName: (state, payload) => {
+        state.infoName = payload;
+    },
+    isMatchOTP: (state, payload) => {
+        state.isMatchOTP = payload;
+    },
     callApiChuyenTien: (state) => {
         axios
             .post('http://localhost:3000/transfer/internal', {
@@ -81,7 +95,6 @@ const mutations = {
             })
             .then(res => {
                 console.log(res);
-                alert("called");
             })
             .catch(err => {
                 console.log(err);
@@ -123,13 +136,16 @@ const actions = {
     otpCode: ({ commit }, payload) => {
         commit("otpCode", payload);
     },
+    isMatchOTP: ({ commit }, payload) => {
+        commit("isMatchOTP", payload);
+    },
     callApiChuyenTien: ({ commit }) => {
         commit("callApiChuyenTien");
     },
     callApiGetOTP: ({ commit }) => {
         commit("callApiGetOTP");
     },
-    compareOTP: () => {
+    compareOTP: ({ commit }) => {
         axios
             .post('http://localhost:3000/otp/compare', {
                 tenDangNhap: `${localStorage.getItem("username")}`,
@@ -137,7 +153,8 @@ const actions = {
             })
             .then(res => {
                 console.log(res.data.result);
-                return res.data.result;
+                commit("isMatchOTP", res.data.result);
+                state.isMatchOTP = res.data.result;
             })
             .catch(err => {
                 console.log(err);
@@ -152,7 +169,8 @@ const actions = {
                     return {
                         "id": val.SoTaiKhoan,
                         "text": val.SoTaiKhoan + " - " + format(val.SoTien),
-                        "value": val.SoTaiKhoan
+                        "value": val.SoTaiKhoan,
+                        "money": val.SoTien
                     }
                 });
                 commit("lstSrc", arr);
@@ -177,6 +195,19 @@ const actions = {
                     }
                 });
                 commit("lstReceive", arr);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    getInfoUserReceive: ({ commit }) => {
+        axios
+            .post('http://localhost:3000/transfer/load-info-receive', {
+                soTaiKhoan: state.receiveAccount
+            })
+            .then(res => {
+                console.log(res.data);
+                commit("infoName", res.data.Ten);
             })
             .catch(err => {
                 console.log(err);

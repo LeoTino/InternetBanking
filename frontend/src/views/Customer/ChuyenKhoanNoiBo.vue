@@ -40,13 +40,13 @@
       <b-card border-variant="info" header="Thông tin người nhận" align="center">
         <b-card-text>
           <p>Số tài khoản: {{receiveAccount}}</p>
-          <p>Tên tài khoản: {{receiveAccount}}</p>
+          <p>Tên tài khoản: {{infoName}}</p>
         </b-card-text>
       </b-card>
     </tab-content>
     <tab-content title="Step 4">
       <b-alert show variant="primary">Số tiền chuyển khoản: {{ format(soTienChuyen) }}</b-alert>
-      <b-form-input v-model="soTienChuyen" type="range" min="500000" max="5000000" step="500000"></b-form-input>
+      <b-form-input v-model="soTienChuyen" type="number" min="100000" max="50000000" step="100000"></b-form-input>
     </tab-content>
     <tab-content title="Step 5">
       <b-alert show variant="primary">Nội dung chuyển khoản:</b-alert>
@@ -75,6 +75,9 @@
     </tab-content>
     <tab-content title="Finish" :before-change="compareOTP">
       <b-alert show variant="primary">Xác thực OTP</b-alert>
+      <font v-show="isMatchOTP == false" size="5" color="red">
+        <i>Mã OTP không đúng</i>
+      </font>
       <b-form-input
         v-model="otpCode"
         id="input-large"
@@ -104,6 +107,16 @@ export default {
   mounted() {
     this.$store.dispatch("genLstSrc");
     this.$store.dispatch("genLstReceive");
+  },
+  watch: {
+    isMatchOTP: function() {
+      event.preventDefault();
+      if (this.$store.getters.isMatchOTP == true) {
+        this.$store.dispatch("callApiChuyenTien");
+        alert("Chuyển tiền thành công!");
+        window.location.reload(true);
+      }
+    }
   },
   computed: {
     srcAccount: {
@@ -170,6 +183,19 @@ export default {
       set(otpCode) {
         this.$store.dispatch("otpCode", otpCode);
       }
+    },
+    infoName: {
+      get() {
+        return this.$store.getters.infoName;
+      }
+    },
+    isMatchOTP: {
+      get() {
+        return this.$store.getters.isMatchOTP;
+      },
+      set(isMatchOTP) {
+        this.$store.dispatch("isMatchOTP", isMatchOTP);
+      }
     }
   },
   methods: {
@@ -177,14 +203,27 @@ export default {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
     onComplete: function() {
-      this.$store.dispatch("callApiChuyenTien");
-      alert("Yay. Done!");
+      //alert("Chuyển tiền thành công!");
     },
     beforeTabSwitch: function() {
-      alert("This is called before switching tabs");
+      //alert("This is called before switching tabs");
       return true;
     },
     getOTP: function() {
+      if (
+        this.$store.getters.srcAccount == "" ||
+        this.$store.getters.receiveAccount == "" ||
+        this.$store.getters.soTienChuyen == ""
+      ) {
+        alert("Vui lòng nhập đầy đủ thông tin chuyển tiền!");
+        return false;
+      }
+      if(this.$store.getters.lstSrc.find(
+          i => i.id == this.$store.getters.srcAccount
+        ).money < this.$store.getters.soTienChuyen){
+          alert("Số dư không đủ để chuyển!");
+          return false;
+        }
       this.$store.dispatch("callApiGetOTP");
       if (this.$store.getters.isSendOTP == false) {
         alert("Cannot send OTP! Please contact administrator");
@@ -194,12 +233,12 @@ export default {
       return true;
     },
     compareOTP: function() {
-      //let x = this.$store.dispatch("compareOTP");
-      alert("x");
+      event.preventDefault();
+      this.$store.dispatch("compareOTP");
       return true;
     },
     findReceiver: function() {
-      alert("fdsfds");
+      this.$store.dispatch("getInfoUserReceive");
     }
   }
 };
