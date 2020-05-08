@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import GiaoDich from './modules/GiaoDich'
 import Authentication from './modules/Authentication'
 import Account from './modules/Account'
+import NguoiNhan from './modules/NguoiNhan'
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -18,6 +19,7 @@ export const store = new Vuex.Store({
     modules: {
         GiaoDich,
         Authentication,
-        Account
+        Account,
+        NguoiNhan
     }
 });
