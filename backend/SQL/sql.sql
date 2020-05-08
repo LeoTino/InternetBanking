@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 23, 2020 lúc 05:42 PM
+-- Thời gian đã tạo: Th5 08, 2020 lúc 02:52 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -92,6 +92,25 @@ CREATE TABLE `lich_su_giao_dich` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `ngan_hang_thu_huong`
+--
+
+CREATE TABLE `ngan_hang_thu_huong` (
+  `ID` bigint(20) NOT NULL,
+  `MA_NGAN_HANG` varchar(20) NOT NULL,
+  `TEN_NGAN_HANG` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `ngan_hang_thu_huong`
+--
+
+INSERT INTO `ngan_hang_thu_huong` (`ID`, `MA_NGAN_HANG`, `TEN_NGAN_HANG`) VALUES
+(1, 'abc', 'Ngân Hàng ABC');
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `otp`
 --
 
@@ -108,6 +127,26 @@ CREATE TABLE `otp` (
 INSERT INTO `otp` (`Id`, `TenDangNhap`, `OtpCode`) VALUES
 (1, 'admin', 1234),
 (22, 'khoatq}', 5215572);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `system_config`
+--
+
+CREATE TABLE `system_config` (
+  `Id` bigint(20) NOT NULL,
+  `KeyValue` varchar(20) NOT NULL,
+  `Value` mediumtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `system_config`
+--
+
+INSERT INTO `system_config` (`Id`, `KeyValue`, `Value`) VALUES
+(1, 'private_key', '-----BEGIN RSA PRIVATE KEY-----\r\nMIICXQIBAAKBgQCCgHEPIosqHMB2q4KkNeaLIufg35P1r3WVYDZuOZkk2z2aimYC\r\nXW7sK/AIDjYxznr7a+s/JYD+kFd5BCgpLnu9Vv0+ykafKdSaOBrpza3vjXA6KdtQ\r\neKY39SkIUHM4h7wQKwuX96HiPCCh0aMw7QnrFtZ8wxPcajaEjzfHs9J04QIDAQAB\r\nAoGAArPAI40Wjper0Ik6mkXXcTgWzwwyFxs79wzX865TonS7sNB+zju7CT7bqH8K\r\n1jstRrl0VIllQ2Afv4y7fCbPPxOMuysvPdPI1HQ5gL359cxUhKd3sfF+EPzYw/p2\r\nEGRSXJ24+bzSqT+Q4kfkosmYr6UhYhdI3wzHPYRls1dhSjUCQQDwG0kNOHzLXRSV\r\ndEqBSgJWo0pLDe/zn0GBU6k67Xv2gwx9DUgx63+l5xtJnQTQSiBe5zBghE/j6IaC\r\nF8NTTyfnAkEAiyPaNheQiVr9m32ApX1v5Q4GUpF/PARrbslUqlxC0Heoi4wXNwRI\r\n4ytn0r7sHZpksVOegtPHEptIow/XpsLD9wJBAL7iklMmY2Ax4dlnmIvs0KscKkY9\r\nEFS4eZVdc57bir/SM61/T7QQK20zrGf7owYMyGtqlPVGe1UPWVA3oButRGUCQA82\r\nxl9vyDAcsOpVmMF/q8KB/BL/MchgO1cL0KQoHm4pB1bq5Ibxgv7D+kBC/BJolWYG\r\nXKi1e2j/bbvWuZ/UYBUCQQDHbk/zpyD1ZOhUGXSnDkiEEXaITr/bpYg5124XcBmb\r\nPmKX45O0MZTZ2+2TJyp+RkHuR3NjPdQWHhNg/LbJEU+Q\r\n-----END RSA PRIVATE KEY-----'),
+(2, 'public_key', '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCgHEPIosqHMB2q4KkNeaLIufg\r\n35P1r3WVYDZuOZkk2z2aimYCXW7sK/AIDjYxznr7a+s/JYD+kFd5BCgpLnu9Vv0+\r\nykafKdSaOBrpza3vjXA6KdtQeKY39SkIUHM4h7wQKwuX96HiPCCh0aMw7QnrFtZ8\r\nwxPcajaEjzfHs9J04QIDAQAB\r\n-----END PUBLIC KEY-----');
 
 -- --------------------------------------------------------
 
@@ -211,11 +250,24 @@ ALTER TABLE `lich_su_giao_dich`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Chỉ mục cho bảng `ngan_hang_thu_huong`
+--
+ALTER TABLE `ngan_hang_thu_huong`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `ID` (`ID`);
+
+--
 -- Chỉ mục cho bảng `otp`
 --
 ALTER TABLE `otp`
   ADD PRIMARY KEY (`Id`),
   ADD UNIQUE KEY `TenDangNhap` (`TenDangNhap`);
+
+--
+-- Chỉ mục cho bảng `system_config`
+--
+ALTER TABLE `system_config`
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Chỉ mục cho bảng `tai_khoan`
@@ -258,10 +310,22 @@ ALTER TABLE `lich_su_giao_dich`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `ngan_hang_thu_huong`
+--
+ALTER TABLE `ngan_hang_thu_huong`
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT cho bảng `otp`
 --
 ALTER TABLE `otp`
   MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT cho bảng `system_config`
+--
+ALTER TABLE `system_config`
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `tai_khoan`

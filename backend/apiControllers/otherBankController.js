@@ -5,7 +5,12 @@ var router = express.Router();
 //Try vấn thông tin tài khoản
 router.post('/info-account', (req, res) => {
     bankRepo.queryInfoAccount(req.body).then(rows => {
-        res.json(rows);
+        var mockupData = {
+            ten : 'Nguyen Van A',
+            soTk : '0281434343434',
+            tenNganhang :'Ngan Hang ACB'
+        }
+        res.json(mockupData);
     }).catch(err => {
         console.log(err);
         res.statusCode = 500;
@@ -34,6 +39,39 @@ router.post('/payInto', (req, res) => {
 router.post('/withdraw', (req, res) => {
 
     bankRepo.withdraw(req.body)
+        .then(insertId => {
+            var poco = {
+                status : "success"
+            };
+            res.statusCode = 201;
+            res.json(poco);
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
+
+//Get list bank
+router.get('/get-list-info-bank', (req, res) => {
+
+    bankRepo.getListInfoBank(req.body)
+        .then(rows => {
+            res.statusCode = 200;
+            res.json(rows);
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
+
+//add a bank
+router.post('/add-other-bank', (req, res) => {
+
+    bankRepo.addOtherBank(req.body)
         .then(insertId => {
             var poco = {
                 status : "success"

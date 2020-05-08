@@ -10,7 +10,7 @@ var db = require('../fn/mysql-db'),
 
 exports.generateAccessToken = userObj => {
     var payload = {
-        user: userObj,
+        user: "nghiemEncode",
         info: 'more info for you'
     }
     var token = jwt.sign(payload, opts.ACCESS_TOKEN.SECRET_KEY, {

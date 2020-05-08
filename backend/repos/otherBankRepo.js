@@ -1,9 +1,14 @@
 var db = require('../fn/mysql-db');
+var jwt = require('jsonwebtoken');
 
-
+var exp = "24h";
+//json request :
+//Post : localhost:3000/api/ib-hn/info-account
 // {
-//    "soTk":"028100023232"   
+//    "soTk":"028100023232",
+//     "maNH":"NH_ABC"  
 // }
+//Truy van thong tin tai khoan
 
 exports.queryInfoAccount = function(data) {
     
@@ -16,29 +21,133 @@ exports.queryInfoAccount = function(data) {
 }
 
 //json request :
+//Post : localhost:3000/api/ib-hn/withdraw
 // {
-//     "taiKhoanNguon":"028100023233",
-//     "soTienChuyen":1000000
+    // maNganHangThuHuong: "nh_SG",
+    // soTaiKhoanNganNganHangThuHuong:"028100023333",
+    // tenNguoiNhan:"Tran Van B",
+    // soTienChuyen:"100000"
 // }
 
 //trừ tiền 
 exports.withdraw = data=> {
-    var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
-    WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
-    return db.update2(sqlNguoiChuyen);
+    var payload = {
+        soTaiKhoanNguoiNhan:data.soTaiKhoanNganNganHangThuHuong,
+        tenNguoiNhan:data.tenNguoiNhan,
+        soTienChuyen:data.soTienChuyen
+    }
+    var privateKey;
+    var sqlFindPrivateKey = `SELECT * FROM system_config WHERE KeyValue='private_key'`;
+    return db.load(sqlFindPrivateKey).then(obj=>{
+        var signOptions = {
+            //expiresin:exp,
+            algorithm:["RS256"]
+          };
+        console.log("Go to return .");
+        privateKey =obj[0].Value;
+        var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='public_key'`;
+        var publickey ;
+        db.load(sqlFindPublicKey).then(pubKeyRows=>{
+            var signOptions = {
+                //expiresin:exp,
+                algorithm:"RS256"
+              };
+            var token = jwt.sign(payload, privateKey,signOptions);
+            // console.log(token);
+            // console.log("public key : "+pubKeyRows[0].Value);
+            // publickey = pubKeyRows[0].Value;
+            // var verifyOptions = {
+            //     algorithm:["RS256"]
+            // };
+            // var verified = jwt.verify(token,publickey,verifyOptions);
+            //  console.log("Verified: " + JSON.stringify(verified));
+            // console.log(privateKey);
+            // var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
+            // WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
+            // return db.update2(sqlNguoiChuyen);
+
+            //Start send token : 
+        })
+    });
 }
 
 
-//json request:
-
+//json request :
+//Post : localhost:3000/api/ib-hn//payInto
 // {
-//     "soTienChuyen":10000000,
-//     "soTaikhoanNhan":"02810434343"
+//         "tenNganHangThuHuong": "Ngân hàng Sài Gòn",
+//         "soTaiKhoanNganNganHangThuHuong":"028100023333",
+//         "tenNguoiNhan":"Tran Van B",
+//         "soTienChuyen":"100000"
 // }
-//Nộp tiền 
+//chuyen tien tiền 
 
 exports.payInto = data=> {
-    var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
-        WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
-    return db.update2(sqlNguoiNhan);
+    var payload = {
+        tenNganHangChuyen: data.tenNganHangThuHuong,
+        soTaiKhoanNganChuyen:data.soTaiKhoanNganChuyen,
+        soTaiKhoanNganNhan:data.soTaiKhoanNganChuyen,
+        tenNguoiNhan:"Tran Van B",
+        soTienChuyen:"100000"
+    }
+    var privateKey;
+    var sqlFindPrivateKey = `SELECT * FROM system_config WHERE KeyValue='private_key'`;
+    return db.load(sqlFindPrivateKey).then(obj=>{
+        var signOptions = {
+            //expiresin:exp,
+            algorithm:["RS256"]
+          };
+        console.log("Go to return .");
+        privateKey =obj[0].Value;
+        var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='public_key'`;
+        var publickey ;
+        db.load(sqlFindPublicKey).then(pubKeyRows=>{
+            var signOptions = {
+                //expiresin:exp,
+                algorithm:"RS256"
+              };
+            var token = jwt.sign(payload, privateKey,signOptions);
+            console.log(token);
+            console.log("public key : "+pubKeyRows[0].Value);
+            publickey = pubKeyRows[0].Value;
+            var verifyOptions = {
+                algorithm:["RS256"]
+            };
+            var verified = jwt.verify(token,publickey,verifyOptions);
+             console.log("Verified: " + JSON.stringify(verified));
+            console.log(privateKey);
+            var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
+            WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
+            return db.update2(sqlNguoiChuyen);
+        })
+    });
+}
+
+//json request :
+//Post : localhost:3000/api/ib-hn/get-list-info-bank
+// {
+//         "tenNganHangThuHuong": "Ngân hàng Sài Gòn",
+//         "soTaiKhoanNganNganHangThuHuong":"028100023333",
+//         "tenNguoiNhan":"Tran Van B",
+//         "soTienChuyen":"100000"
+// }
+//Get danh sách ngân hàng
+exports.getListInfoBank= function(data) {
+    
+    var sql = `SELECT * FROM ngan_hang_thu_huong`
+
+    return db.load(sql);
+}
+
+// Method : post 
+// Api :localhost:3000/api/ib-hn/add-other-bank
+// {
+    // 'maNganHang':'NH_ABC',
+    // 'tenNganHang':'Ngan hang Acb'
+// }
+//Thêm 1 ngân hàng
+exports.addOtherBank = function(data) {
+    
+    var sql = `INSERT INTO ngan_hang_thu_huong(MA_NGAN_HANG,TEN_NGAN_HANG) values ('${data.maNganHang}','${data.tenNganHang}')`;
+    return db.insert(sql);
 }
