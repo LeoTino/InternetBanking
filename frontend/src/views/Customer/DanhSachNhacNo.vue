@@ -1,21 +1,17 @@
 <template>
   <div class="card shadow mb-4">
-    <h4 class="card-header">Danh sách nhắc nợ
+    <h4 class="card-header">
+      Danh sách nhắc nợ
       <b-button v-bind:href="urlCreateNguoiNo" variant="primary">Tạo nhắc nợ</b-button>
     </h4>
     <h4 class="card-header">Danh sách nhắc nợ do bản thân tạo</h4>
     <div class="row">
-      <div class="col-sm-3 mb-3" v-for="item in lstReceive" :key="item.value">
+      <div class="col-sm-3 mb-3" v-for="item in nnoLstNguoiNo" :key="item.value">
         <div class="card h-100">
           <div class="card-body">
             <h4 class="card-title text-danger">{{item.name}}</h4>
-            <h6 class="card-title">{{item.value}}</h6>
-            <b-button
-              type="submit"
-              block
-              variant="primary"
-              v-on:click="remove($event, item.value)"
-            >Huỷ</b-button>
+            <h6 class="card-title">{{item.noidung}}</h6>
+            <b-button type="submit" block variant="primary" v-on:click="remove($event, item.id)">Xoá</b-button>
             <b-button type="submit" block variant="primary">Thanh toán</b-button>
           </div>
         </div>
@@ -24,17 +20,12 @@
 
     <h4 class="card-header">Danh sách nhắc nợ do người khác gửi</h4>
     <div class="row">
-      <div class="col-sm-3 mb-3" v-for="item in lstReceive" :key="item.value">
+      <div class="col-sm-3 mb-3" v-for="item in nnoLstNguoiNo" :key="item.value">
         <div class="card h-100">
           <div class="card-body">
             <h4 class="card-title text-danger">{{item.name}}</h4>
-            <h6 class="card-title">{{item.value}}</h6>
-            <b-button
-              type="submit"
-              block
-              variant="primary"
-              v-on:click="remove($event, item.value)"
-            >Huỷ</b-button>
+            <h6 class="card-title">{{item.noidung}}</h6>
+            <b-button type="submit" block variant="primary" v-on:click="remove($event, item.id)">Huỷ</b-button>
             <b-button type="submit" block variant="primary">Thanh toán</b-button>
           </div>
         </div>
@@ -52,24 +43,37 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("genLstReceive");
+    this.$store.dispatch("getLstNguoiNo");
   },
   computed: {
-    lstReceive: {
+    nnoLstNguoiNo: {
       get() {
-        return this.$store.getters.lstReceive;
+        return this.$store.getters.nnoLstNguoiNo;
       },
-      set(lstReceive) {
-        this.$store.dispatch("lstReceive", lstReceive);
+      set(nnoLstNguoiNo) {
+        this.$store.dispatch("nnoLstNguoiNo", nnoLstNguoiNo);
+      }
+    },
+    nnoNoiDungXoa: {
+      get() {
+        return this.$store.getters.nnoNoiDungXoa;
+      },
+      set(nnoNoiDungXoa) {
+        this.$store.dispatch("nnoNoiDungXoa", nnoNoiDungXoa);
       }
     }
   },
   methods: {
     remove(event, id) {
       event.preventDefault();
-      alert(id);
-    },
-    createNhacNo() {}
+      let ndXoa = prompt("Nhập nội dung xoá");
+      let xacNhan = confirm("Confirm or deny");
+      this.$store.dispatch("nnoNoiDungXoa", ndXoa);
+      this.$store.dispatch("nnoID", id);
+      if (xacNhan) {
+        this.$store.dispatch("deleteNhacNo");
+      }
+    }
   }
 };
 </script>

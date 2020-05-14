@@ -5,7 +5,9 @@ const state = {
     nnoLstNguoiNo: [],
     nnoSoTien: "",
     nnoNoiDung: "",
-    nnoInfo: ""
+    nnoInfo: "",
+    nnoNoiDungXoa: "",
+    nnoID: ""
 };
 const getters = {
     nnoSoTK: state => {
@@ -22,6 +24,12 @@ const getters = {
     },
     nnoInfo: state => {
         return state.nnoInfo;
+    },
+    nnoNoiDungXoa: state => {
+        return state.nnoNoiDungXoa;
+    },
+    nnoID: state => {
+        return state.nnoID;
     }
 };
 const mutations = {
@@ -39,6 +47,12 @@ const mutations = {
     },
     nnoInfo: (state, payload) => {
         state.nnoInfo = payload;
+    },
+    nnoNoiDungXoa: state => {
+        return state.nnoNoiDungXoa;
+    },
+    nnoID: state => {
+        return state.nnoID;
     }
 };
 const actions = {
@@ -57,6 +71,12 @@ const actions = {
     nnoInfo: ({ commit }, payload) => {
         commit("nnoInfo", payload);
     },
+    nnoNoiDungXoa: ({ commit }, payload) => {
+        commit("nnoNoiDungXoa", payload);
+    },
+    nnoID: ({ commit }, payload) => {
+        commit("nnoID", payload);
+    },
     getLstNguoiNo: ({ commit }) => {
         axios
             .post('http://localhost:3000/debt/load-debt', {
@@ -67,9 +87,11 @@ const actions = {
                 var arr = [];
                 arr = res.data.map(function (val, ) {
                     return {
-                        "id": val.TAIKHOANNO,
+                        "id": val.ID,
                         "text": val.TAIKHOANNO, //+ " - " + val.NOIDUNG,
                         "value": val.TAIKHOANNO,
+                        "noidung": val.NOIDUNG,
+                        "name": val.TAIKHOANNO
                     }
                 });
                 commit("nnoLstNguoiNo", arr);
@@ -86,6 +108,24 @@ const actions = {
             .then(res => {
                 console.log(res.data);
                 commit("nnoInfo", res.data.Ten);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    deleteNhacNo: () => {
+        console.log(state.nnoID, state.nnoNoiDungXoa);
+        axios
+            .post('http://localhost:3000/debt/delete-debt', {
+                idNhacNo: state.nnoID,
+                noiDungXoa: state.nnoNoiDungXoa
+            })
+            .then(res => {
+                console.log(res.data);
+                if(res.data != null){
+                    return true;
+                }
+                return false;
             })
             .catch(err => {
                 console.log(err);
