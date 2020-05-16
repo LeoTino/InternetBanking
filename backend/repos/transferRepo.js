@@ -31,28 +31,47 @@ exports.insert = (userID, poco) => {
 // Api : localhost:3000/transfer/set-up-user-receive
 
 // {
+//     "id":1,
 //     "tenDangNhap":"123434",
 //     "soTk":"028100024343",
 //     "tenGoiNho":"Nguyen Van A",
-//     "nganHang":"VCB"
+//     "nganHang":"VCB",
+//      "method":1 //1: insert, 2: edit, 3: delete
 //   }
   
 exports.setupUserReceive = function(data) {
+    if(data.method===1){
+        var sql = `INSERT INTO danh_sach_nguoi_nhan(TEN_DANG_NHAP ,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG) 
+        values('${data.tenDangNhap}','${data.soTk}','${data.tenGoiNho}','${data.nganHang}')
+               ON DUPLICATE KEY UPDATE
+               SO_TAI_KHOAN_NGUOI_NHAN = '${data.soTk}'`;
+        return db.insert(sql);
+    }else if(data.method===2){
+        
+        var sql = `update danh_sach_nguoi_nhan SET TEN_DANG_NHAP='${data.tenDangNhap}',
+                    SO_TAI_KHOAN_NGUOI_NHAN='${data.soTk}',
+                    TEN_GOI_NHO ='${data.tenGoiNho}',
+                    NGAN_HANG = '${data.nganHang}' 
+                    WHERE ID = ${data.id}`;
+                    console.log("method 2"+sql);
+        return db.update(sql);
+    }else if(data.method===3){
+        var sql = `DELETE FROM danh_sach_nguoi_nhan WHERE ID='${data.id}'`
+
+        return db.delete(sql);
+    }
     
-    var sql = `INSERT INTO danh_sach_nguoi_nhan(TEN_DANG_NHAP ,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG) 
-         values('${data.tenDangNhap}','${data.soTk}','${data.tenGoiNho}','${data.nganHang}')
-                ON DUPLICATE KEY UPDATE
-                SO_TAI_KHOAN_NGUOI_NHAN = '${data.soTk}'`;
-    return db.insert(sql);
 }
 
+// Method : post 
+// Api :localhost:3000/transfer/load-info-receive
 // {
-//     "tenGoiNho":"Nguyen Van A"
-//  }
+//     "soTaiKhoan":"02810002324343"
+// }
 
-exports.loadUserReceive = function(data) {
+exports.loadInfoReceive = function(data) {
     
-    var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE TEN_GOI_NHO like '%${data.tenGoiNho}%'`;
+    var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE TEN_GOI_NHO like '%${data.soTaiKhoan}%'`;
     console.log("sql la "+sql);
     return db.load(sql);
 }
@@ -63,16 +82,16 @@ exports.loadUserReceive = function(data) {
 // {
 //     "soTaiKhoan":"02810002324343"
 // }
-exports.loadInfoReceive = function(data) {
+// exports.loadInfoReceive = function(data) {
     
-    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
-    FROM TAI_KHOAN T 
-    LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
-    WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
-    `;
-    console.log("sql la "+sql);
-    return db.load(sql);
-}
+//     var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
+//     FROM TAI_KHOAN T 
+//     LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
+//     WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
+//     `;
+//     console.log("sql la "+sql);
+//     return db.load(sql);
+// }
 
 
 

@@ -17,9 +17,34 @@ exports.addDebt = data=> {
     return db.update2(sql);
 }
 
+//json request:
+//Method : Post 
+// localhost:3000/debt/update-debt
+{
+    "id":4,
+    "taiKhoanDoi":"admin",
+    "taiKhoanNo":"hiep",
+    "soTien":9000000,
+    "noiDung":"Tien dien",
+    "trangThai":0,
+    "phanHoi":"Khong thich tra"
+}
+// Update nhắc nợ
+
+exports.updateDebt = data=> {
+    var sql = `UPDATE thong_tin_no
+     SET NOIDUNG = '${data.noiDung}',
+     TAIKHOANNO='${data.taiKhoanNo}',
+    SOTIEN='${data.soTien}',
+    TRANG_THAI=${data.trangThai},
+    TAI_KHOAN_DOI_NO='${data.taiKhoanDoi}', 
+    PhanHoi='${data.phanHoi}'`;
+    return db.update2(sql);
+}
+
 //Xem danh sách nhắc nợ : 
 //Method : Post
-//Api : localhost:3000/debt/load-debt
+// //Api : localhost:3000/debt/load-debt
 // {
 //     "taiKhoanHienTai":"admin"
 // }
@@ -35,7 +60,7 @@ exports.loadDebt = data=> {
 //Api : localhost:3000/debt/delete-debt
 //Method : Post
 // {
-//     "idNhacNo":"admin",
+//     "idNhacNo":"1",
 //     "noiDungXoa":"Đã thanh toán tháng trước"
 // }
 

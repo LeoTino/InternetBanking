@@ -44,7 +44,7 @@ router.post('/set-up-user-receive', (req, res) => {
                 Id: insertId
             };
             res.statusCode = 201;
-            res.json(poco);
+            res.json("success");
         })
         .catch(err => {
             console.log(err);
