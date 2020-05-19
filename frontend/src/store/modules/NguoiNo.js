@@ -113,24 +113,6 @@ const actions = {
                 console.log(err);
             })
     },
-    deleteNhacNo: () => {
-        console.log(state.nnoID, state.nnoNoiDungXoa);
-        axios
-            .post('http://localhost:3000/debt/delete-debt', {
-                idNhacNo: state.nnoID,
-                noiDungXoa: state.nnoNoiDungXoa
-            })
-            .then(res => {
-                console.log(res.data);
-                if(res.data != null){
-                    return true;
-                }
-                return false;
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
 };
 export default {
     state, getters, mutations, actions

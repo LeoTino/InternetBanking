@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     onSubmitTaoNguoiNo() {
+      event.preventDefault();
       alert("tét");
     },
     findNguoiNo(){

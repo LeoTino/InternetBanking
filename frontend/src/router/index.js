@@ -93,6 +93,12 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/customer/debtmanagement/delete/:id',
+    name: 'DeleteDebt',
+    component: () => import('../views/Customer/DeleteNhacNo.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/customer/createNguoiNo',
     name: 'CreateNguoiNo',
     component: () => import('../views/Customer/CreateNguoiNo.vue'),

@@ -25,7 +25,7 @@
           <div class="card-body">
             <h4 class="card-title text-danger">{{item.name}}</h4>
             <h6 class="card-title">{{item.noidung}}</h6>
-            <b-button type="submit" block variant="primary" v-on:click="remove($event, item.id)">Huỷ</b-button>
+            <b-button type="submit" block variant="primary" v-on:click="remove($event, item.id)">Xoá</b-button>
             <b-button type="submit" block variant="primary">Thanh toán</b-button>
           </div>
         </div>
@@ -66,13 +66,7 @@ export default {
   methods: {
     remove(event, id) {
       event.preventDefault();
-      let ndXoa = prompt("Nhập nội dung xoá");
-      let xacNhan = confirm("Confirm or deny");
-      this.$store.dispatch("nnoNoiDungXoa", ndXoa);
-      this.$store.dispatch("nnoID", id);
-      if (xacNhan) {
-        this.$store.dispatch("deleteNhacNo");
-      }
+      location.href = `http://localhost:8080/#/customer/debtmanagement/delete/` + id;
     }
   }
 };
