@@ -3,13 +3,25 @@
     <h1>Tạo người nhận</h1>
     <b-form @submit="onSubmitTaoNguoiNhan">
       <b-form-group id="soTK" label="Số tài khoản" label-for="soTK">
-        <b-form-input id="soTK" v-model="nnSoTK" required placeholder="Số tài khoản"></b-form-input>
+        <b-form-input
+          id="soTK"
+          v-model="nnSoTK"
+          readonly="true"
+          required
+          placeholder="Số tài khoản"
+        ></b-form-input>
       </b-form-group>
       <b-form-group id="tenGoiNho" label="Tên gợi nhớ" label-for="tenGoiNho">
         <b-form-input id="tenGoiNho" v-model="nnTenGoiNho" placeholder="Tên gợi nhớ"></b-form-input>
       </b-form-group>
       <b-form-group id="nganHang" label="Chọn ngân hàng" label-for="nganHang">
-        <b-form-select id="nganHang" required v-model="nnSelectedNganHang" :options="lstNganHang" :select-size="4"></b-form-select>
+        <b-form-select
+          id="nganHang"
+          required
+          v-model="nnSelectedNganHang"
+          :options="lstNganHang"
+          :select-size="4"
+        ></b-form-select>
       </b-form-group>
       <br />
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -21,11 +33,14 @@
 export default {
   data() {
     return {
-      temp:""
+      temp: ""
     };
   },
   mounted() {
     this.$store.dispatch("getLstNganHang");
+  },
+  beforeCreate: function() {
+    this.$store.dispatch("nnSoTK", "dsaad");
   },
   computed: {
     lstNganHang: {
@@ -59,13 +74,14 @@ export default {
       set(nnSelectedNganHang) {
         this.$store.dispatch("nnSelectedNganHang", nnSelectedNganHang);
       }
-    },
+    }
   },
   methods: {
     onSubmitTaoNguoiNhan() {
       event.preventDefault();
-      this.$store.dispatch("createNguoiNhan");
-      alert("Success");
+      alert(this.$route.params.soTK);
+      //this.$store.dispatch("createNguoiNhan");
+      //alert("Success");
     }
   }
 };

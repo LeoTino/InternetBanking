@@ -5,7 +5,7 @@ const state = {
     user: "",
     pwd: "",
     msgLoginFailed: false,
-    role: 0
+    role: 0,
 };
 const getters = {
     user: state => {
@@ -44,6 +44,8 @@ const mutations = {
                     localStorage.setItem('currentUser', res.data.user.MaKhachHang);
                     localStorage.setItem('username', res.data.user.Ten);
                     localStorage.setItem('token', res.data.access_token);
+                    localStorage.setItem('access-token', res.data.access_token);
+                    localStorage.setItem('refresh-token', res.data.refresh_token);
                     console.log(localStorage);
                     state.role = res.data.user.Role;
                     router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
@@ -71,6 +73,20 @@ const actions = {
     },
     callApiLogin: ({ commit }) => {
         commit("callApiLogin");
+    },
+    callApiRefreshToken: () => {
+        axios
+            .post('http://localhost:3000/users/renew-token', {
+                refreshToken: localStorage.getItem("refresh-token")
+            })
+            .then(res => {
+                console.log(res);
+                localStorage.setItem('token', res.data.access_token);
+                localStorage.setItem('access-token', res.data.access_token);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 };
 export default {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import axios from "axios"
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,7 @@ const ifNotAuthenticated = (to, from, next) => {
 const ifAuthenticated = (to, from, next) => {
   let token = localStorage.getItem("token");
   if (token) {
+    axios.defaults.headers.common['x-access-token'] = token
     next()
     return
   }
@@ -70,6 +72,12 @@ const routes = [
     path: '/customer/receivemanagement',
     name: 'ReceiveManagement',
     component: () => import('../views/Customer/DanhSachNguoiNhan.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/customer/receivemanagement/edit/:soTK',
+    name: 'EditReceiveManagement',
+    component: () => import('../views/Customer/EditNguoiNhan.vue'),
     beforeEnter: ifAuthenticated,
   },
   {

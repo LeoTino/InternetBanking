@@ -64,6 +64,54 @@ const actions = {
             .catch(err => {
                 console.log(err);
             })
+    },
+    createNguoiNhan: ({ state }) => {
+        axios
+            .post('http://localhost:3000/transfer/set-up-user-receive', {
+                tenDangNhap: localStorage.getItem("username"),
+                soTK: state.nnSoTK,
+                tenGoiNho: state.nnTenGoiNho,
+                nganHang: state.nnSelectedNganHang,
+                method: 1
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
+    editNguoiNhan: ({ state }) => {
+        axios
+            .post('http://localhost:3000/transfer/set-up-user-receive', {
+                tenDangNhap: localStorage.getItem("username"),
+                soTK: state.nnSoTK,
+                tenGoiNho: state.nnTenGoiNho,
+                nganHang: state.nnSelectedNganHang,
+                method: 2
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
+    deleteNguoiNhan: ({ state }) => {
+        axios
+            .post('http://localhost:3000/transfer/set-up-user-receive', {
+                tenDangNhap: localStorage.getItem("username"),
+                soTK: state.nnSoTK,
+                tenGoiNho: state.nnTenGoiNho,
+                nganHang: state.nnSelectedNganHang,
+                method: 3
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 };
 export default {

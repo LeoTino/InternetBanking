@@ -1,6 +1,7 @@
 <template>
   <div class="card shadow mb-4">
-    <h4 class="card-header">Danh sách người nhận
+    <h4 class="card-header">
+      Danh sách người nhận
       <b-button v-bind:href="urlCreateNguoiNhan" variant="primary">Tạo người nhận</b-button>
     </h4>
     <div class="row">
@@ -15,7 +16,12 @@
               variant="primary"
               v-on:click="remove($event, item.value)"
             >Remove</b-button>
-            <b-button type="submit" block variant="primary">Change</b-button>
+            <b-button
+              type="submit"
+              block
+              variant="primary"
+              v-on:click="edit($event, item.value)"
+            >Change</b-button>
           </div>
         </div>
       </div>
@@ -48,6 +54,10 @@ export default {
     remove(event, id) {
       event.preventDefault();
       alert(id);
+    },
+    edit(event, id) {
+      event.preventDefault();
+      location.href = `http://localhost:8080/#/customer/receivemanagement/edit/` + id;
     }
   }
 };
