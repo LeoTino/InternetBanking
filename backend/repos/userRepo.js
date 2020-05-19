@@ -36,7 +36,7 @@ exports.login = function(userName, password) {
 }
 
 exports.load = function(id) {
-    var sql = `select * from users where f_ID = ${id}`;
+    var sql = `select * from khach_hang where id = ${id}`;
     return db.load(sql);
 }
 
