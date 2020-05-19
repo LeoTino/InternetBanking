@@ -20,15 +20,7 @@ exports.addDebt = data=> {
 //json request:
 //Method : Post 
 // localhost:3000/debt/update-debt
-{
-    "id":4,
-    "taiKhoanDoi":"admin",
-    "taiKhoanNo":"hiep",
-    "soTien":9000000,
-    "noiDung":"Tien dien",
-    "trangThai":0,
-    "phanHoi":"Khong thich tra"
-}
+// ddr
 // Update nhắc nợ
 
 exports.updateDebt = data=> {

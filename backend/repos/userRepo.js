@@ -21,6 +21,7 @@ exports.login = function(userName, password) {
     return new Promise((resolve, reject) => {
         //var md5_password = md5(password);
         var sql = `select * from khach_hang where TenDangNhap = '${userName}' and MatKhau = '${password}'`;
+        console.log("sql la "+sql);
         db.load(sql)
             .then(rows => {
                 if (rows.length === 0) {

@@ -29,6 +29,8 @@ router.post('/createAccount', (req, res) => {
         });
 });
 
+//url : localhost:3000/employment/refill
+//method : post
 // {
 //     "inforUser":"admin",
 //     "soTien":100000

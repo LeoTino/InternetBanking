@@ -4,8 +4,6 @@ var transferHisRepo = require('../repos/transferHistoryRepo');
 var router = express.Router();
 
 router.get('/:soTaiKhoan/:loaiGiaoDich', (req, res) => {
-    console.log("giatri la : "+req.params.loaiGiaoDich);
-    console.log("giatri la : "+req.params.soTaiKhoan);
     if (req.params.loaiGiaoDich) {
         var loaiGD = req.params.loaiGiaoDich;
         var soTaiKhoan = req.params.soTaiKhoan;

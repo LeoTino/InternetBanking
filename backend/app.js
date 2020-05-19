@@ -38,26 +38,26 @@ app.use(staticDir);
 // });
 
 app.use('/categories', categoryCtrl);
-app.use('/users', userCtrl);
+app.use('/users',userCtrl);
 app.use('/products', productCtrl);
 
 //app.use('/orders', verifyAccessToken, orderCtrl);
-app.use('/customer',  customerCtrl);
-app.use('/transfer',  transferCtrl);
-app.use('/transfer-history',  transferHistoryCtrl);
+app.use('/customer',verifyAccessToken,  customerCtrl);
+app.use('/transfer',verifyAccessToken,  transferCtrl);
+app.use('/transfer-history',verifyAccessToken,  transferHistoryCtrl);
 
 //Employment
-app.use('/employment',accountCtrl);
-app.use('/otp',otpCtrl);
+app.use('/employment',verifyAccessToken,accountCtrl);
+app.use('/otp',verifyAccessToken,otpCtrl);
 
 //Other bank
 app.use('/api/ib-hn',otherBankCtrl);
 
 //Manager debt
-app.use('/debt',debtCtr);
+app.use('/debt',verifyAccessToken,debtCtr);
 
 //Notify
-app.use('/notify',notifyCtr);
+app.use('/notify',verifyAccessToken,notifyCtr);
 
 
 const port = process.env.PORT || 3000;

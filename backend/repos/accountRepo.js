@@ -18,6 +18,7 @@ exports.createAccount = infoAcc => {
     return db.insert(sql);
 }
 
+//localhost:3000/debt/update-debt
 // {
 //     "inforUser":"admin",
 //     "soTien":100000
