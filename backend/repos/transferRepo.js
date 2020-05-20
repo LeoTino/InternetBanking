@@ -1,5 +1,5 @@
 var db = require('../fn/mysql-db');
-
+var jwt = require('jsonwebtoken');
 exports.transferInternal = data=> {
     var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
         WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
@@ -109,4 +109,23 @@ exports.loadListInfoReceive = function(data) {
     return db.load(sql);
 }
 
+//json request :
+//Get : localhost:3000/api/ib-hn/create-signature
+//Tạo 
 
+exports.loadPrivateKey = function(data) {
+    
+    var sqlFindPrivateKey = `SELECT * FROM system_config WHERE KeyValue='private_key'`;
+    return db.load(sqlFindPrivateKey);
+}
+
+exports.createSignature = function(data) {
+    var payload = {}
+        var signOptions = {
+            //expiresin:exp,
+            algorithm:"RS256"
+          };
+          privateKey =data[0].Value;
+        return jwt.sign(payload, privateKey,signOptions);
+        
+}

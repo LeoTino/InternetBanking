@@ -1,6 +1,7 @@
 var express = require('express');
 var transferRepo = require('../repos/transferRepo');
 
+
 var router = express.Router();
 
 router.post('/internal', (req, res) => {
@@ -102,5 +103,17 @@ router.post('/load-list-info-receive', (req, res) => {
             res.statusCode = 500;
             res.end('View error log on console.');
         });
+});
+
+
+router.get('/create-signature', (req, res) => {
+    transferRepo.loadPrivateKey().then(data => {
+        res.json(transferRepo.createSignature(data));
+    }).catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console.');
+    });
+
 });
 module.exports = router;

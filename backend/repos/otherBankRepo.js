@@ -2,6 +2,25 @@ var db = require('../fn/mysql-db');
 var jwt = require('jsonwebtoken');
 
 var exp = "24h";
+
+//json request :
+//Post : localhost:3000/api/ib-hn/info-account
+// {
+//    "soTk":"028100023232",
+//     "maNH":"NH_ABC"  
+// }
+//Tạo 
+
+exports.queryInfoAccount = function(data) {
+    
+    var sql = `SELECT tk.SoTaiKhoan, kh.Ten,tk.SoTien
+    FROM TAI_KHOAN tk
+    LEFT JOIN KHACH_HANG kh ON tk.MaKhachHang = kh.MaKhachHang
+    WHERE tk.SoTaiKhoan = '${data.soTk}'`
+
+    return db.load(sql);
+}
+
 //json request :
 //Post : localhost:3000/api/ib-hn/info-account
 // {
@@ -78,7 +97,8 @@ exports.withdraw = data=> {
 //         "tenNganHangThuHuong": "Ngân hàng Sài Gòn",
 //         "soTaiKhoanNganNganHangThuHuong":"028100023333",
 //         "tenNguoiNhan":"Tran Van B",
-//         "soTienChuyen":"100000"
+//         "soTienChuyen":"100000",
+//          "signature":"UQUQ2vjWaO/7F2hTGyHehCjhXCXnSl/sxp9XvlME76zDxioTLiyoR3BytraBJdhbg10GB1kASOfVpex6Ue7IH7eiqJUFBE+e9vegMY8iXaGcDI/ueoo4cvI6AIPWcUqQ7urtDXKeU4jLkVN7SLOt0Tu7spWc2hoZ63KT6uuzhlE="
 // }
 //chuyen tien tiền 
 
@@ -99,7 +119,7 @@ exports.payInto = data=> {
           };
         console.log("Go to return .");
         privateKey =obj[0].Value;
-        var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='public_key'`;
+        var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
         var publickey ;
         db.load(sqlFindPublicKey).then(pubKeyRows=>{
             var signOptions = {
@@ -113,7 +133,7 @@ exports.payInto = data=> {
             var verifyOptions = {
                 algorithm:["RS256"]
             };
-            var verified = jwt.verify(token,publickey,verifyOptions);
+            var verified = jwt.verify(data.signature,publickey,verifyOptions);
              console.log("Verified: " + JSON.stringify(verified));
             console.log(privateKey);
             var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
