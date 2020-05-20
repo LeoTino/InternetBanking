@@ -91,7 +91,8 @@ const actions = {
                         "text": val.TAIKHOANNO, //+ " - " + val.NOIDUNG,
                         "value": val.TAIKHOANNO,
                         "noidung": val.NOIDUNG,
-                        "name": val.TAIKHOANNO
+                        "name": val.TAIKHOANNO,
+                        "soTien": val.SOTIEN,
                     }
                 });
                 commit("nnoLstNguoiNo", arr);

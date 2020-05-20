@@ -99,6 +99,12 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/customer/debtmanagement/thanhtoan/:id',
+    name: 'PaymentDebt',
+    component: () => import('../views/Customer/ThanhToanNhacNo.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/customer/createNguoiNo',
     name: 'CreateNguoiNo',
     component: () => import('../views/Customer/CreateNguoiNo.vue'),
