@@ -71,7 +71,7 @@ exports.setupUserReceive = function(data) {
 
 exports.loadInfoReceive = function(data) {
     
-    var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE TEN_GOI_NHO like '%${data.soTaiKhoan}%'`;
+    var sql = `SELECT * FROM danh_sach_nguoi_nhan WHERE SO_TAI_KHOAN_NGUOI_NHAN like '%${data.soTaiKhoan}%'`;
     console.log("sql la "+sql);
     return db.load(sql);
 }
@@ -111,7 +111,7 @@ exports.loadListInfoReceive = function(data) {
 
 //json request :
 //Get : localhost:3000/api/ib-hn/create-signature
-//Tạo 
+//Tạo signature
 
 exports.loadPrivateKey = function(data) {
     
