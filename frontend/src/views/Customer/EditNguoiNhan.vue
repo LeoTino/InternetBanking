@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -80,6 +81,23 @@ export default {
     onSubmitTaoNguoiNhan() {
       event.preventDefault();
       alert(this.$route.params.soTK);
+      axios
+        .post(
+          "http://internetbankingapi.somee.com/api/NganHangLienKet/GetThongTinTaiKhoan",
+          {
+            soTaiKhoan: "44233946496",
+            timer: "20200521",
+            hashStr:
+              "$2b$12$5vkn.Qwl774rNOIOWmGDr.MoaNcHyWIDzFev.ZEHfQcE9ugs385L2"
+          }
+        )
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
       //this.$store.dispatch("createNguoiNhan");
       //alert("Success");
     }

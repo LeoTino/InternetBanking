@@ -31,15 +31,16 @@ function myCallback() {
     .catch(err => {
       console.log(err);
     });
+    console.log(arr);
   //hien thi notify
-  arr.forEach(function(item){
-    Vue.$toast.open({
-      message: item.noidung,
-      type: 'info',
-      duration: 7000
-      // all other options may go here
-    });
-  });
+  // arr.forEach(function(item){
+  //   Vue.$toast.open({
+  //     message: item.noidung,
+  //     type: 'info',
+  //     duration: 7000
+  //     // all other options may go here
+  //   });
+  // });
 }
 console.log(intervalID);
 new Vue({

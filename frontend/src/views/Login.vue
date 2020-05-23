@@ -29,7 +29,7 @@
 <script>
 import VueRecaptcha from "vue-recaptcha";
 import axios from "axios";
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH';
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 export default {
   data() {
     return {
@@ -76,7 +76,7 @@ export default {
       // param.append("secret", "6LchEV0UAAAAAJnodGqHGn3TCkli4dY8lWRjyCWJ");
       // param.append("response", this.resCaptcha);
       let url =
-        "https://www.google.com/recaptcha/api/siteverify" +
+        "https://cors-anywhere.herokuapp.com/https://www.google.com/recaptcha/api/siteverify" +
         "?secret=6LchEV0UAAAAAJnodGqHGn3TCkli4dY8lWRjyCWJ&response=" +
         this.resCaptcha;
       axios
@@ -86,17 +86,20 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.success);
+          if (res.data.success) {
+            if (
+              JSON.stringify(this.$store.getters.user) &&
+              JSON.stringify(this.$store.getters.pwd)
+            ) {
+              this.$store.dispatch("callApiLogin");
+            }
+          } else {
+            alert("Captcha Err! Pls try again!");
+          }
         })
         .catch(err => {
           console.log(err);
         });
-      if (
-        JSON.stringify(this.$store.getters.user) &&
-        JSON.stringify(this.$store.getters.pwd)
-      ) {
-        this.$store.dispatch("callApiLogin");
-      }
     },
     onVerify: function(response) {
       this.resCaptcha = response;
