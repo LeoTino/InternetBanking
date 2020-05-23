@@ -4,3 +4,4 @@ frontend/src/main.js
 frontend/package.json
 frontend/package-lock.json
 frontend/babel.config.js
+backend/node_modules/

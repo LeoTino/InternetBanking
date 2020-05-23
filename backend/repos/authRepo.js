@@ -4,6 +4,7 @@ var randtoken = require('rand-token'),
 
 var db = require('../fn/mysql-db'),
     opts = require('../fn/opts');
+    var bcrypt = require('bcrypt');
 
 //
 // acccess-token
@@ -76,4 +77,11 @@ exports.verifyRefreshToken = refreshToken => {
 exports.deleteRefreshToken = id => {
     var sql = `delete from userRefreshTokenExt where ID = ${id}`;
     return db.delete(sql);
+}
+
+exports.generateHashKey = () => {
+    return new Promise((resolve, reject) => {
+        const salt = bcrypt.genSaltSync(12);
+        const hash = bcrypt.hashSync("123nhom21", salt);
+    });
 }

@@ -1,5 +1,6 @@
 var express = require('express');
 var bankRepo = require('../repos/otherBankRepo');
+var bcrypt = require('bcrypt');
 
 var router = express.Router();
 //Try vấn thông tin tài khoản
@@ -10,7 +11,25 @@ router.post('/info-account', (req, res) => {
             soTk : '0281434343434',
             tenNganhang :'Ngan Hang ACB'
         }
-        res.json(mockupData);
+
+        bcrypt.genSalt(12, function(err, salt) {
+            bcrypt.hash("4423394649620200521nhom9", salt, function(err, hash) {
+                console.log("hash moi:"+hash);
+            });
+        });
+        var hashString = req.body.soTk+req.body.timer+"nhom21";
+        console.log("hashString:"+hashString);
+        bcrypt.compare(hashString, req.body.hashCode, function(err, result) {
+            console.log("result la:"+result);
+            if(result){
+                res.json(mockupData);
+            }else{
+                res.json({status:"false"});
+            }
+             
+        });
+        // console.log("hash la"+hash);
+        //res.json({status:"false"});
     }).catch(err => {
         console.log(err);
         res.statusCode = 500;
@@ -23,10 +42,11 @@ router.post('/payInto', (req, res) => {
 
     bankRepo.payInto(req.body)
         .then(insertId => {
+            console.log("insertId"+insertId);
             var poco = {
-                status : "success"
+                status : insertId
             };
-            res.statusCode = 201;
+            res.statusCode = 200;
             res.json(poco);
         })
         .catch(err => {
@@ -85,4 +105,6 @@ router.post('/add-other-bank', (req, res) => {
             res.end('View error log on console.');
         });
 });
+
+
 module.exports = router;

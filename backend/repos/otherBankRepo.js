@@ -1,13 +1,14 @@
 var db = require('../fn/mysql-db');
 var jwt = require('jsonwebtoken');
+var NodeRSA = require('node-rsa');
 
 var exp = "24h";
 
-//json request :
-//Post : localhost:3000/api/ib-hn/info-account
+// json request :
+// Post : localhost:3000/api/ib-hn/info-account
 // {
 //    "soTk":"028100023232",
-//     "maNH":"NH_ABC"  
+//     "timer":"NH_ABC"  
 // }
 //Tạo 
 
@@ -25,7 +26,8 @@ exports.queryInfoAccount = function(data) {
 //Post : localhost:3000/api/ib-hn/info-account
 // {
 //    "soTk":"028100023232",
-//     "maNH":"NH_ABC"  
+//     "timer":"string",
+//    "hashStr:"string" // 
 // }
 //Truy van thong tin tai khoan
 
@@ -94,53 +96,52 @@ exports.withdraw = data=> {
 //json request :
 //Post : localhost:3000/api/ib-hn//payInto
 // {
-//         "tenNganHangThuHuong": "Ngân hàng Sài Gòn",
-//         "soTaiKhoanNganNganHangThuHuong":"028100023333",
-//         "tenNguoiNhan":"Tran Van B",
-//         "soTienChuyen":"100000",
-//          "signature":"UQUQ2vjWaO/7F2hTGyHehCjhXCXnSl/sxp9XvlME76zDxioTLiyoR3BytraBJdhbg10GB1kASOfVpex6Ue7IH7eiqJUFBE+e9vegMY8iXaGcDI/ueoo4cvI6AIPWcUqQ7urtDXKeU4jLkVN7SLOt0Tu7spWc2hoZ63KT6uuzhlE="
+//     "tenNganHangGui": "Ngân hàng Sài Gòn",
+//     "soTaiKhoanGui":"028100023333",
+//     "soTaiKhoanNhan":"028143434343",
+//     "tenNguoiNhan":"Tran Van B",
+//     "tenNguoiGui":"Tran Van A",
+//     "soTienChuyen":"100000",
+//     "ngayTao":"2020-05-20",
+//     "noiDung":"chuyen tien",
+//      "signature":"B1ts+MR2h0C0w3ltjaZoZslIpsurS7RpwSGt00ciHsKU57j6EySrEzcNUDqQeRYiPVMTFoxOEB9OEdXCA2mK0Df/tXNKD5lwNXjfDaKF600khurczprFwM7otoc3lA+fQvopKpY2qPX1AO3/w4efcGElDQJxUjN0QPIWeNDp4+I="
 // }
+
 //chuyen tien tiền 
 
+
 exports.payInto = data=> {
-    var payload = {
-        tenNganHangChuyen: data.tenNganHangThuHuong,
-        soTaiKhoanNganChuyen:data.soTaiKhoanNganChuyen,
-        soTaiKhoanNganNhan:data.soTaiKhoanNganChuyen,
-        tenNguoiNhan:"Tran Van B",
-        soTienChuyen:"100000"
-    }
+    var payload = "nhom21"
     var privateKey;
     var sqlFindPrivateKey = `SELECT * FROM system_config WHERE KeyValue='private_key'`;
-    return db.load(sqlFindPrivateKey).then(obj=>{
-        var signOptions = {
-            //expiresin:exp,
-            algorithm:["RS256"]
-          };
-        console.log("Go to return .");
-        privateKey =obj[0].Value;
-        var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
-        var publickey ;
-        db.load(sqlFindPublicKey).then(pubKeyRows=>{
-            var signOptions = {
-                //expiresin:exp,
-                algorithm:"RS256"
-              };
-            var token = jwt.sign(payload, privateKey,signOptions);
-            console.log(token);
-            console.log("public key : "+pubKeyRows[0].Value);
-            publickey = pubKeyRows[0].Value;
-            var verifyOptions = {
-                algorithm:["RS256"]
-            };
-            var verified = jwt.verify(data.signature,publickey,verifyOptions);
-             console.log("Verified: " + JSON.stringify(verified));
-            console.log(privateKey);
-            var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
-            WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
-            return db.update2(sqlNguoiChuyen);
-        })
+    return new Promise((resolve,reject)=>{
+        db.load(sqlFindPrivateKey).then(obj=>{
+            var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
+            var publickey ;
+            db.load(sqlFindPublicKey).then(pubKeyRows=>{
+                var  key = new NodeRSA(null, {signingScheme: 'sha512'});
+                key.importKey(pubKeyRows[0].Value);
+                console.log("signuatre :"+data.signature);
+                var checkSignature = key.verify('nhom9', data.signature,{signingScheme: 'sha512'},"base64");
+                console.log(checkSignature);
+                if(checkSignature===true){
+                    console.log("vo if")
+                    var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien + ${data.soTienChuyen}
+                    WHERE SoTaiKhoan = ${data.soTaiKhoanNhan}`;
+                    return db.update2(sqlNguoiChuyen);
+                }else{
+                    console.log("vo else")
+                    resolve(false)
+                }
+            }).then(result =>{
+                resolve(true);
+            })
+            .catch(err=>reject(err));
+                
+            // })
+        });
     });
+    
 }
 
 //json request :

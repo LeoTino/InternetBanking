@@ -1,5 +1,6 @@
 var db = require('../fn/mysql-db');
 var jwt = require('jsonwebtoken');
+var NodeRSA = require('node-rsa');
 exports.transferInternal = data=> {
     var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
         WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
@@ -120,12 +121,10 @@ exports.loadPrivateKey = function(data) {
 }
 
 exports.createSignature = function(data) {
-    var payload = {}
-        var signOptions = {
-            //expiresin:exp,
-            algorithm:"RS256"
-          };
           privateKey =data[0].Value;
-        return jwt.sign(payload, privateKey,signOptions);
+         var  key = new NodeRSA(null, {signingScheme: 'sha512'});
+         key.importKey(privateKey);
+         var signature=key.sign('nhom21', 'base64');
+        return signature;
         
 }
