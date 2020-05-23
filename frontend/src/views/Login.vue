@@ -1,3 +1,5 @@
+<script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer>
+</script>
 <template>
   <div class="login">
     <h1>Login</h1>
@@ -13,14 +15,29 @@
         <b-form-input id="pwd" v-model="pwd" required placeholder="Password" type="password"></b-form-input>
       </b-form-group>
       <br />
+      <vue-recaptcha
+        @verify="onVerify"
+        @expired="onExpired"
+        :sitekey="sitekey"
+        :loadRecaptchaScript="true"
+      ></vue-recaptcha>
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
   </div>
 </template>
 
-
 <script>
+import VueRecaptcha from "vue-recaptcha";
+import axios from "axios";
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 export default {
+  data() {
+    return {
+      sitekey: "6LchEV0UAAAAAJddn-pwBabt3YfYRlS428y_M3yS",
+      resCaptcha: ""
+    };
+  },
+  components: { VueRecaptcha },
   computed: {
     user: {
       get() {
@@ -50,9 +67,43 @@ export default {
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
-      if (JSON.stringify(this.$store.getters.user) && JSON.stringify(this.$store.getters.pwd)) {
+      // let param = JSON.stringify({
+      //   secret: "6LchEV0UAAAAAJnodGqHGn3TCkli4dY8lWRjyCWJ",
+      //   response: this.resCaptcha
+      // });
+      let param = "";
+      // let param = new FormData();
+      // param.append("secret", "6LchEV0UAAAAAJnodGqHGn3TCkli4dY8lWRjyCWJ");
+      // param.append("response", this.resCaptcha);
+      let url =
+        "https://www.google.com/recaptcha/api/siteverify" +
+        "?secret=6LchEV0UAAAAAJnodGqHGn3TCkli4dY8lWRjyCWJ&response=" +
+        this.resCaptcha;
+      axios
+        .post(url, null, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+          }
+        })
+        .then(res => {
+          console.log(res.success);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      if (
+        JSON.stringify(this.$store.getters.user) &&
+        JSON.stringify(this.$store.getters.pwd)
+      ) {
         this.$store.dispatch("callApiLogin");
       }
+    },
+    onVerify: function(response) {
+      this.resCaptcha = response;
+      console.log("Verify: " + response);
+    },
+    onExpired: function() {
+      console.log("Expired");
     }
   }
 };

@@ -36,6 +36,7 @@ function myCallback() {
     Vue.$toast.open({
       message: item.noidung,
       type: 'info',
+      duration: 7000
       // all other options may go here
     });
   });
