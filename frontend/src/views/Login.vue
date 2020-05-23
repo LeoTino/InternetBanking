@@ -29,7 +29,7 @@
 <script>
 import VueRecaptcha from "vue-recaptcha";
 import axios from "axios";
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'GET, PUT, POST, DELETE, HEAD, OPTIONS, PATCH';
 export default {
   data() {
     return {
