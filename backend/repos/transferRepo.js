@@ -33,7 +33,6 @@ exports.insert = (userID, poco) => {
 
 // {
 //     "id":1,
-//     "tenDangNhap":"123434",
 //     "soTk":"028100024343",
 //     "tenGoiNho":"Nguyen Van A",
 //     "nganHang":"VCB",
@@ -102,7 +101,7 @@ exports.loadInfoReceiveFromStk = function(data) {
 // }
 exports.loadListInfoReceive = function(data) {
     
-    var sql = `SELECT SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG
+    var sql = `SELECT ID,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG
     FROM danh_sach_nguoi_nhan
     WHERE TEN_DANG_NHAP = '${data.tenDangNhap}'`;
     console.log("sql la "+sql);
