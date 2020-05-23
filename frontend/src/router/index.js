@@ -81,7 +81,7 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
-    path: '/customer/receivemanagement/edit/:soTK',
+    path: '/customer/receivemanagement/edit/:soTK/:id',
     name: 'EditReceiveManagement',
     component: () => import('../views/Customer/EditNguoiNhan.vue'),
     beforeEnter: ifAuthenticated,

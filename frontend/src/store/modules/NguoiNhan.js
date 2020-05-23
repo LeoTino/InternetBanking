@@ -4,7 +4,8 @@ const state = {
     lstNganHang: [],
     nnSoTK: "",
     nnTenGoiNho: "",
-    nnSelectedNganHang: ""
+    nnSelectedNganHang: "",
+    nnID: ""
 };
 const getters = {
     lstNganHang: state => {
@@ -18,6 +19,9 @@ const getters = {
     },
     nnSelectedNganHang: state => {
         return state.nnSelectedNganHang;
+    },
+    nnID: state => {
+        return state.nnID;
     }
 };
 const mutations = {
@@ -32,6 +36,9 @@ const mutations = {
     },
     nnSelectedNganHang: (state, payload) => {
         state.nnSelectedNganHang = payload;
+    },
+    nnID: (state, payload) => {
+        state.nnID = payload;
     }
 };
 const actions = {
@@ -46,6 +53,9 @@ const actions = {
     },
     nnSelectedNganHang: ({ commit }, payload) => {
         commit("nnSelectedNganHang", payload);
+    },
+    nnID: ({ commit }, payload) => {
+        commit("nnID", payload);
     },
     getLstNganHang: ({ commit }) => {
         axios
@@ -84,6 +94,7 @@ const actions = {
     editNguoiNhan: ({ state }) => {
         axios
             .post('http://localhost:3000/transfer/set-up-user-receive', {
+                id: state.nnID,
                 tenDangNhap: localStorage.getItem("username"),
                 soTK: state.nnSoTK,
                 tenGoiNho: state.nnTenGoiNho,
@@ -112,7 +123,21 @@ const actions = {
             .catch(err => {
                 console.log(err);
             });
-    }
+    },
+    loadNguoiNhan: ({ commit }) => {
+        axios
+            .post('http://localhost:3000/transfer/load-info-receive-from-stk', {
+                soTaiKhoan: state.nnSoTK
+            })
+            .then(res => {
+                console.log(res);
+                commit("nnSoTK", res.data[0].SoTaiKhoan);
+                commit("nnTenGoiNho", res.data[0].Ten);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
 };
 export default {
     state, getters, mutations, actions

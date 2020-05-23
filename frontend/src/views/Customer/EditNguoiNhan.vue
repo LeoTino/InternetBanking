@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Tạo người nhận</h1>
-    <b-form @submit="onSubmitTaoNguoiNhan">
+    <h1>Chỉnh sửa thông tin người nhận</h1>
+    <b-form @submit="onSubmitEditNguoiNhan">
       <b-form-group id="soTK" label="Số tài khoản" label-for="soTK">
         <b-form-input
           id="soTK"
           v-model="nnSoTK"
-          readonly="true"
+          readonly="readonly"
           required
           placeholder="Số tài khoản"
         ></b-form-input>
@@ -41,7 +41,9 @@ export default {
     this.$store.dispatch("getLstNganHang");
   },
   beforeCreate: function() {
-    this.$store.dispatch("nnSoTK", "dsaad");
+    this.$store.dispatch("nnSoTK", this.$route.params.soTK);
+    this.$store.dispatch("nnID", this.$route.params.id);
+    this.$store.dispatch("loadNguoiNhan");
   },
   computed: {
     lstNganHang: {
@@ -78,28 +80,26 @@ export default {
     }
   },
   methods: {
-    onSubmitTaoNguoiNhan() {
+    onSubmitEditNguoiNhan() {
       event.preventDefault();
-      alert(this.$route.params.soTK);
+      //this.$store.dispatch("editNguoiNhan");
+      alert("dá");
       axios
-        .post(
-          "http://internetbankingapi.somee.com/api/NganHangLienKet/GetThongTinTaiKhoan",
-          {
-            soTaiKhoan: "44233946496",
-            timer: "20200521",
-            hashStr:
-              "$2b$12$5vkn.Qwl774rNOIOWmGDr.MoaNcHyWIDzFev.ZEHfQcE9ugs385L2"
-          }
-        )
+        .post("http://localhost:3000/transfer/set-up-user-receive", {
+          id: this.$store.getters.nnID,
+          tenDangNhap: localStorage.getItem("username"),
+          soTK: this.$store.getters.nnSoTK,
+          tenGoiNho: this.nnTenGoiNho,
+          nganHang: this.nnSelectedNganHang,
+          method: 2
+        })
         .then(res => {
-          console.log(res.data);
+          console.log(res);
+          alert(this.nnTenGoiNho);
         })
         .catch(err => {
           console.log(err);
         });
-
-      //this.$store.dispatch("createNguoiNhan");
-      //alert("Success");
     }
   }
 };

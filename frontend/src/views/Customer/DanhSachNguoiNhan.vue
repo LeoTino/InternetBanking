@@ -14,13 +14,13 @@
               type="submit"
               block
               variant="primary"
-              v-on:click="remove($event, item.value)"
+              v-on:click="remove($event, item.id)"
             >Remove</b-button>
             <b-button
               type="submit"
               block
               variant="primary"
-              v-on:click="edit($event, item.value)"
+              v-on:click="edit($event, item.value, item.id)"
             >Change</b-button>
           </div>
         </div>
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -39,6 +41,16 @@ export default {
   },
   mounted() {
     this.$store.dispatch("genLstReceive");
+  },
+  watch: {
+    isMatchOTP: function() {
+      event.preventDefault();
+      if (this.$store.getters.isMatchOTP == true) {
+        this.$store.dispatch("callApiChuyenTien");
+        alert("Chuyển tiền thành công!");
+        window.location.reload(true);
+      }
+    }
   },
   computed: {
     lstReceive: {
@@ -53,11 +65,27 @@ export default {
   methods: {
     remove(event, id) {
       event.preventDefault();
-      alert(id);
+      axios
+            .post('http://localhost:3000/transfer/set-up-user-receive', {
+                id: id,
+                method: 3
+            })
+            .then(res => {
+                console.log(res.data);
+                if(res.data == "success"){
+                  alert("Success!");
+                  window.location.reload(true);
+                } else{
+                  alert("Err! Pls try again!");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     },
-    edit(event, id) {
+    edit(event, stk, id) {
       event.preventDefault();
-      location.href = `http://localhost:8080/#/customer/receivemanagement/edit/` + id;
+      location.href = `http://localhost:8080/#/customer/receivemanagement/edit/` + stk + "/" + id;
     }
   }
 };

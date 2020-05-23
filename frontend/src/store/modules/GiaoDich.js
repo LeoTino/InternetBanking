@@ -100,24 +100,6 @@ const mutations = {
                 console.log(err);
             });
     },
-    callApiChuyenTienLienNganHang: (state) => {
-        axios
-            .post('http://localhost:3000/transfer/internal', {
-                taiKhoanNguon: state.srcAccount,
-                tentaiKhoanNguon: "Tran Van A",
-                soTaikhoanNhan: state.receiveAccount,
-                tenTaikhoanNhan: "Tran Van B",
-                soTienChuyen: state.soTienChuyen,
-                noiDungChuyen: state.messageTransfer,
-                phi: state.nguoitraphi
-            })
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    },
     callApiGetOTP: (state) => {
         axios
             .post('http://localhost:3000/otp/send', {
@@ -159,6 +141,24 @@ const actions = {
     },
     callApiChuyenTien: ({ commit }) => {
         commit("callApiChuyenTien");
+    },
+    callApiChuyenTienLienNganHang: (state) => {
+        axios
+            .post('http://localhost:3000/transfer/internal', {
+                taiKhoanNguon: state.srcAccount,
+                tentaiKhoanNguon: "Tran Van A",
+                soTaikhoanNhan: state.receiveAccount,
+                tenTaikhoanNhan: "Tran Van B",
+                soTienChuyen: state.soTienChuyen,
+                noiDungChuyen: state.messageTransfer,
+                phi: state.nguoitraphi
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     },
     callApiGetOTP: ({ commit }) => {
         commit("callApiGetOTP");
@@ -206,7 +206,7 @@ const actions = {
                 var arr = [];
                 arr = res.data.map(function (val, ) {
                     return {
-                        "id": val.SO_TAI_KHOAN_NGUOI_NHAN,
+                        "id": val.ID,
                         "text": val.SO_TAI_KHOAN_NGUOI_NHAN + " - " + val.TEN_GOI_NHO,
                         "value": val.SO_TAI_KHOAN_NGUOI_NHAN,
                         "name": val.TEN_GOI_NHO
@@ -220,12 +220,12 @@ const actions = {
     },
     getInfoUserReceive: ({ commit }) => {
         axios
-            .post('http://localhost:3000/transfer/load-info-receive', {
+            .post('http://localhost:3000/transfer/load-info-receive-from-stk', {
                 soTaiKhoan: state.receiveAccount
             })
             .then(res => {
-                console.log(res.data);
-                commit("infoName", res.data.Ten);
+                console.log(res.data[0].Ten);
+                commit("infoName", res.data[0].Ten);
             })
             .catch(err => {
                 console.log(err);
