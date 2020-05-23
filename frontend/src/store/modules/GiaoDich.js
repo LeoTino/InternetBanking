@@ -100,6 +100,24 @@ const mutations = {
                 console.log(err);
             });
     },
+    callApiChuyenTienLienNganHang: (state) => {
+        axios
+            .post('http://localhost:3000/transfer/internal', {
+                taiKhoanNguon: state.srcAccount,
+                tentaiKhoanNguon: "Tran Van A",
+                soTaikhoanNhan: state.receiveAccount,
+                tenTaikhoanNhan: "Tran Van B",
+                soTienChuyen: state.soTienChuyen,
+                noiDungChuyen: state.messageTransfer,
+                phi: state.nguoitraphi
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
     callApiGetOTP: (state) => {
         axios
             .post('http://localhost:3000/otp/send', {

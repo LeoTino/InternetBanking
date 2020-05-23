@@ -40,26 +40,49 @@ exports.insert = (userID, poco) => {
 //   }
   
 exports.setupUserReceive = function(data) {
-    if(data.method===1){
-        var sql = `INSERT INTO danh_sach_nguoi_nhan(TEN_DANG_NHAP ,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG) 
-        values('${data.tenDangNhap}','${data.soTk}','${data.tenGoiNho}','${data.nganHang}')
-               ON DUPLICATE KEY UPDATE
-               SO_TAI_KHOAN_NGUOI_NHAN = '${data.soTk}'`;
-        return db.insert(sql);
-    }else if(data.method===2){
+    return new Promise((resolve, reject) => {
+        var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
+    FROM TAI_KHOAN T 
+    LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
+    WHERE T.SoTaiKhoan ='${data.soTk}'
+    `;
+    db.load(sql).then(info=>{
+            console.log("info la"+JSON.stringify(info));
+            console.log("tenDang nhap "+info[0].TenDangNhap);
+            var tenDangNhap = info[0].TenDangNhap;
+            if(data.tenGoiNho===undefined ||data.tenGoiNho===null){
+                data.tenGoiNho =tenDangNhap;
+            }
+            if(data.method===1){
+                var sql = `INSERT INTO danh_sach_nguoi_nhan(TEN_DANG_NHAP ,SO_TAI_KHOAN_NGUOI_NHAN,TEN_GOI_NHO,NGAN_HANG) 
+                values('${tenDangNhap}','${data.soTk}','${data.tenGoiNho}','${data.nganHang}')
+                       ON DUPLICATE KEY UPDATE
+                       SO_TAI_KHOAN_NGUOI_NHAN = '${data.soTk}'`;
+               db.insert(sql).then(insertResult=>{
+                resolve(true);
+              })
+            }else if(data.method===2){
+                
+                var sql = `update danh_sach_nguoi_nhan SET TEN_DANG_NHAP='${tenDangNhap}',
+                            SO_TAI_KHOAN_NGUOI_NHAN='${data.soTk}',
+                            TEN_GOI_NHO ='${data.tenGoiNho}',
+                            NGAN_HANG = '${data.nganHang}' 
+                            WHERE ID = ${data.id}`;
+                            console.log("method 2"+sql);
+              db.update(sql).then(updateResult=>{
+                resolve(true);
+              })
+            }else if(data.method===3){
+                var sql = `DELETE FROM danh_sach_nguoi_nhan WHERE ID='${data.id}'`
         
-        var sql = `update danh_sach_nguoi_nhan SET TEN_DANG_NHAP='${data.tenDangNhap}',
-                    SO_TAI_KHOAN_NGUOI_NHAN='${data.soTk}',
-                    TEN_GOI_NHO ='${data.tenGoiNho}',
-                    NGAN_HANG = '${data.nganHang}' 
-                    WHERE ID = ${data.id}`;
-                    console.log("method 2"+sql);
-        return db.update(sql);
-    }else if(data.method===3){
-        var sql = `DELETE FROM danh_sach_nguoi_nhan WHERE ID='${data.id}'`
-
-        return db.delete(sql);
-    }
+               db.delete(sql).then(deleteResult=>{
+                resolve(true);
+               });
+            }
+        })
+        
+    });
+    
     
 }
 
@@ -83,11 +106,13 @@ exports.loadInfoReceive = function(data) {
 //     "soTaiKhoan":"02810002324343"
 // }
 exports.loadInfoReceiveFromStk = function(data) {
-    
-    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
+    console.log("qua load info");
+    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone ,N.TEN_GOI_NHO 
     FROM TAI_KHOAN T 
     LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
-    WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
+    LEFT JOIN danh_sach_nguoi_nhan N ON N.SO_TAI_KHOAN_NGUOI_NHAN = T.SoTaiKhoan
+
+    WHERE T.SoTaiKhoan ='${data.soTaiKhoan}'
     `;
     return db.load(sql);
 }

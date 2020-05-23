@@ -69,6 +69,12 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/transfer/other-bank',
+    name: 'ChuyenKhoanLienNganHang',
+    component: () => import('../views/Customer/ChuyenKhoanLienNganHang.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/customer/receivemanagement',
     name: 'ReceiveManagement',
     component: () => import('../views/Customer/DanhSachNguoiNhan.vue'),
