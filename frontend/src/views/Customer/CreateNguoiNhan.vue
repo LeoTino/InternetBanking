@@ -24,6 +24,7 @@ export default {
       temp:""
     };
   },
+  
   mounted() {
     this.$store.dispatch("getLstNganHang");
   },

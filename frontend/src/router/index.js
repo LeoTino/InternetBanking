@@ -117,6 +117,12 @@ const routes = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/customer/history',
+    name: 'LichSuGiaoDich',
+    component: () => import('../views/Customer/LichSuGiaoDich.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/step',
     name: 'MultipleStep',
     component: () => import('../views/MultipleStep.vue'),
