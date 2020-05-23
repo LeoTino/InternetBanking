@@ -46,14 +46,17 @@ const mutations = {
                     localStorage.setItem('token', res.data.access_token);
                     localStorage.setItem('access-token', res.data.access_token);
                     localStorage.setItem('refresh-token', res.data.refresh_token);
+                    localStorage.setItem('Role', res.data.user.Role);
                     console.log(localStorage);
                     state.role = res.data.user.Role;
                     router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
-                    // if(state.role == 0){
-                    //     return false;
-                    // } else {
-                    //     router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
-                    // }                    
+                    if(state.role == "admin"){//sau nay la user
+                        router.push(`/customer/dashboard`);
+                    } else if (state.role == "nhanvien"){
+                        router.push(`/employee/dashboard`);
+                    } else {
+                        return false;
+                    }     
                 }
             })
             .catch(err => {

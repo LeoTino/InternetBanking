@@ -146,6 +146,18 @@ const routes = [
     component: () => import('../views/Employee/CreateAccount.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/employee/dashboard',
+    name: 'EmployeeDashboard',
+    component: () => import('../views/Employee/Dashboard.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/employee/naptien',
+    name: 'EmployeeNapTien',
+    component: () => import('../views/Employee/NapTien.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({

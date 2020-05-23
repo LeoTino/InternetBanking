@@ -7,7 +7,8 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item v-bind:href="urlCustomerDashboard">Dashboard</b-nav-item>
+          <b-nav-item v-if="role === 'admin'" v-bind:href="urlCustomerDashboard">Dashboard</b-nav-item>
+          <b-nav-item v-if="role === 'nhanvien'" v-bind:href="urlEmployeeDashboard">Dashboard</b-nav-item>
           <b-nav-item href="#" disabled>Disabled</b-nav-item>
         </b-navbar-nav>
 
@@ -45,8 +46,10 @@
 export default {
     data () {
         return {
+          role: localStorage.getItem("Role"),
           username: localStorage.getItem("username"),
           urlCustomerDashboard: "http://localhost:8080/#/customer/dashboard",
+          urlEmployeeDashboard: "http://localhost:8080/#/employee/dashboard",
           urlChangePassword: "http://localhost:8080/#/changepassword"
         };
     },
@@ -61,6 +64,7 @@ export default {
     methods: {
       fetchData() {
         this.username = localStorage.getItem("username");
+        this.role = localStorage.getItem("Role");
       },
       clickSignOut(evt) {
         evt.preventDefault()
