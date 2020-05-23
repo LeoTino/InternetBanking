@@ -14,6 +14,9 @@
       <b-form-group id="pwd" label="Password" label-for="pwd">
         <b-form-input id="pwd" v-model="pwd" required placeholder="Password" type="password"></b-form-input>
       </b-form-group>
+      <div>
+        <b-link v-bind:href="urlForgotPassword">Quên mật khẩu?</b-link>
+      </div>
       <br />
       <vue-recaptcha
         @verify="onVerify"
@@ -34,7 +37,8 @@ export default {
   data() {
     return {
       sitekey: "6LchEV0UAAAAAJddn-pwBabt3YfYRlS428y_M3yS",
-      resCaptcha: ""
+      resCaptcha: "",
+      urlForgotPassword: "http://localhost:8080/#/forgotpassword"
     };
   },
   components: { VueRecaptcha },
