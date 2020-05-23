@@ -7,28 +7,40 @@
     </div>
 
     <div v-else class="card-body">
-    <h6>Tài khoản thanh toán</h6>
-    <div class="row">
+      <h6>Tài khoản thanh toán</h6>
+      <div class="row">
         <div class="col-sm-4 mb-3" v-for="item in listTT" :key="item.MaTaiKhoan">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h6 class="card-title">{{item.SoTaiKhoan}}</h6>
-                    <h5 class="card-title text-danger">{{format(item.SoTien)}}</h5>
-                    </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-title">{{item.SoTaiKhoan}}</h6>
+              <h5 class="card-title text-danger">{{format(item.SoTien)}}</h5>
+              <b-button
+                type="submit"
+                block
+                variant="danger"
+                v-on:click="remove($event, item.SoTaiKhoan)"
+              >Đóng tài khoản</b-button>
             </div>
+          </div>
         </div>
-    </div>
-    <h6>Tài khoản tiết kiệm</h6>
-    <div class="row">
+      </div>
+      <h6>Tài khoản tiết kiệm</h6>
+      <div class="row">
         <div class="col-sm-4 mb-3" v-for="item in listTK" :key="item.MaTaiKhoan">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h6 class="card-title">{{item.SoTaiKhoan}}</h6>
-                    <h5 class="card-title text-danger">{{format(item.SoTien)}}</h5>
-                    </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-title">{{item.SoTaiKhoan}}</h6>
+              <h5 class="card-title text-danger">{{format(item.SoTien)}}</h5>
+              <b-button
+                type="submit"
+                block
+                variant="danger"
+                v-on:click="remove($event, item.SoTaiKhoan)"
+              >Đóng tài khoản</b-button>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
     </div>
 
     <div class="card-footer text-muted">Footer</div>
@@ -36,10 +48,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'getAccountsList',
+  name: "getAccountsList",
   data() {
     return {
       listTT: [],
