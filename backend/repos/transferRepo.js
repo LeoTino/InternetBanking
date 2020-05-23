@@ -79,20 +79,19 @@ exports.loadInfoReceive = function(data) {
 
 
 // Method : post 
-// Api :localhost:3000/transfer/load-info-receive
+// Api :localhost:3000/transfer/load-info-receive-from-stk
 // {
 //     "soTaiKhoan":"02810002324343"
 // }
-// exports.loadInfoReceive = function(data) {
+exports.loadInfoReceiveFromStk = function(data) {
     
-//     var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
-//     FROM TAI_KHOAN T 
-//     LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
-//     WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
-//     `;
-//     console.log("sql la "+sql);
-//     return db.load(sql);
-// }
+    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone 
+    FROM TAI_KHOAN T 
+    LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
+    WHERE T.SoTaiKhoan ='${data.soTaiKhoan }'
+    `;
+    return db.load(sql);
+}
 
 
 
