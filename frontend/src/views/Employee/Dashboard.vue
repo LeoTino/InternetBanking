@@ -3,6 +3,7 @@
     <h1>Dashboard</h1>
     <b-button v-bind:href="urlCreateAccount" variant="primary">Tạo tài khoản</b-button><br><br>
     <b-button v-bind:href="urlNapTien" variant="primary">Nạp tiền vào tài khoản</b-button><br><br>
+    <b-button v-bind:href="urlHistory" variant="primary">Lịch sử giao dịch</b-button><br><br>
     <!-- <b-button v-bind:href="urlChuyenTienLienNganHang" variant="primary">Chuyển tiền liên ngân hàng</b-button><br><br>
     <b-button v-bind:href="urlDanhSachNguoiNhan" variant="primary">Danh sách người nhận</b-button><br><br>
     <b-button v-bind:href="urlDanhSachNhacNo" variant="primary">Danh sách nhắc nợ</b-button><br><br>
@@ -15,7 +16,8 @@ export default {
   data() {
     return {
       urlCreateAccount: "http://localhost:8080/#/employee/createAccount",
-      urlNapTien: "http://localhost:8080/#/employee/naptien"
+      urlNapTien: "http://localhost:8080/#/employee/naptien",
+      urlHistory: "http://localhost:8080/#/employee/history",
       // urlDanhSachTaiKhoan:
       //   "http://localhost:8080/#/customer/getAccounts/" +
       //   `${localStorage.getItem("currentUser")}`,

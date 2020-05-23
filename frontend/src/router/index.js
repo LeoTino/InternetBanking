@@ -158,6 +158,12 @@ const routes = [
     component: () => import('../views/Employee/NapTien.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/employee/history',
+    name: 'EmployeeHistory',
+    component: () => import('../views/Employee/LichSuGiaoDich.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({
