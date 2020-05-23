@@ -31,7 +31,7 @@
               <template v-slot:button-content>
                 <em>{{username}}</em>
               </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
+              <b-dropdown-item v-bind:href="urlChangePassword">Change password</b-dropdown-item>
               <b-dropdown-item v-on:click="clickSignOut">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </div>
@@ -46,7 +46,8 @@ export default {
     data () {
         return {
           username: localStorage.getItem("username"),
-          urlCustomerDashboard: "http://localhost:8080/#/customer/dashboard"
+          urlCustomerDashboard: "http://localhost:8080/#/customer/dashboard",
+          urlChangePassword: "http://localhost:8080/#/changepassword"
         };
     },
     mounted() {

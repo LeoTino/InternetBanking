@@ -57,6 +57,12 @@ const routes = [
     beforeEnter: ifNotAuthenticated,
   },
   {
+    path: '/changepassword',
+    name: 'ChangePassword',
+    component: () => import('../views/ChangePassword.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/customer/getAccounts/:MaKhachHang',
     name: 'getAccountsList',
     component: () => import('../views/Customer/DanhSachTaiKhoan.vue'),
