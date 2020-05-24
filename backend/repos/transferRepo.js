@@ -107,7 +107,7 @@ exports.loadInfoReceive = function(data) {
 // }
 exports.loadInfoReceiveFromStk = function(data) {
     console.log("qua load info");
-    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone ,N.TEN_GOI_NHO 
+    var sql = `SELECT T.SoTaiKhoan,K.Ten,K.DiaChi,K.TenDangNhap,K.Email,K.Phone ,N.TEN_GOI_NHO ,N.NGAN_HANG
     FROM TAI_KHOAN T 
     LEFT JOIN KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang 
     LEFT JOIN danh_sach_nguoi_nhan N ON N.SO_TAI_KHOAN_NGUOI_NHAN = T.SoTaiKhoan
