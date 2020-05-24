@@ -164,6 +164,18 @@ const routes = [
     component: () => import('../views/Employee/LichSuGiaoDich.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: () => import('../views/Administrator/Dashboard.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/admin/history',
+    name: 'AdminHistory',
+    component: () => import('../views/Administrator/LichSuGiaoDich.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({

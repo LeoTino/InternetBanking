@@ -50,10 +50,12 @@ const mutations = {
                     console.log(localStorage);
                     state.role = res.data.user.Role;
                     router.push(`/customer/getAccounts/` + `${localStorage.getItem("currentUser")}`);
-                    if(state.role == "admin"){//sau nay la user
+                    if(state.role == "user"){//sau nay la user
                         router.push(`/customer/dashboard`);
                     } else if (state.role == "nhanvien"){
                         router.push(`/employee/dashboard`);
+                    } else if (state.role == "admin"){
+                        router.push(`/admin/dashboard`);
                     } else {
                         return false;
                     }     
