@@ -5,6 +5,8 @@ var randtoken = require('rand-token'),
 var db = require('../fn/mysql-db'),
     opts = require('../fn/opts');
 
+
+
 exports.createAccount = infoAcc => {
     var date = new Date();
     var maKhachHang = date.getFullYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
@@ -18,7 +20,8 @@ exports.createAccount = infoAcc => {
     return db.insert(sql);
 }
 
-//localhost:3000/debt/update-debt
+//url : localhost:3000/employment/refill
+//method : post
 // {
 //     "inforUser":"admin",
 //     "soTien":100000
@@ -37,7 +40,7 @@ exports.refill = infoTransfer => {
     return db.update2(sqlNguoiChuyen);
 }
 
-
+//localhost:3000/employment/history-account
 // {
 //     "soTaiKhoan":"0281000232299",
 //     "loaiGd":"NHAN_TIEN",
@@ -50,3 +53,28 @@ exports.getHistTransaction = data => {
 }
 
 
+// localhost:3000/employment/add-debit-account
+// {
+//     "infoCustomer":"admin",//Ma khach hang hoac user dang nhap
+//     "soTien":100000
+//   }
+exports.addDebitAccount = data => {
+    var date = new Date();
+    var radomStr = date.getYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
+    var soTaiKhoan = "0281"+radomStr;
+    var maTaiKhoan = date.getYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
+    return new Promise((resolve,reject)=>{
+        var truyvanInfo = `SELECT * FROM khach_hang WHERE MaKhachHang ='${data.infoCustomer}' OR TenDangNhap='${data.infoCustomer}'`
+        db.load(truyvanInfo).then(khachHang=>{
+            var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien) 
+            values('${maTaiKhoan}', '${khachHang[0].MaKhachHang}','${soTaiKhoan}', '0', ${data.soTien})`;
+            db.update2(sqlCreateAcc).then(taiKhoan=>{
+                resolve(taiKhoan);
+            });
+        }).catch(error=>{
+            reject(error)
+        });
+    });
+    
+    
+}

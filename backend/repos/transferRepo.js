@@ -50,7 +50,7 @@ exports.setupUserReceive = function(data) {
             console.log("info la"+JSON.stringify(info));
             console.log("tenDang nhap "+info[0].TenDangNhap);
             var tenDangNhap = info[0].TenDangNhap;
-            if(data.tenGoiNho===undefined ||data.tenGoiNho===null){
+            if(data.tenGoiNho==="" ||data.tenGoiNho===undefined ||data.tenGoiNho===null){
                 data.tenGoiNho =tenDangNhap;
             }
             if(data.method===1){
@@ -81,7 +81,7 @@ exports.setupUserReceive = function(data) {
             }
         })
         
-    });
+    }).catch(err => reject(err));;
     
     
 }
@@ -143,6 +143,9 @@ exports.loadPrivateKey = function(data) {
     return db.load(sqlFindPrivateKey);
 }
 
+//json request :
+//Get : localhost:3000/api/ib-hn/create-signature
+//Tạo signature
 exports.createSignature = function(data) {
           privateKey =data[0].Value;
          var  key = new NodeRSA(null, {signingScheme: 'sha512'});

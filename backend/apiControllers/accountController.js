@@ -62,4 +62,18 @@ router.post('/history-account', (req, res) => {
         });
 });
 
+
+router.post('/add-debit-account', (req, res) => {
+    accountRepo.addDebitAccount(req.body)
+        .then(insertId => {
+            
+            res.statusCode = 201;
+            res.json("success");
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
 module.exports = router;
