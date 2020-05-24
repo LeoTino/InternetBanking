@@ -176,6 +176,12 @@ const routes = [
     component: () => import('../views/Administrator/LichSuGiaoDich.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/admin/danhsachnhanvien',
+    name: 'AdminDanhSachNhanVien',
+    component: () => import('../views/Administrator/DanhSachNhanVien.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ]
 
 const router = new VueRouter({
