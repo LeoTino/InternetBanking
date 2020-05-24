@@ -125,4 +125,18 @@ router.post('/logout', authRepo.verifyAccessToken, (req, res) => {
         });
 });
 
+router.post('/change-pwd', (req, res) => {
+    userRepo.changePassword(req.body)
+        .then(affectedRows => {
+            res.json({
+                msg: 'success'
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
+
 module.exports = router;

@@ -15,6 +15,7 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	otherBankCtrl = require('./apiControllers/otherBankController');
 	debtCtr = require('./apiControllers/debtController');
 	notifyCtr = require('./apiControllers/notifyController');
+	adminCtr = require('./apiControllers/adminController');
 
 	
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
@@ -43,8 +44,9 @@ app.use('/products', productCtrl);
 
 //app.use('/orders', verifyAccessToken, orderCtrl);
 app.use('/customer',verifyAccessToken,  customerCtrl);
-app.use('/transfer',verifyAccessToken,  transferCtrl);
+app.use('/transfer',  verifyAccessToken,transferCtrl);
 app.use('/transfer-history',verifyAccessToken,  transferHistoryCtrl);
+
 
 //Employment
 app.use('/employment',verifyAccessToken,accountCtrl);
@@ -58,7 +60,8 @@ app.use('/debt',verifyAccessToken,debtCtr);
 
 //Notify
 app.use('/notify',verifyAccessToken,notifyCtr);
-
+//Admin
+app.use('/admin',  adminCtr);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

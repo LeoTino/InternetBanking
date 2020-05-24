@@ -2,6 +2,8 @@ var express = require('express');
 var accountRepo = require('../repos/accountRepo');
 
 var router = express.Router();
+
+//Api localhost:3000/employment/createAccount
 //json 
 // {
 // 	"ten":"Trần Anh Khoa",

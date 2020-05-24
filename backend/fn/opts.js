@@ -11,6 +11,9 @@ var opts = {
     REFRESH_TOKEN: {
         SIZE: 80
     },
+    KEY_BANK: {
+        VALUE: 80
+    },
 
     DB: {
         HOST: '127.0.0.1',
