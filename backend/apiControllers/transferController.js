@@ -21,6 +21,23 @@ router.post('/internal', (req, res) => {
         });
 });
 
+router.post('/truTien', (req, res) => {
+
+    transferRepo.truTien(req.body)
+        .then(insertId => {
+            var poco = {
+                status : "success"
+            };
+            res.statusCode = 201;
+            res.json(poco);
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
+
 router.post('/outsite', (req, res) => {
     categoryRepo.add(req.body)
         .then(insertId => {
