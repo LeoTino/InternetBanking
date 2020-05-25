@@ -270,6 +270,29 @@ const actions = {
                 console.log(err);
             })
     },
+    genLstReceiveLienNganHang: ({ commit }) => {
+        axios
+            .post('http://localhost:3000/transfer/load-list-info-receive', {
+                tenDangNhap: `${localStorage.getItem("username")}`
+            })
+            .then(res => {
+                var arr = [];
+                var data = res.data.filter(i => i.NGAN_HANG == state.gdrsaSelectedNganHang);
+                console.log(data);
+                arr = data.map(function (val, ) {
+                    return {
+                        "id": val.ID,
+                        "text": val.SO_TAI_KHOAN_NGUOI_NHAN + " - " + val.TEN_GOI_NHO,
+                        "value": val.SO_TAI_KHOAN_NGUOI_NHAN,
+                        "name": val.TEN_GOI_NHO
+                    }
+                });
+                commit("lstReceive", arr);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 };
 function format(val) {
     return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;

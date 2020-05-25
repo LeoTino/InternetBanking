@@ -1,7 +1,7 @@
 <template>
   <form-wizard @on-complete="onComplete" shape="tab" color="#9b59b6">
     <div slot="title">Chuyển khoản liên ngân hàng</div>
-    <tab-content title="Step 0" :before-change="beforeTabSwitch">
+    <tab-content title="Step 0" :before-change="afterSelectNganHang">
       <b-alert show variant="primary">Chọn ngân hàng: {{ gdrsaSelectedNganHang }}</b-alert>
       <div>
         <b-form-select v-model="gdrsaSelectedNganHang" :options="lstNganHang" :select-size="8"></b-form-select>
@@ -112,7 +112,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("genLstSrc");
-    this.$store.dispatch("genLstReceive");
+    //this.$store.dispatch("genLstReceiveLienNganHang");
     this.$store.dispatch("getLstNganHang");
   },
   watch: {
@@ -264,23 +264,36 @@ export default {
       return true;
     },
     findReceiver: function() {
-      if (this.$store.getters.gdrsaSelectedNganHang == this.$store.getters.constNganHangRSA) {
+      if (
+        this.$store.getters.gdrsaSelectedNganHang ==
+        this.$store.getters.constNganHangRSA
+      ) {
         this.$store.dispatch("getInfoUserReceiveLienNganHangRSA");
       }
     },
     checkNguoiNhan: function() {
-      if(this.$store.getters.infoName == "" || this.$store.getters.infoName == "Tài khoản không tồn tại"){
+      if (
+        this.$store.getters.infoName == "" ||
+        this.$store.getters.infoName == "Tài khoản không tồn tại"
+      ) {
         alert("Người nhận không tồn tại!");
         return false;
       }
       return true;
     },
     timInfoNguoiNhan: function() {
-      if (this.$store.getters.gdrsaSelectedNganHang == this.$store.getters.constNganHangRSA) {
+      if (
+        this.$store.getters.gdrsaSelectedNganHang ==
+        this.$store.getters.constNganHangRSA
+      ) {
         this.$store.dispatch("getInfoUserReceiveLienNganHangRSA");
       }
       return true;
     },
+    afterSelectNganHang: function() {
+      this.$store.dispatch("genLstReceiveLienNganHang");
+      return true;
+    }
   }
 };
 </script>
