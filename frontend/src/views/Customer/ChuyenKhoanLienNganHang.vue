@@ -1,13 +1,19 @@
 <template>
   <form-wizard @on-complete="onComplete" shape="tab" color="#9b59b6">
     <div slot="title">Chuyển khoản liên ngân hàng</div>
+    <tab-content title="Step 0" :before-change="beforeTabSwitch">
+      <b-alert show variant="primary">Chọn ngân hàng: {{ gdrsaSelectedNganHang }}</b-alert>
+      <div>
+        <b-form-select v-model="gdrsaSelectedNganHang" :options="lstNganHang" :select-size="8"></b-form-select>
+      </div>
+    </tab-content>
     <tab-content title="Step 1" :before-change="beforeTabSwitch">
       <b-alert show variant="primary">Chọn tài khoản nguồn: {{ srcAccount }}</b-alert>
       <div>
         <b-form-select v-model="srcAccount" :options="lstSrc" :select-size="8"></b-form-select>
       </div>
     </tab-content>
-    <tab-content title="Step 2">
+    <tab-content title="Step 2" :before-change="timInfoNguoiNhan">
       <b-alert show variant="primary">
         Chọn người nhận: {{ receiveAccount }}
         <sup>
@@ -21,7 +27,7 @@
         <b-form-select v-model="receiveAccount" :options="lstReceive" :select-size="8"></b-form-select>
       </div>
     </tab-content>
-    <tab-content title="Step 3">
+    <tab-content title="Step 3" :before-change="checkNguoiNhan">
       <b-alert show variant="primary">
         Điền STK người nhận: {{ receiveAccount }}
         <sup>
@@ -107,14 +113,14 @@ export default {
   mounted() {
     this.$store.dispatch("genLstSrc");
     this.$store.dispatch("genLstReceive");
+    this.$store.dispatch("getLstNganHang");
   },
   watch: {
     isMatchOTP: function() {
       event.preventDefault();
       if (this.$store.getters.isMatchOTP == true) {
-        this.$store.dispatch("callApiChuyenTienLienNganHang");
-        alert("Chuyển tiền thành công!");
-        window.location.reload(true);
+        this.$store.dispatch("callApiChuyenTienLienNganHangRSA");
+        // window.location.reload(true);
       }
     }
   },
@@ -196,6 +202,22 @@ export default {
       set(isMatchOTP) {
         this.$store.dispatch("isMatchOTP", isMatchOTP);
       }
+    },
+    lstNganHang: {
+      get() {
+        return this.$store.getters.lstNganHang;
+      },
+      set(lstNganHang) {
+        this.$store.dispatch("lstNganHang", lstNganHang);
+      }
+    },
+    gdrsaSelectedNganHang: {
+      get() {
+        return this.$store.getters.gdrsaSelectedNganHang;
+      },
+      set(gdrsaSelectedNganHang) {
+        this.$store.dispatch("gdrsaSelectedNganHang", gdrsaSelectedNganHang);
+      }
     }
   },
   methods: {
@@ -218,12 +240,16 @@ export default {
         alert("Vui lòng nhập đầy đủ thông tin chuyển tiền!");
         return false;
       }
-      if(this.$store.getters.lstSrc.find(
-          i => i.id == this.$store.getters.srcAccount
-        ).money < this.$store.getters.soTienChuyen){
-          alert("Số dư không đủ để chuyển!");
-          return false;
-        }
+      if (
+        parseFloat(
+          this.$store.getters.lstSrc.find(
+            i => i.id == this.$store.getters.srcAccount
+          ).money
+        ) < parseFloat(this.$store.getters.soTienChuyen)
+      ) {
+        alert("Số dư không đủ để chuyển!");
+        return false;
+      }
       this.$store.dispatch("callApiGetOTP");
       if (this.$store.getters.isSendOTP == false) {
         alert("Cannot send OTP! Please contact administrator");
@@ -238,8 +264,23 @@ export default {
       return true;
     },
     findReceiver: function() {
-      this.$store.dispatch("getInfoUserReceive");
-    }
+      if (this.$store.getters.gdrsaSelectedNganHang == this.$store.getters.constNganHangRSA) {
+        this.$store.dispatch("getInfoUserReceiveLienNganHangRSA");
+      }
+    },
+    checkNguoiNhan: function() {
+      if(this.$store.getters.infoName == "" || this.$store.getters.infoName == "Tài khoản không tồn tại"){
+        alert("Người nhận không tồn tại!");
+        return false;
+      }
+      return true;
+    },
+    timInfoNguoiNhan: function() {
+      if (this.$store.getters.gdrsaSelectedNganHang == this.$store.getters.constNganHangRSA) {
+        this.$store.dispatch("getInfoUserReceiveLienNganHangRSA");
+      }
+      return true;
+    },
   }
 };
 </script>

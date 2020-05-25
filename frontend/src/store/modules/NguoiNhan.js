@@ -85,6 +85,7 @@ const actions = {
                 method: 1
             })
             .then(res => {
+                alert("Success");
                 console.log(res);
             })
             .catch(err => {

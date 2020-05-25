@@ -42,7 +42,8 @@ const mutations = {
                 if (res.data.auth == true) {
                     console.log(res);
                     localStorage.setItem('currentUser', res.data.user.MaKhachHang);
-                    localStorage.setItem('username', res.data.user.Ten);
+                    localStorage.setItem('username', res.data.user.TenDangNhap);
+                    localStorage.setItem('ten', res.data.user.Ten);
                     localStorage.setItem('token', res.data.access_token);
                     localStorage.setItem('access-token', res.data.access_token);
                     localStorage.setItem('refresh-token', res.data.refresh_token);

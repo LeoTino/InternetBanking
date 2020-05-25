@@ -10,8 +10,10 @@ const state = {
     nguoitraphi: "",
     isSendOTP: false,
     otpCode: "",
-    infoName: "Tài khoản không tồn tại",
-    isMatchOTP: "none"
+    infoName: "",
+    isMatchOTP: "none",
+    gdrsaSelectedNganHang: "",
+    constNganHangRSA: "NHOM_21_BANK",
 };
 const getters = {
     srcAccount: state => {
@@ -46,7 +48,13 @@ const getters = {
     },
     isMatchOTP: state => {
         return state.isMatchOTP;
-    }
+    },
+    gdrsaSelectedNganHang: state => {
+        return state.gdrsaSelectedNganHang;
+    },
+    constNganHangRSA: state => {
+        return state.constNganHangRSA;
+    },
 };
 const mutations = {
     srcAccount: (state, payload) => {
@@ -81,6 +89,9 @@ const mutations = {
     },
     isMatchOTP: (state, payload) => {
         state.isMatchOTP = payload;
+    },
+    gdrsaSelectedNganHang: (state, payload) => {
+        state.gdrsaSelectedNganHang = payload;
     },
     callApiChuyenTien: (state) => {
         axios
@@ -139,22 +150,29 @@ const actions = {
     isMatchOTP: ({ commit }, payload) => {
         commit("isMatchOTP", payload);
     },
+    gdrsaSelectedNganHang: ({ commit }, payload) => {
+        commit("gdrsaSelectedNganHang", payload);
+    },
     callApiChuyenTien: ({ commit }) => {
         commit("callApiChuyenTien");
     },
-    callApiChuyenTienLienNganHang: (state) => {
+    callApiChuyenTienLienNganHangRSA: (state) => {
         axios
-            .post('http://localhost:3000/transfer/internal', {
-                taiKhoanNguon: state.srcAccount,
-                tentaiKhoanNguon: "Tran Van A",
-                soTaikhoanNhan: state.receiveAccount,
-                tenTaikhoanNhan: "Tran Van B",
-                soTienChuyen: state.soTienChuyen,
-                noiDungChuyen: state.messageTransfer,
-                phi: state.nguoitraphi
+            .post('https://cors-anywhere.herokuapp.com/http://internetbankingapi.somee.com/api/NganHangLienKet/GiaoDichKhacNganHang', {
+                soTKGui: state.srcAccount,
+                tenNganHangGui: "NHOM_21_BANK",
+                soTKNhan: "44233946496",
+                tenNganHangNhan: "18HCB BANK",
+                soTien: state.soTienChuyen,
+                noiDung: state.messageTransfer,
+                ngayTao: "2020-05-27",
+                signature: "B1ts+MR2h0C0w3ltjaZoZslIpsurS7RpwSGt00ciHsKU57j6EySrEzcNUDqQeRYiPVMTFoxOEB9OEdXCA2mK0Df/tXNKD5lwNXjfDaKF600khurczprFwM7otoc3lA+fQvopKpY2qPX1AO3/w4efcGElDQJxUjN0QPIWeNDp4+I="
             })
             .then(res => {
                 console.log(res);
+                if(res.data.mesError == "request success"){
+                    alert("Chuyển tiền thành công");
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -180,7 +198,7 @@ const actions = {
     },
     genLstSrc: ({ commit }) => {
         axios
-            .get('http://localhost:3000/customer/getAccounts/' + `${localStorage.getItem("username")}`)
+            .get('http://localhost:3000/customer/getAccounts/' + `${localStorage.getItem("currentUser")}`)
             .then(res => {
                 var arr = [];
                 arr = res.data.map(function (val, ) {
@@ -224,13 +242,34 @@ const actions = {
                 soTaiKhoan: state.receiveAccount
             })
             .then(res => {
+                commit("infoName", "Tài khoản không tồn tại");
                 console.log(res.data[0].Ten);
                 commit("infoName", res.data[0].Ten);
             })
             .catch(err => {
                 console.log(err);
             })
-    }
+    },
+    getInfoUserReceiveLienNganHangRSA: ({ commit }) => {
+        axios
+            .post('https://cors-anywhere.herokuapp.com/http://internetbankingapi.somee.com/api/NganHangLienKet/GetThongTinTaiKhoan', {
+                soTaiKhoan: state.receiveAccount,
+                timer: "20200521",
+                hashStr: "$2b$12$5vkn.Qwl774rNOIOWmGDr.MoaNcHyWIDzFev.ZEHfQcE9ugs385L2"
+            })
+            .then(res => {
+                commit("infoName", "Tài khoản không tồn tại");
+                if (res.data.tenTaiKhoan == undefined) {
+                    commit("infoName", "Tài khoản không tồn tại");
+                } else {
+                    commit("infoName", res.data.tenTaiKhoan);
+                }
+                console.log(res.data.tenTaiKhoan);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 };
 function format(val) {
     return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;

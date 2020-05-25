@@ -66,7 +66,6 @@ export default {
     onSubmitTaoNguoiNhan() {
       event.preventDefault();
       this.$store.dispatch("createNguoiNhan");
-      alert("Success");
     }
   }
 };

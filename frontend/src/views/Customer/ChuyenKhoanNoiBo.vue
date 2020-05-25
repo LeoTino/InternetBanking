@@ -7,7 +7,7 @@
         <b-form-select v-model="srcAccount" :options="lstSrc" :select-size="8"></b-form-select>
       </div>
     </tab-content>
-    <tab-content title="Step 2">
+    <tab-content title="Step 2" :before-change="timInfoNguoiNhan">
       <b-alert show variant="primary">
         Chọn người nhận: {{ receiveAccount }}
         <sup>
@@ -21,7 +21,7 @@
         <b-form-select v-model="receiveAccount" :options="lstReceive" :select-size="8"></b-form-select>
       </div>
     </tab-content>
-    <tab-content title="Step 3">
+    <tab-content title="Step 3" :before-change="checkNguoiNhan">
       <b-alert show variant="primary">
         Điền STK người nhận: {{ receiveAccount }}
         <sup>
@@ -218,9 +218,9 @@ export default {
         alert("Vui lòng nhập đầy đủ thông tin chuyển tiền!");
         return false;
       }
-      if(this.$store.getters.lstSrc.find(
+      if(parseFloat(this.$store.getters.lstSrc.find(
           i => i.id == this.$store.getters.srcAccount
-        ).money < this.$store.getters.soTienChuyen){
+        ).money) < parseFloat(this.$store.getters.soTienChuyen)){
           alert("Số dư không đủ để chuyển!");
           return false;
         }
@@ -239,7 +239,18 @@ export default {
     },
     findReceiver: function() {
       this.$store.dispatch("getInfoUserReceive");
-    }
+    },
+    checkNguoiNhan: function() {
+      if(this.$store.getters.infoName == "" || this.$store.getters.infoName == "Tài khoản không tồn tại"){
+        alert("Người nhận không tồn tại!");
+        return false;
+      }
+      return true;
+    },
+    timInfoNguoiNhan: function() {
+      this.$store.dispatch("getInfoUserReceive");
+      return true;
+    },
   }
 };
 </script>
