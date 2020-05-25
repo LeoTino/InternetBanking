@@ -17,8 +17,8 @@ exports.createAccount = infoAcc => {
                 var maKhachHang = date.getFullYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
                 var maTaiKhoan = date.getYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
                 var soTaiKhoan = "0281"+maKhachHang;
-                var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien) 
-                values('${maTaiKhoan}', '${maKhachHang}','${soTaiKhoan}', '0', '0')`;
+                var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien,Role) 
+                values('${maTaiKhoan}', '${maKhachHang}','${soTaiKhoan}', '0', '0','user')`;
                 var sql = `insert into khach_hang(Ten, DiaChi,MaKhachHang, TenDangNhap,MatKhau,Email,Phone) 
                             values('${infoAcc.ten}', '${infoAcc.diaChi}','${maKhachHang}', '${infoAcc.tenDangNhap}', '${infoAcc.matKhau}', '${infoAcc.phone}', '${infoAcc.email}')`;
                 db.sqlCreateAcc(sqlCreateAcc);
@@ -68,7 +68,8 @@ exports.getHistTransaction = data => {
 // localhost:3000/employment/add-debit-account
 // {
 //     "infoCustomer":"admin",//Ma khach hang hoac user dang nhap
-//     "soTien":100000
+//     "soTien":100000,
+//     "loaiTaiKhoan":0
 //   }
 exports.addDebitAccount = data => {
     var date = new Date();
@@ -79,7 +80,7 @@ exports.addDebitAccount = data => {
         var truyvanInfo = `SELECT * FROM khach_hang WHERE MaKhachHang ='${data.infoCustomer}' OR TenDangNhap='${data.infoCustomer}'`
         db.load(truyvanInfo).then(khachHang=>{
             var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien) 
-            values('${maTaiKhoan}', '${khachHang[0].MaKhachHang}','${soTaiKhoan}', '0', ${data.soTien})`;
+            values('${maTaiKhoan}', '${khachHang[0].MaKhachHang}','${soTaiKhoan}', '${data.loaiTaiKhoan}', ${data.soTien})`;
             db.update2(sqlCreateAcc).then(taiKhoan=>{
                 resolve(taiKhoan);
             });

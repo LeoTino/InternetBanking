@@ -9,7 +9,7 @@ var db = require('../fn/mysql-db'),
 //url : localhost:3000/admin/load-empl
 //method : get
 exports.loadEmpl = infoAcc => {
-    var sql = `SELECT * FROM khach_hang WHERE Role=2`;
+    var sql = `SELECT * FROM khach_hang WHERE Role='nhanvien'`;
     return db.load(sql);
 }
 

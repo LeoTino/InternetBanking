@@ -50,7 +50,7 @@ app.use('/transfer-history',verifyAccessToken,  transferHistoryCtrl);
 
 //Employment
 app.use('/employment',verifyAccessToken,accountCtrl);
-app.use('/otp',verifyAccessToken,otpCtrl);
+app.use('/otp',otpCtrl);
 
 //Other bank
 app.use('/api/ib-hn',otherBankCtrl);
