@@ -1,8 +1,21 @@
 <template>
   <div id="app">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <b-button v-bind:href="urlCreateNhanVien" variant="primary">Thêm nhân viên</b-button>
     <div class="content">
-      <datatable title="Danh sách nhân viên" :columns="tableColumns1" :rows="tableRows1" />
+      <datatable title="Danh sách nhân viên" :columns="columnNhanVien" :rows="rowDataNhanVien">
+        <th slot="thead-tr">Actions</th>
+        <template slot="tbody-tr" slot-scope="props">
+          <td>
+            <button
+              class="btn red darken-2 waves-effect waves-light compact-btn"
+              @click="(e) => deleteItem(props.row, e)"
+            >
+              <i class="material-icons white-text">delete</i>
+            </button>
+          </td>
+        </template>
+      </datatable>
     </div>
   </div>
 </template>
@@ -11,99 +24,86 @@
 import axios from "axios";
 import DataTable from "vue-materialize-datatable";
 export default {
-  name: "getAccountsList",
   data() {
     return {
-      list: [],
-      tableColumns1: [
+      urlCreateNhanVien: "http://localhost:8080/#/admin/themnhanvien",
+      rowDataNhanVien: [],
+      columnNhanVien: [
         {
           label: "Tên nhân viên",
-          field: "charName",
+          field: "ten",
           numeric: false,
           html: true
         },
         {
+          label: "Địa chỉ",
+          field: "diachi",
+          numeric: false,
+          html: false
+        },
+        {
           label: "Tên đăng nhập",
-          field: "firstAppearance",
+          field: "username",
+          numeric: false,
+          html: false
+        },
+        {
+          label: "Email",
+          field: "email",
           numeric: false,
           html: false
         },
         {
           label: "Số điện thoại",
-          field: "createdBy",
+          field: "phone",
           numeric: false,
           html: false
         },
-        {
-          label: "Status",
-          field: "voicedBy",
-          numeric: false,
-          html: false
-        },
-        {
-          label: "Button change status",
-          field: "voicedBy",
-          numeric: false,
-          html: false
-        }
-      ],
-      tableRows1: [
-        {
-          charName: '<div style="color:red;">Abu</div>',
-          firstAppearance: "Alladin (1992)",
-          createdBy: "Joe Grant",
-          voicedBy: "Frank Welker"
-        },
-        {
-          charName: "Magic Carpet",
-          firstAppearance: "Peter (1994)",
-          createdBy: "Randy Cartwright",
-          voicedBy: "N/A"
-        },
-        {
-          charName: "The Sultan",
-          firstAppearance: "John (1995)",
-          createdBy: "Navid Negahban",
-          voicedBy: "Douglas Seale"
-        }
       ]
     };
   },
   components: {
     datatable: DataTable
   },
+  beforeCreate: function() {
+    //this.fetchData();
+  },
   mounted() {
-    this.fetchData(this.$route.params.MaKhachHang);
+    this.fetchData();
   },
-
-  watch: {
-    $route(to) {
-      this.fetchData(to.params.MaKhachHang);
-    }
-  },
-
   methods: {
     format(val) {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
-    fetchData(MaKhachHang) {
+    fetchData() {
       axios
-        .get(`http://localhost:3000/customer/getAccounts/${MaKhachHang}`)
+        .get(`http://localhost:3000/admin/load-empl`)
         .then(res => {
-          this.listTT = res.data.filter(i => i.LoaiTaiKhoan == 1);
-          this.listTK = res.data.filter(i => i.LoaiTaiKhoan == 2);
-          this.empty = res.data.length === 0;
-          console.log(axios.defaults.headers.common);
+          console.log(res);
+          var arr = [];
+          arr = res.data.map(function(val) {
+            return {
+              id: val.Id,
+              ten: val.Ten,
+              diachi: val.DiaChi,
+              username: val.TenDangNhap,
+              phone: val.Phone,
+              email: val.Email
+            };
+          });
+          console.log(JSON.stringify(arr));
+          this.rowDataNhanVien = arr;
         })
         .catch(err => {
-          this.listTT = [];
-          this.listTK = [];
-          this.empty = true;
           console.log(err);
         });
     },
     onSubmit() {
       return true;
+    },
+    deleteItem(row, e){
+      e.preventDefault();
+      console.log(row);
     }
   }
 };
