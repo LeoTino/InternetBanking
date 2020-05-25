@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 08, 2020 lúc 02:52 AM
+-- Thời gian đã tạo: Th5 26, 2020 lúc 01:51 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.28
 
@@ -41,8 +41,8 @@ CREATE TABLE `danh_sach_nguoi_nhan` (
 --
 
 INSERT INTO `danh_sach_nguoi_nhan` (`ID`, `TEN_DANG_NHAP`, `SO_TAI_KHOAN_NGUOI_NHAN`, `TEN_GOI_NHO`, `NGAN_HANG`) VALUES
-(1, '123434}', '028100024343', 'Nguyen Van A', 'VCB'),
-(2, '123434}', '028100024343', 'Nguyen Van A', 'VCB');
+(1, 'ABC', '4343', 'ABDS', 'VCB'),
+(19, 'admin', '02810002324343', 'admin', 'VCB');
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,7 @@ CREATE TABLE `khach_hang` (
   `DiaChi` varchar(20) NOT NULL,
   `Role` varchar(20) NOT NULL,
   `TenDangNhap` varchar(20) NOT NULL,
-  `MatKhau` varchar(20) NOT NULL,
+  `MatKhau` varchar(2000) NOT NULL,
   `Email` varchar(20) NOT NULL,
   `Phone` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='test';
@@ -67,10 +67,10 @@ CREATE TABLE `khach_hang` (
 --
 
 INSERT INTO `khach_hang` (`Id`, `MaKhachHang`, `Ten`, `DiaChi`, `Role`, `TenDangNhap`, `MatKhau`, `Email`, `Phone`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'quocquoc42@gmail.com', '0984344343'),
-(2, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co'),
-(3, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co'),
-(4, '202033235754', 'Trần Anh Khoa', 'Bình Thạnh', '', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co');
+(2, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', 'admin', 'khoatq', '123', '0947232743', 'trananhkhoa@gmail.co'),
+(3, '202033235546', 'Trần Anh Khoa', 'Bình Thạnh', 'nhanvien', 'khoatq1', '123', '0947232743', 'trananhkhoa@gmail.co'),
+(4, '202033235754', 'Trần Anh Khoa', 'Bình Thạnh', 'nhanvien', 'khoatqa2', '$2b$12$qiMHFMi.QLXpF0CAzzXSZeSDSvmwhzyJd6cuQsVTzbNsoK0ft//7a', 'quocquoc42@gmail.com', '09434343'),
+(11, '20204023230', 'Administrator', 'Bình Thạnh', '', 'admin', '$2b$12$73cEAfw5C7jWqgheoM6VxuN47xBt.X9PQGT3bfCQMukKqlc20lJqa', '0947232743', 'trananhkhoa@gmail.co');
 
 -- --------------------------------------------------------
 
@@ -81,13 +81,26 @@ INSERT INTO `khach_hang` (`Id`, `MaKhachHang`, `Ten`, `DiaChi`, `Role`, `TenDang
 CREATE TABLE `lich_su_giao_dich` (
   `ID` bigint(20) NOT NULL,
   `SO_TAI_KHOAN_NGUOI_GUI` varchar(20) NOT NULL,
+  `TEN_TAI_KHOAN_NGUOI_GUI` varchar(200) NOT NULL,
   `SO_TAI_KHOAN_NGUOI_NHAN` varchar(20) NOT NULL,
-  `THOIGIAN` varchar(20) NOT NULL,
+  `TEN_TAI_KHOAN_NGUOI_NHAN` varchar(200) NOT NULL,
+  `THOIGIAN` date NOT NULL,
   `LOAIGIAODICH` varchar(20) NOT NULL,
   `SOTIEN` varchar(20) NOT NULL,
-  `GHICHU` varchar(20) NOT NULL,
+  `GHICHU` varchar(2000) NOT NULL,
   `HINH_THUC_THANH_TOAN` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `lich_su_giao_dich`
+--
+
+INSERT INTO `lich_su_giao_dich` (`ID`, `SO_TAI_KHOAN_NGUOI_GUI`, `TEN_TAI_KHOAN_NGUOI_GUI`, `SO_TAI_KHOAN_NGUOI_NHAN`, `TEN_TAI_KHOAN_NGUOI_NHAN`, `THOIGIAN`, `LOAIGIAODICH`, `SOTIEN`, `GHICHU`, `HINH_THUC_THANH_TOAN`) VALUES
+(9, '02810002324343', 'Tran Van A', '0281202040225727', 'Tran Van B', '2020-05-26', '', '100000', 'thanh toan tien dien dot 1', ''),
+(10, '02810002324343', 'Tran Van A', '0281202040225727', 'Tran Van B', '2020-05-26', '', '100000', 'thanh toan tien dien dot 2', ''),
+(11, '02810002324343', 'Tran Van A', '0281202040225727', 'Tran Van B', '2020-05-26', '', '100000', 'thanh toan tien dien dot 3', ''),
+(12, '02810002324343', 'Tran Van A', '0281202040225727', 'Tran Van B', '2020-05-26', '', '100000', 'thanh toan tien dien dot 4', ''),
+(13, '02810002324343', 'Tran Van A', '0281202040225727', 'Tran Van B', '2020-05-26', '', '100000', 'thanh toan tien dien dot 5', '');
 
 -- --------------------------------------------------------
 
@@ -145,8 +158,9 @@ CREATE TABLE `system_config` (
 --
 
 INSERT INTO `system_config` (`Id`, `KeyValue`, `Value`) VALUES
-(1, 'private_key', '-----BEGIN RSA PRIVATE KEY-----\r\nMIICXQIBAAKBgQCCgHEPIosqHMB2q4KkNeaLIufg35P1r3WVYDZuOZkk2z2aimYC\r\nXW7sK/AIDjYxznr7a+s/JYD+kFd5BCgpLnu9Vv0+ykafKdSaOBrpza3vjXA6KdtQ\r\neKY39SkIUHM4h7wQKwuX96HiPCCh0aMw7QnrFtZ8wxPcajaEjzfHs9J04QIDAQAB\r\nAoGAArPAI40Wjper0Ik6mkXXcTgWzwwyFxs79wzX865TonS7sNB+zju7CT7bqH8K\r\n1jstRrl0VIllQ2Afv4y7fCbPPxOMuysvPdPI1HQ5gL359cxUhKd3sfF+EPzYw/p2\r\nEGRSXJ24+bzSqT+Q4kfkosmYr6UhYhdI3wzHPYRls1dhSjUCQQDwG0kNOHzLXRSV\r\ndEqBSgJWo0pLDe/zn0GBU6k67Xv2gwx9DUgx63+l5xtJnQTQSiBe5zBghE/j6IaC\r\nF8NTTyfnAkEAiyPaNheQiVr9m32ApX1v5Q4GUpF/PARrbslUqlxC0Heoi4wXNwRI\r\n4ytn0r7sHZpksVOegtPHEptIow/XpsLD9wJBAL7iklMmY2Ax4dlnmIvs0KscKkY9\r\nEFS4eZVdc57bir/SM61/T7QQK20zrGf7owYMyGtqlPVGe1UPWVA3oButRGUCQA82\r\nxl9vyDAcsOpVmMF/q8KB/BL/MchgO1cL0KQoHm4pB1bq5Ibxgv7D+kBC/BJolWYG\r\nXKi1e2j/bbvWuZ/UYBUCQQDHbk/zpyD1ZOhUGXSnDkiEEXaITr/bpYg5124XcBmb\r\nPmKX45O0MZTZ2+2TJyp+RkHuR3NjPdQWHhNg/LbJEU+Q\r\n-----END RSA PRIVATE KEY-----'),
-(2, 'public_key', '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCgHEPIosqHMB2q4KkNeaLIufg\r\n35P1r3WVYDZuOZkk2z2aimYCXW7sK/AIDjYxznr7a+s/JYD+kFd5BCgpLnu9Vv0+\r\nykafKdSaOBrpza3vjXA6KdtQeKY39SkIUHM4h7wQKwuX96HiPCCh0aMw7QnrFtZ8\r\nwxPcajaEjzfHs9J04QIDAQAB\r\n-----END PUBLIC KEY-----');
+(1, 'private_key', '-----BEGIN RSA PRIVATE KEY-----\r\nMIICXAIBAAKBgQCFY/7R0ap4a1Bl+Bg9g9Y6MHa7yNVkGxdPHeFR9tICa4kQSFYQ\r\nfa++hEHBGNX/7tmmmJnInEmFHUoybcXxiFRO79d586o2kHBZv9jMkaDcYGFdMM1r\r\ne0I/aL7EwHub3MWMYJEkaoRbM6Rj9gjOom5bpcQEVTWuNZ2FodcIGYPqZwIDAQAB\r\nAoGAPc2n+lVX07V9KdG6gX39GzbrPHSAEoLO2PRyOoTOpxpmBipN3hQuAmrLAIne\r\nVVe4do0L67wmAEwi3Zyo8xEEZmcLByidqeT+ER8/R4mJfWJguMcVb+J1Yz1gof1p\r\nTp5agsWsWqExQw9/H8adAv+ET1WmiIW/p7QHMaituCVxkOECQQDDpiv8Yyl9geb5\r\n9/jOKQE6BAXBe4pR8Fq9AaTuCVho8RzpoeA9Jll1n5aXEjyNt/eiqTX7eOt3UAt2\r\nCmDnqDqRAkEArol0cmkH+eruhoJe7FcclQR2kj8li07tnAQ3wbEho7lQBlUVAKSY\r\nbWCCfby6/9XWsjIh7Botmx0P4I09CIQhdwJAWot669EQkI8f0Cucr/x2Ht1htIty\r\nFj3AIJy0MZ2NlvOPR+ismGA5IqB61uuPrp6nMlZRL1Jk1tDqnPRsqIlIoQJAdNgs\r\njtNltZfjq0ToC0yeI9zjDDEeD079ny7rrM3KeXL78eFPuCh4qvCrK0YH4nHj01Pg\r\nhdFYqrkgAfJL48GhLQJBAIQmEtNDt4DTACNr4x1elWumek+z8S0uEZjvLsyu4H5A\r\nyp1eSf0/UmIkXFgQiqsXbEf9um+vwMcsVSmxM9YDg2w=\r\n-----END RSA PRIVATE KEY-----'),
+(2, 'public_key', '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFY/7R0ap4a1Bl+Bg9g9Y6MHa7\r\nyNVkGxdPHeFR9tICa4kQSFYQfa++hEHBGNX/7tmmmJnInEmFHUoybcXxiFRO79d5\r\n86o2kHBZv9jMkaDcYGFdMM1re0I/aL7EwHub3MWMYJEkaoRbM6Rj9gjOom5bpcQE\r\nVTWuNZ2FodcIGYPqZwIDAQAB\r\n-----END PUBLIC KEY-----'),
+(3, 'key_NM', '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNdjzB5D42fbkMeM9GDIqyUfEf\r\n3rJNolSj9loyDiFmeBeiGt2ulBiOmOf0SKs3C+DO99VooDPC4AMqmrhEMT+NVVYa\r\ncelIPu1MccTCS6x0ySZXny2JkSmpjHreQ5Q66SH+T+8D+9O4leNJek2Vtw8YWJuJ\r\nhQPuZfaPfZaht1mxlQIDAQAB\r\n-----END PUBLIC KEY-----');
 
 -- --------------------------------------------------------
 
@@ -168,9 +182,18 @@ CREATE TABLE `tai_khoan` (
 --
 
 INSERT INTO `tai_khoan` (`Id`, `MaTaiKhoan`, `MaKhachHang`, `SoTaiKhoan`, `LoaiTaiKhoan`, `SoTien`) VALUES
-(1, '1', 'admin', '02810002324343', '1', '300000'),
+(1, '1', 'admin', '02810002324343', '1', '-900000'),
 (2, '3', 'admin', '0281434', '2', '1100000'),
-(3, '12033235754', '202033235754', '0281202033235754', '0', '0');
+(3, '12033235754', '202033235754', '0281202033235754', '0', '300000'),
+(4, '12040165755', 'admin', '028112040165755', '0', '100000'),
+(5, '12040165913', 'admin', '028112040165913', '0', '100000'),
+(6, '12040225323', '202040225323', '0281202040225323', '0', '-200000'),
+(7, '12040225415', '202040225415', '0281202040225415', '0', '200000'),
+(8, '12040225526', '202040225526', '0281202040225526', '0', '0'),
+(9, '1204022575', '20204022575', '028120204022575', '0', '0'),
+(10, '12040225727', '202040225727', '0281202040225727', '0', '1200000'),
+(11, '1204023230', '20204023230', '028120204023230', '0', '0'),
+(12, '1204023615', '20204023615', '028120204023615', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -193,11 +216,13 @@ CREATE TABLE `thong_bao` (
 
 CREATE TABLE `thong_tin_no` (
   `ID` bigint(20) NOT NULL,
+  `TEN_NGUOI_DOI` varchar(200) NOT NULL,
+  `SO_TAI_KHOAN_DOI` varchar(200) NOT NULL,
   `NOIDUNG` varchar(20) DEFAULT NULL,
-  `TAIKHOANNO` varchar(20) NOT NULL,
   `SOTIEN` varchar(20) NOT NULL,
+  `TEN_NGUOI_BI_DOI` varchar(200) NOT NULL,
+  `SO_TAI_KHOAN_BI_DOI` varchar(200) NOT NULL,
   `TRANG_THAI` varchar(20) NOT NULL,
-  `TAI_KHOAN_DOI_NO` varchar(20) NOT NULL,
   `PhanHoi` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -205,8 +230,8 @@ CREATE TABLE `thong_tin_no` (
 -- Đang đổ dữ liệu cho bảng `thong_tin_no`
 --
 
-INSERT INTO `thong_tin_no` (`ID`, `NOIDUNG`, `TAIKHOANNO`, `SOTIEN`, `TRANG_THAI`, `TAI_KHOAN_DOI_NO`, `PhanHoi`) VALUES
-(4, 'Tien dien', 'user01', '9000000', '0', 'admin', '');
+INSERT INTO `thong_tin_no` (`ID`, `TEN_NGUOI_DOI`, `SO_TAI_KHOAN_DOI`, `NOIDUNG`, `SOTIEN`, `TEN_NGUOI_BI_DOI`, `SO_TAI_KHOAN_BI_DOI`, `TRANG_THAI`, `PhanHoi`) VALUES
+(4, '', '', 'Tien dien 2', '12000000', '', '', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -216,7 +241,7 @@ INSERT INTO `thong_tin_no` (`ID`, `NOIDUNG`, `TAIKHOANNO`, `SOTIEN`, `TRANG_THAI
 
 CREATE TABLE `userrefreshtokenext` (
   `ID` int(20) NOT NULL,
-  `refreshToken` varchar(20) NOT NULL,
+  `refreshToken` varchar(2000) NOT NULL,
   `Date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -225,7 +250,9 @@ CREATE TABLE `userrefreshtokenext` (
 --
 
 INSERT INTO `userrefreshtokenext` (`ID`, `refreshToken`, `Date`) VALUES
-(1, 'jxziFiDhDGozSoTih4fV', '2020-04-04');
+(2, 'Yoa2UPM0lc0kCBhjInwJ', '2020-05-08'),
+(1, 'rYD7VRSOu78gP2CuY9lflmNx3m9BJtgMu3XtiYmbFOaXHVMR1GzA5AFfYnoTkuJhzvj05Fo9OKnhTTAl', '2020-05-24'),
+(11, 'lLs9PpIVDEmuF5IkJbWBDBSeHihBDygZA7MVtfXdbgqG8P6sCF870r7UJ1mycVxbZ40Ayeg6VTzEu7B4', '2020-05-25');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -295,19 +322,19 @@ ALTER TABLE `thong_tin_no`
 -- AUTO_INCREMENT cho bảng `danh_sach_nguoi_nhan`
 --
 ALTER TABLE `danh_sach_nguoi_nhan`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT cho bảng `khach_hang`
 --
 ALTER TABLE `khach_hang`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `lich_su_giao_dich`
 --
 ALTER TABLE `lich_su_giao_dich`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `ngan_hang_thu_huong`
@@ -325,13 +352,13 @@ ALTER TABLE `otp`
 -- AUTO_INCREMENT cho bảng `system_config`
 --
 ALTER TABLE `system_config`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `tai_khoan`
 --
 ALTER TABLE `tai_khoan`
-  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `thong_bao`
