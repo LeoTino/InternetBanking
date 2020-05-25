@@ -4,16 +4,21 @@ var db = require('../fn/mysql-db');
 //Method : Post 
 // localhost:3000/debt/add-debt
 // {
-//     "taiKhoanDoi":"admin",
-//     "taiKhoanNo":"hiep",
+//      "tenNguoiDoi":"Tran Van A",
+//     "soTaiKhoanDoi":"0281202033235754",
+//      "tenNguoiBiDoi":"Tran Van B",
+//     "soTaiKhoanBiDoi":"028112040165755",
 //     "soTien":9000000,
-//     "noiDung":"Tien dien"
+//     "noiDung":"Tien muon thang 1"
 // }
 // Tạo nhắc nợ
 
 exports.addDebt = data=> {
-    var sql = `INSERT INTO THONG_TIN_NO (TAI_KHOAN_DOI_NO,TAIKHOANNO,SOTIEN,NoiDung,TRANG_THAI)
-     VALUES ("${data.taiKhoanDoi}","${data.taiKhoanNo}",${data.soTien},"${data.noiDung}",0)`;
+    var sql = `INSERT INTO thong_tin_no
+    (TEN_NGUOI_DOI, SO_TAI_KHOAN_DOI, 
+    TEN_NGUOI_BI_DOI, SO_TAI_KHOAN_BI_DOI, TRANG_THAI,SOTIEN,NOIDUNG) 
+    VALUES ('${data.tenNguoiDoi}','${data.soTaiKhoanDoi}','${data.tenNguoiBiDoi}','${data.soTaiKhoanBiDoi}'
+    '${data.soTien}','${data.noiDung}')`;
     return db.update2(sql);
 }
 
@@ -68,14 +73,35 @@ exports.deleteDebt = data=> {
 //Api : localhost:3000/debt/payment-debt
 //Method : Post
 // {
-//     "idNhacNo":"1",
+//     "idNhacNo":"1"
 // }
 
 exports.paymentDebt = data=> {
-    var sql = ` UPDATE thong_tin_no N,TAI_kHOAN tkD,TAI_KHOAN tkN 
-    SET N.TRANG_THAI = 1, PhanHoi ="DA THANH TOAN",tkD.SoTien =tkD.SoTien+N.SOTIEN,
-     tkN.SoTien = tkN.SoTien-N.SOTIEN 
-     WHERE N.Id =${data.idNhacNo} and tkD.MaKhachHang = N.TAIKHOANNO 
-     and tkN.MaKhachHang = N.TAI_KHOAN_DOI_NO`;
-    return db.update(sql);
+    return new Promise((resolve,reject)=>{
+        var sqlLoad = `SELECT * FROM thong_tin_no WHERE ID=${data.idNhacNo}`;
+        db.load(sqlLoad).then(dataResp=>{
+            var data = dataResp[0];
+            if(data!==undefined){
+                console.log("data la"+data);
+                var sqlSaveHist = `INSERT INTO lich_su_giao_dich
+                (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
+                    TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU,LOAIGIAODICH)
+                    VALUES ('${dataResp[0].SO_TAI_KHOAN_BI_DOI}','${data.TEN_NGUOI_BI_DOI}','${data.SO_TAI_KHOAN_DOI}','${data.TEN_NGUOI_DOI}',
+                    NOW(),'${data.SOTIEN}','${data.noiDungChuyen}','THANH_TOAN_NHAC_NO')`
+                db.insert(sqlSaveHist);
+                var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.SOTIEN}
+                WHERE SoTaiKhoan = ${data.SO_TAI_KHOAN_DOI}`;
+                var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.SOTIEN}
+                WHERE SoTaiKhoan = ${data.SO_TAI_KHOAN_BI_DOI}`;
+                db.update(sqlNguoiNhan);
+                db.update2(sqlNguoiChuyen).then(updateResult=>{
+                    resolve(true);
+                })
+            }else{
+                resolve(false);
+            }
+            
+        });
+    })
+   
 }

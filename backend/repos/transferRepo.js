@@ -1,11 +1,29 @@
 var db = require('../fn/mysql-db');
 var jwt = require('jsonwebtoken');
 var NodeRSA = require('node-rsa');
+
+
+//api : localhost:3000/transfer/internal
+//Method : Post
+//Body
+// { "taiKhoanNguon":"02810002324343", 
+// "tentaiKhoanNguon":"Tran Van A",
+//  "soTaikhoanNhan":"0281434",
+//  "tenTaikhoanNhan":"Tran Van B",
+//  "soTienChuyen":100000,
+//  "noiDungChuyen":"thanh toan tien dien",
+//  "phi":0 }
 exports.transferInternal = data=> {
     var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
         WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
     var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.soTienChuyen}
     WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
+    var sqlSaveHist = `INSERT INTO lich_su_giao_dich
+    (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
+         TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU)
+          VALUES ('${data.taiKhoanNguon}','${data.tentaiKhoanNguon}','${data.soTaikhoanNhan}','${data.tenTaikhoanNhan}',
+          NOW(),'${data.soTienChuyen}','${data.noiDungChuyen}')`
+    db.insert(sqlSaveHist);
     db.update(sqlNguoiNhan);
     return db.update2(sqlNguoiChuyen);
 }
@@ -154,3 +172,16 @@ exports.createSignature = function(data) {
         return signature;
         
 }
+
+//json request :
+//Post : localhost:3000/api/ib-hn/create-signature
+//Tạo signature
+exports.createHash = function(data) {
+    privateKey =data[0].Value;
+   var  key = new NodeRSA(null, {signingScheme: 'sha512'});
+   key.importKey(privateKey);
+   var signature=key.sign('nhom21', 'base64');
+  return signature;
+  
+}
+

@@ -58,8 +58,9 @@ router.post('/delete-debt', (req, res) => {
 router.post('/payment-debt', (req, res) => {
     debtRepo.paymentDebt(req.body)
         .then(insertId => {
+            console.log("gia tri la"+insertId);
             res.statusCode = 201;
-            res.json("success");
+            res.json({status:insertId});
         })
         .catch(err => {
             console.log(err);
