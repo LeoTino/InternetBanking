@@ -12,12 +12,21 @@
         ></b-form-input>
       </b-form-group>
     </tab-content>
-    <tab-content title="Step 2">
+    <tab-content title="Step 2" :before-change="onSubmitOTP">
       <b-form-group id="otp" label="Nhập mã OTP" label-for="otp">
         <b-form-input id="otp" required type="number" v-model="otpCode" placeholder="Nhập mã OTP"></b-form-input>
       </b-form-group>
     </tab-content>
-    <tab-content title="Step 3">
+    <tab-content title="Step 3" :before-change="onSubmitPassword">
+      <b-form-group id="currentPassword" label="Mật khẩu hiện tại" label-for="currentPassword">
+        <b-form-input
+          id="currentPassword"
+          required
+          type="password"
+          v-model="currentPassword"
+          placeholder="Mật khẩu hiện tại"
+        ></b-form-input>
+      </b-form-group>
       <b-form-group id="newPassword" label="Mật khẩu mới" label-for="newPassword">
         <b-form-input
           id="newPassword"
@@ -47,13 +56,15 @@
 <script>
 import { FormWizard, TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import axios from "axios";
 export default {
   data() {
     return {
       username: "",
       otpCode: "",
       newPassword: "",
-      retypeNewPassword: ""
+      retypeNewPassword: "",
+      currentPassword: ""
     };
   },
   components: {
@@ -68,41 +79,57 @@ export default {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
     onComplete: function() {
-      //alert("Chuyển tiền thành công!");
+      //alert("Changed!");
     },
-    beforeTabSwitch: function() {
-      //alert("This is called before switching tabs");
-      return true;
+    onSubmitTenTaiKhoan: function() {
+      axios
+        .post("http://localhost:3000/otp/send", {
+          tenDangNhap: this.username
+        })
+        .then(res => {
+          console.log(res);
+          return true;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    getOTP: function() {
-      if (
-        this.$store.getters.srcAccount == "" ||
-        this.$store.getters.receiveAccount == "" ||
-        this.$store.getters.soTienChuyen == ""
-      ) {
-        alert("Vui lòng nhập đầy đủ thông tin chuyển tiền!");
+    onSubmitOTP: function() {
+      axios
+        .post("http://localhost:3000/otp/compare", {
+          tenDangNhap: this.username,
+          otpcode: this.otpCode
+        })
+        .then(res => {
+          console.log(res.data.result);
+          if (res.data.result == true) {
+            return true;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      alert("OTP invalid!");
+      return false;
+    },
+    onSubmitPassword: function() {
+      if (this.newPassword == this.retypeNewPassword) {
+        axios
+          .post("http://localhost:3000/users/change-pwd", {
+            user: `${localStorage.getItem("username")}`,
+            currentPwd: this.currentPassword,
+            newPwd: this.newPassword
+          })
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        alert("Password mới không trùng khớp");
         return false;
       }
-      if (
-        this.$store.getters.lstSrc.find(
-          i => i.id == this.$store.getters.srcAccount
-        ).money < this.$store.getters.soTienChuyen
-      ) {
-        alert("Số dư không đủ để chuyển!");
-        return false;
-      }
-      this.$store.dispatch("callApiGetOTP");
-      if (this.$store.getters.isSendOTP == false) {
-        alert("Cannot send OTP! Please contact administrator");
-        return false;
-      }
-      alert("OTP has sent! Please check your email!");
-      return true;
-    },
-    compareOTP: function() {
-      event.preventDefault();
-      this.$store.dispatch("compareOTP");
-      return true;
     }
   }
 };
