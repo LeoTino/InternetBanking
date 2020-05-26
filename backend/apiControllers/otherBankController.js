@@ -1,7 +1,8 @@
 var express = require('express');
 var bankRepo = require('../repos/otherBankRepo');
 var bcrypt = require('bcrypt');
-
+var userRepo = require('../repos/userRepo'),
+authRepo = require('../repos/authRepo');
 var router = express.Router();
 //Try vấn thông tin tài khoản
 router.post('/info-account', (req, res) => {
@@ -106,5 +107,65 @@ router.post('/add-other-bank', (req, res) => {
         });
 });
 
+exports.login = function(userName, password) {
+   
+    return new Promise((resolve, reject) => {
+                //var md5_password = md5(password);
+            var sql = `select * from khach_hang where TenDangNhap = '${userName}'`;
+            console.log("sql la "+sql);
+            db.load(sql)
+                .then(rows => {
+                    if (rows.length === 0) {
+                        resolve(null);
+                    } else {
+                        var user = rows[0];
+                        bcrypt.compare(password+opts.KEY_BANK.VALUE,user.MatKhau, function(err, result) {
+                            console.log("makhau la"+user.MatKhau);
+                            console.log("kết qua "+result);
+                            if(result){
+                               resolve(user);
+                            }else{
+                                resolve(false);
+                            }
+                             
+                        });
+                    }
+                })
+                .catch(err => reject(err));
+        
+    });
+}
+
+router.post('/login', (req, res) => {
+    userRepo.login(req.body.user, req.body.pwd)
+        .then(userObj => {
+            if (userObj) {
+                var token = authRepo.generateAccessToken(userObj);
+                var refreshToken = authRepo.generateRefreshToken();
+                console.log(userObj);
+                authRepo.updateRefreshToken(userObj.Id, refreshToken)
+                    .then(rs => {
+                        res.json({
+                            auth: true,
+                            access_token: token
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.statusCode = 500;
+                        res.end('View error log on console.');
+                    });
+            } else {
+                res.json({
+                    auth: false
+                });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
 
 module.exports = router;

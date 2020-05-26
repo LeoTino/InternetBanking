@@ -47,9 +47,9 @@ exports.updateDebt = data=> {
 // }
 
 exports.loadDebt = data=> {
-    var sql = `SELECT * FROM thong_tin_no 
-    WHERE (TaiKhoanNo = '${data.taiKhoanHienTai}' OR TAI_KHOAN_DOI_NO ='${data.taiKhoanHienTai}')
-    AND TRANG_THAI = 0`;
+    var sql = `SELECT * FROM thong_tin_no `;
+    // WHERE (TaiKhoanNo = '${data.taiKhoanHienTai}' OR TAI_KHOAN_DOI_NO ='${data.taiKhoanHienTai}')
+    // AND TRANG_THAI = 0`;
     return db.load(sql);
 }
 

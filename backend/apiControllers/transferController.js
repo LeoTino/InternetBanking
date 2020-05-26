@@ -150,4 +150,16 @@ router.get('/create-signature', (req, res) => {
     });
 
 });
+
+router.post('/create-hash', (req, res) => {
+
+    transferRepo.createHash(req.body).then(data => {
+        res.json({hashStr:data});
+    }).catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console.');
+    });
+
+});
 module.exports = router;

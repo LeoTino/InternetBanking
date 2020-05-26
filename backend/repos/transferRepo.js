@@ -1,7 +1,7 @@
 var db = require('../fn/mysql-db');
 var jwt = require('jsonwebtoken');
 var NodeRSA = require('node-rsa');
-
+var bcrypt = require('bcrypt');
 
 //api : localhost:3000/transfer/internal
 //Method : Post
@@ -195,14 +195,27 @@ exports.createSignature = function(data) {
 }
 
 //json request :
-//Post : localhost:3000/api/ib-hn/create-signature
+//Post : localhost:3000/api/ib-hn/create-hash
+// {
+//     "soTaiKhoan":"0281433434",
+//     "timer":"202005260729",
+//     "tenNganHang":"nhom9"
+// }
 //Tạo signature
 exports.createHash = function(data) {
-    privateKey =data[0].Value;
-   var  key = new NodeRSA(null, {signingScheme: 'sha512'});
-   key.importKey(privateKey);
-   var signature=key.sign('nhom21', 'base64');
-  return signature;
+    var date = new Date();
+                //var str = date.getFullYear().toString() +"0"+ (date.getMonth()+1).toString()+date.getDate().toString() +date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
+                var strHash = data.soTaiKhoan + data.timer +"nhom9";
+                return new Promise((resolve,reject)=>{
+                    bcrypt.genSalt(12, function(err, salt) {
+                        bcrypt.hash(strHash, salt, function(err, hash) {
+                            console.log("data la"+hash);
+                         resolve(hash);
+                      });
+                })
+                
+            });
+    
   
 }
 

@@ -172,3 +172,39 @@ exports.addOtherBank = function(data) {
     var sql = `INSERT INTO ngan_hang_thu_huong(MA_NGAN_HANG,TEN_NGAN_HANG) values ('${data.maNganHang}','${data.tenNganHang}')`;
     return db.insert(sql);
 }
+
+// api :localhost:3000/api/ib-hn/login
+// Method:post
+// Body :
+// {
+// 	"user":"admin",
+// 	"pwd":"admin"
+// }
+exports.login = function(userName, password) {
+   
+    return new Promise((resolve, reject) => {
+                //var md5_password = md5(password);
+            var sql = `select * from khach_hang where TenDangNhap = '${userName}'`;
+            console.log("sql la "+sql);
+            db.load(sql)
+                .then(rows => {
+                    if (rows.length === 0) {
+                        resolve(null);
+                    } else {
+                        var user = rows[0];
+                        bcrypt.compare(password+opts.KEY_BANK.VALUE,user.MatKhau, function(err, result) {
+                            console.log("makhau la"+user.MatKhau);
+                            console.log("kết qua "+result);
+                            if(result){
+                               resolve(user);
+                            }else{
+                                resolve(false);
+                            }
+                             
+                        });
+                    }
+                })
+                .catch(err => reject(err));
+        
+    });
+}
