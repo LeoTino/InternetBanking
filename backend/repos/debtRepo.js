@@ -16,8 +16,8 @@ var db = require('../fn/mysql-db');
 exports.addDebt = data=> {
     var sql = `INSERT INTO thong_tin_no
     (TEN_NGUOI_DOI, SO_TAI_KHOAN_DOI, 
-    TEN_NGUOI_BI_DOI, SO_TAI_KHOAN_BI_DOI, TRANG_THAI,SOTIEN,NOIDUNG) 
-    VALUES ('${data.tenNguoiDoi}','${data.soTaiKhoanDoi}','${data.tenNguoiBiDoi}','${data.soTaiKhoanBiDoi}'
+    TEN_NGUOI_BI_DOI, SO_TAI_KHOAN_BI_DOI,SOTIEN,NOIDUNG) 
+    VALUES ('${data.tenNguoiDoi}','${data.soTaiKhoanDoi}','${data.tenNguoiBiDoi}','${data.soTaiKhoanBiDoi}',
     '${data.soTien}','${data.noiDung}')`;
     return db.update2(sql);
 }
