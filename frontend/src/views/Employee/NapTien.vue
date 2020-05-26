@@ -2,8 +2,18 @@
   <div>
     <h1>Nạp tiền vào tài khoản</h1>
     <b-form @submit="onSubmit">
-      <b-form-group id="tenDangNhap" label="Tên đăng nhập hoặc số tài khoản" label-for="tenDangNhap">
-        <b-form-input id="tenDangNhap" required type="text" v-model="userOrSTK" placeholder="Tên đăng nhập hoặc số tài khoản"></b-form-input>
+      <b-form-group
+        id="tenDangNhap"
+        label="Tên đăng nhập hoặc số tài khoản"
+        label-for="tenDangNhap"
+      >
+        <b-form-input
+          id="tenDangNhap"
+          required
+          type="text"
+          v-model="userOrSTK"
+          placeholder="Tên đăng nhập hoặc số tài khoản"
+        ></b-form-input>
       </b-form-group>
       <b-form-group id="soTien" label="Số tiền" label-for="soTien">
         <b-form-input id="soTien" required type="number" v-model="soTien" placeholder="Số tiền"></b-form-input>
@@ -15,7 +25,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 export default {
   data() {
     return {
@@ -28,11 +38,11 @@ export default {
   methods: {
     onSubmit() {
       event.preventDefault();
-      var id = this.$route.params.id;
       axios
-        .post("http://localhost:3000/debt/delete-debt", {
-          idNhacNo: id,
-          noiDungXoa: this.noidung
+        .post("http://localhost:3000/debt/update-debt", {
+          inforUser: this.userOrSTK,
+          soTien: this.soTien,
+          maGiaoDichVien: `${localStorage.getItem("username")}`
         })
         .then(res => {
           console.log(res.data);
