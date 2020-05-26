@@ -81,7 +81,12 @@ export default {
   methods: {
     onSubmitTaoNguoiNo() {
       event.preventDefault();
-      alert("tét");
+      if(this.$store.getters.nnoInfo == "" || this.$store.getters.nnoInfo == "Tài khoản không tồn tại"){
+        alert("Số tài khoản bị đòi nợ không tồn tại!");
+      } else {
+        alert("tét");
+        this.$store.dispatch("taoNguoiNo");
+      }
     },
     findNguoiNo(){
       this.$store.dispatch("getInfoNguoiNo");

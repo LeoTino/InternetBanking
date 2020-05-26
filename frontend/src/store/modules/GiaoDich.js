@@ -14,6 +14,7 @@ const state = {
     isMatchOTP: "none",
     gdrsaSelectedNganHang: "",
     constNganHangRSA: "NHOM_21_BANK",
+    isSaveNguoiNhan: false,
 };
 const getters = {
     srcAccount: state => {
@@ -55,6 +56,9 @@ const getters = {
     constNganHangRSA: state => {
         return state.constNganHangRSA;
     },
+    isSaveNguoiNhan: state => {
+        return state.isSaveNguoiNhan;
+    },
 };
 const mutations = {
     srcAccount: (state, payload) => {
@@ -92,6 +96,9 @@ const mutations = {
     },
     gdrsaSelectedNganHang: (state, payload) => {
         state.gdrsaSelectedNganHang = payload;
+    },
+    isSaveNguoiNhan: (state, payload) => {
+        state.isSaveNguoiNhan = payload;
     },
     callApiChuyenTien: (state) => {
         axios
@@ -152,6 +159,9 @@ const actions = {
     },
     gdrsaSelectedNganHang: ({ commit }, payload) => {
         commit("gdrsaSelectedNganHang", payload);
+    },
+    isSaveNguoiNhan: ({ commit }, payload) => {
+        commit("isSaveNguoiNhan", payload);
     },
     callApiChuyenTien: ({ commit }) => {
         commit("callApiChuyenTien");

@@ -31,6 +31,8 @@
           </font>
         </sup>
       </b-alert>
+      <input type="checkbox" id="jack" value="Jack" v-model="isSaveNguoiNhan" />
+      <label for="jack">Lưu người nhận</label>
       <b-form-input
         v-model="receiveAccount"
         type="number"
@@ -196,7 +198,15 @@ export default {
       set(isMatchOTP) {
         this.$store.dispatch("isMatchOTP", isMatchOTP);
       }
-    }
+    },
+    isSaveNguoiNhan: {
+      get() {
+        return this.$store.getters.isSaveNguoiNhan;
+      },
+      set(isSaveNguoiNhan) {
+        this.$store.dispatch("isSaveNguoiNhan", isSaveNguoiNhan);
+      }
+    },
   },
   methods: {
     format(val) {
@@ -218,12 +228,16 @@ export default {
         alert("Vui lòng nhập đầy đủ thông tin chuyển tiền!");
         return false;
       }
-      if(parseFloat(this.$store.getters.lstSrc.find(
-          i => i.id == this.$store.getters.srcAccount
-        ).money) < parseFloat(this.$store.getters.soTienChuyen)){
-          alert("Số dư không đủ để chuyển!");
-          return false;
-        }
+      if (
+        parseFloat(
+          this.$store.getters.lstSrc.find(
+            i => i.id == this.$store.getters.srcAccount
+          ).money
+        ) < parseFloat(this.$store.getters.soTienChuyen)
+      ) {
+        alert("Số dư không đủ để chuyển!");
+        return false;
+      }
       this.$store.dispatch("callApiGetOTP");
       if (this.$store.getters.isSendOTP == false) {
         alert("Cannot send OTP! Please contact administrator");
@@ -241,16 +255,26 @@ export default {
       this.$store.dispatch("getInfoUserReceive");
     },
     checkNguoiNhan: function() {
-      if(this.$store.getters.infoName == "" || this.$store.getters.infoName == "Tài khoản không tồn tại"){
+      if (
+        this.$store.getters.infoName == "" ||
+        this.$store.getters.infoName == "Tài khoản không tồn tại"
+      ) {
         alert("Người nhận không tồn tại!");
         return false;
+      } else {
+        if(this.$store.getters.isSaveNguoiNhan){
+          this.$store.dispatch("nnSoTK", this.$store.getters.receiveAccount);
+          this.$store.dispatch("nnTenGoiNho", this.$store.getters.infoName);
+          this.$store.dispatch("createNguoiNhan");
+        }
       }
+      
       return true;
     },
     timInfoNguoiNhan: function() {
       this.$store.dispatch("getInfoUserReceive");
       return true;
-    },
+    }
   }
 };
 </script>

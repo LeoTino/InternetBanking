@@ -55,7 +55,8 @@ const mutations = {
                 tenDangNhap: state.tenDangNhap,
                 matKhau: state.matKhau,
                 email: state.email,
-                phone: state.phone
+                phone: state.phone,
+                role: "user"
             })
             .then(res => {
                 console.log(res);
@@ -64,7 +65,8 @@ const mutations = {
                     axios
                         .post('localhost:3000/employment/add-debit-account', {
                             infoCustomer: state.tenDangNhap,
-                            soTien: 0
+                            soTien: 0,
+                            loaiTaiKhoan: 1
                         })
                         .then(res => {
                             console.log("tạo tài khoản thanh toán 0đ" + res);
