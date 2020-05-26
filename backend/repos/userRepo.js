@@ -19,12 +19,17 @@ exports.add = function(poco) {
     return db.insert(sql);
 }
 
+
+// api :localhost:3000/users/login
+// Method:post
+// Body :
+// {
+// 	"user":"admin",
+// 	"pwd":"admin"
+// }
 exports.login = function(userName, password) {
    
     return new Promise((resolve, reject) => {
-        bcrypt.genSalt(12, function(err, salt) {
-            bcrypt.hash(password+opts.KEY_BANK.VALUE, salt, function(err, hash) {
-                password = hash;
                 //var md5_password = md5(password);
             var sql = `select * from khach_hang where TenDangNhap = '${userName}'`;
             console.log("sql la "+sql);
@@ -34,20 +39,19 @@ exports.login = function(userName, password) {
                         resolve(null);
                     } else {
                         var user = rows[0];
-                        bcrypt.compare(password, user.MatKhau, function(err, result) {
+                        bcrypt.compare(password+opts.KEY_BANK.VALUE,user.MatKhau, function(err, result) {
+                            console.log("makhau la"+user.MatKhau);
+                            console.log("kết qua "+result);
                             if(result){
                                resolve(user);
                             }else{
-                                resolve({status:"Password failed"});
+                                resolve(false);
                             }
                              
                         });
-                        resolve(user);
                     }
                 })
                 .catch(err => reject(err));
-                });
-        });
         
     });
 }
@@ -86,9 +90,6 @@ exports.changePassword =  function(data) {
     var passEnc = "";
     return new Promise((resolve, reject) => {
         //var md5_password = md5(password);
-        bcrypt.genSalt(12, function(err, salt) {
-            bcrypt.hash(data.currentPwd+opts.KEY_BANK.VALUE, salt, function(err, hash) {
-                data.currentPwd = hash;
                 bcrypt.genSalt(12, function(err, salt) {
                     bcrypt.hash(data.newPwd+opts.KEY_BANK.VALUE, salt, function(err, hash) {
                         data.newPwd = hash;
@@ -96,14 +97,14 @@ exports.changePassword =  function(data) {
                         db.load(sqlUser)
                             .then(rows => {
                                 if (rows.length !== 0) {
-                                    bcrypt.compare(rows[0].MatKhau, data.currentPwd, function(err, result) {
+                                    bcrypt.compare(data.currentPwd+opts.KEY_BANK.VALUE, rows[0].MatKhau, function(err, result) {
                                         console.log("result la:"+result);
                                         if(result){
                                             var sqlUpdate = `UPDATE khach_hang SET MatKhau='${data.newPwd}' WHERE Id=${rows[0].Id}`
                                             db.update(sqlUpdate);
                                             resolve(true);
                                         }else{
-                                            res.json({status:"false"});
+                                            res.json(false);
                                         }
                                          
                                     });
@@ -115,8 +116,6 @@ exports.changePassword =  function(data) {
                             .catch(err => reject(err));
                     });
                 });
-            });
-        });
        
     });
 }

@@ -28,6 +28,27 @@ exports.transferInternal = data=> {
     return db.update2(sqlNguoiChuyen);
 }
 
+//api : localhost:3000/transfer/tru-tien
+//Method : Post
+//Body
+// { "taiKhoanNguon":"02810002324343", 
+// "tentaiKhoanNguon":"Tran Van A",
+//  "soTaikhoanNhan":"0281434",
+//  "tenTaikhoanNhan":"Tran Van B",
+//  "soTienChuyen":100000,
+//  "noiDungChuyen":"chuyen tien toi ngan hang abc",
+//  "phi":0 }
+exports.truTien = data=> {
+    var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
+        WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
+    var sqlSaveHist = `INSERT INTO lich_su_giao_dich
+    (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
+         TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU)
+          VALUES ('${data.taiKhoanNguon}','${data.tentaiKhoanNguon}','${data.soTaikhoanNhan}','${data.tenTaikhoanNhan}',
+          NOW(),'${data.soTienChuyen}','${data.noiDungChuyen}')`
+    db.insert(sqlSaveHist);
+    return db.update(sqlNguoiNhan);
+}
 exports.insert = (userID, poco) => {
     return new Promise((resolve, reject) => {
         var sql = `UPDATE tai_khoan SET SoTien=${soTien}

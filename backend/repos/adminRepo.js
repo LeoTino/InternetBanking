@@ -1,7 +1,7 @@
 var randtoken = require('rand-token'),
     jwt = require('jsonwebtoken'),
     moment = require('moment');
-
+    var bcrypt = require('bcrypt');
 var db = require('../fn/mysql-db'),
     opts = require('../fn/opts');
 
@@ -19,7 +19,7 @@ exports.loadEmpl = infoAcc => {
 //     "id":1
 //     "ten":"Trần Anh Khoa",
 //     "diaChi":"Bình Thạnh",
-//     "role":2,
+//     "role":"nhanvien",
 //     "tenDangNhap": "admin",
 //     "matKhau":"admin",
 //     "phone":"09434343",
@@ -27,39 +27,46 @@ exports.loadEmpl = infoAcc => {
 //      "method":1 //1 insert,2 update ,3 delete
 //   }
 exports.manageEmpl = data => {
-    var sqlInsert = `INSERT INTO khach_hang
-                    (Ten, DiaChi, Role, TenDangNhap, MatKhau, Email, Phone)
-                     VALUES ('${data.ten}','${data.diaChi}','${data.role}','${data.tenDangNhap}','${data.matKhau}','${data.email}','${data.phone}')`;
-    var sqlUpdate = `UPDATE khach_hang 
-                    SET Ten='${data.ten}',
-                    DiaChi='${data.diaChi}',
-                    Role='${data.role}',
-                    TenDangNhap='${data.emaitenDangNhapl}',
-                    MatKhau='${data.matKhau}',
-                    Email='${data.email}',
-                    Phone='${data.phone}' WHERE Id=${data.id}`;
-    var sqlDelete =`DELETE FROM khach_hang WHERE Id=${data.id}`;
-    return new Promise((resole,reject)=>{
-        if(data.method===1){
-            db.insert(sqlInsert).then(insertResult=>{
-                resole(insertResult);
-            }).catch(error=>{
-                reject(error);
-            })
-        }
-        if(data.method===2){
-            console.log("sql la "+sqlUpdate);
-            db.update(sqlUpdate);
-            resole(true);
-        }
-        if(data.method===3){
-            db.delete(sqlDelete).then(deleteResult=>{
-                resole(deleteResult);
-            }).catch(error=>{
-                reject(error);
-            })
-        }
-    });
+    return new Promise((resolve,reject)=>{
+        bcrypt.genSalt(12, function(err, salt) {
+            bcrypt.hash(data.matKhau+opts.KEY_BANK.VALUE, salt, function(err, hash) {
+                data.matKhau = hash;
+                var sqlInsert = `INSERT INTO khach_hang
+                (Ten, DiaChi, Role, TenDangNhap, MatKhau, Email, Phone)
+                 VALUES ('${data.ten}','${data.diaChi}','${data.role}','${data.tenDangNhap}','${data.matKhau}','${data.email}','${data.phone}')`;
+                    var sqlUpdate = `UPDATE khach_hang 
+                                    SET Ten='${data.ten}',
+                                    DiaChi='${data.diaChi}',
+                                    Role='${data.role}',
+                                    TenDangNhap='${data.tenDangNhap}',
+                                    MatKhau='${data.matKhau}',
+                                    Email='${data.email}',
+                                    Phone='${data.phone}' WHERE Id=${data.id}`;
+                    var sqlDelete =`DELETE FROM khach_hang WHERE Id=${data.id}`;
+                                    if(data.method===1){
+                    db.insert(sqlInsert).then(insertResult=>{
+                        resolve(insertResult);
+                    }).catch(error=>{
+                        reject(error);
+                    })
+                }
+                if(data.method===2){
+                    console.log("sql la "+sqlUpdate);
+                    db.update(sqlUpdate);
+                    resolve(true);
+                }
+                if(data.method===3){
+                    db.delete(sqlDelete).then(deleteResult=>{
+                        resolve(deleteResult);
+                    }).catch(error=>{
+                        reject(error);
+                    })
+                }
+            });
+        });
+    })
+    
+
 }
 
 //localhost:3000/employment/history-account
