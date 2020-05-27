@@ -203,7 +203,7 @@ const actions = {
                 if (res.data.mesError == "request success") {
                     alert("Chuyển tiền thành công");
                     axios
-                        .post('localhost:3000/transfer/tru-tien', {
+                        .post('http://localhost:3000/transfer/tru-tien', {
                             taiKhoanNguon: state.srcAccount,
                             tentaiKhoanNguon: `${localStorage.getItem("username")}`,
                             soTaikhoanNhan: state.receiveAccount,
