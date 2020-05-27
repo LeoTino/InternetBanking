@@ -10,7 +10,9 @@ const state = {
     nnoID: "",
     funcUsername: "",
     funcLstAllUser: [],
-    nnoUsernameInfo: ""
+    nnoUsernameInfo: "",
+    messageNotify: "",
+    userReceiveNotify: "",
 };
 const getters = {
     nnoSoTK: state => {
@@ -33,6 +35,12 @@ const getters = {
     },
     nnoID: state => {
         return state.nnoID;
+    },
+    messageNotify: state => {
+        return state.messageNotify;
+    },
+    userReceiveNotify: state => {
+        return state.userReceiveNotify;
     }
 };
 const mutations = {
@@ -56,7 +64,13 @@ const mutations = {
     },
     nnoID: state => {
         return state.nnoID;
-    }
+    },
+    messageNotify: state => {
+        return state.messageNotify;
+    },
+    userReceiveNotify: state => {
+        return state.userReceiveNotify;
+    },
 };
 const actions = {
     nnoSoTK: ({ commit }, payload) => {
@@ -79,6 +93,12 @@ const actions = {
     },
     nnoID: ({ commit }, payload) => {
         commit("nnoID", payload);
+    },
+    messageNotify: ({ commit }, payload) => {
+        commit("messageNotify", payload);
+    },
+    userReceiveNotify: ({ commit }, payload) => {
+        commit("userReceiveNotify", payload);
     },
     getLstNguoiNoDoBanThanTao: ({ commit }) => {
         axios
@@ -147,7 +167,6 @@ const actions = {
                         if (res.data.success == "success") {
                             alert("Thêm thành công!");
                         }
-
                     })
                     .catch(err => {
                         console.log(err);
@@ -158,6 +177,19 @@ const actions = {
             });
 
     },
+    sendNotify: (state) => {
+        axios
+            .post('http://localhost:3000/notify/add-notify', {
+                userNhan: state.userReceiveNotify,
+                noiDung: state.messageNotify
+            })
+            .then(res => {
+                console.log("noti: " + res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 };
 export default {
     state, getters, mutations, actions

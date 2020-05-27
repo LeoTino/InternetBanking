@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 export default {
   data() {
     return {
@@ -32,8 +32,51 @@ export default {
         })
         .then(res => {
           console.log(res.data);
-          if (res.data != null) {
+          if (res.data == "success") {
             alert("Xoá thành công");
+            var userDoi = `${localStorage.getItem("nnoUserDoi")}`;
+            var userBiDoi = `${localStorage.getItem("nnoUserBiDoi")}`;
+            var user = `${localStorage.getItem("username")}`;
+            //sendNotify
+            debugger;
+            if (userDoi == user) {
+              var messageNotify =
+                userDoi + " đã xóa nhắc nợ với nội dung: " + this.noidung;
+              //send start
+              axios
+                .post("http://localhost:3000/notify/add-notify", {
+                  userNhan: userBiDoi,
+                  noiDung: messageNotify
+                })
+                .then(res => {
+                  console.log("noti: " + res);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+              //send end
+              localStorage.removeItem("nnoUserDoi");
+              localStorage.removeItem("nnoUserBiDoi");
+            }
+            if (userBiDoi == user) {
+              var messageNotify2 =
+                userBiDoi + " đã xóa nhắc nợ với nội dung: " + this.noidung;
+              //send start
+              axios
+                .post("http://localhost:3000/notify/add-notify", {
+                  userNhan: userDoi,
+                  noiDung: messageNotify2
+                })
+                .then(res => {
+                  console.log("noti: " + res);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+              //send end
+              localStorage.removeItem("nnoUserDoi");
+              localStorage.removeItem("nnoUserBiDoi");
+            }
             return true;
           }
           alert("Không xoá được");

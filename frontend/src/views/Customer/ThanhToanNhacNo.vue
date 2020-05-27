@@ -40,14 +40,30 @@ export default {
                 idNhacNo: id
               })
               .then(res => {
-                alert(id);
+                alert("Thanh toán thành công");
                 console.log(res.data);
+                //send thong bao
+                var userDoi = `${localStorage.getItem("ttnnoUserDoi")}`;
+                var messageNotify = userDoi + " đã thanh toán nhắc nợ!";
+                //send start
+                axios
+                  .post("http://localhost:3000/notify/add-notify", {
+                    userNhan: userDoi,
+                    noiDung: messageNotify
+                  })
+                  .then(res => {
+                    console.log("noti: " + res);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+                //send end
+                localStorage.removeItem("ttnnoUserDoi");
               })
               .catch(err => {
                 console.log(err);
               });
-          } 
-          else {
+          } else {
             alert("OTP invalid");
           }
         })

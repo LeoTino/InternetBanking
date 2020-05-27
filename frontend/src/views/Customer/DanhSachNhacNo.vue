@@ -12,7 +12,7 @@
             <h4 class="card-title text-danger">Người nợ: {{item.tenbidoi}}</h4>
             <h6 class="card-title">{{ format(item.sotien) }}</h6>
             <h6 class="card-title">Nội dung:{{item.noidung}}</h6>
-            <b-button type="submit" block variant="primary" v-on:click="remove($event, item.id)">Xoá</b-button>
+            <b-button type="submit" block variant="primary" v-on:click="remove($event, item)">Xoá</b-button>
             <!-- <b-button
               type="submit"
               block
@@ -37,7 +37,7 @@
               type="submit"
               block
               variant="primary"
-              v-on:click="payment($event, item.id)"
+              v-on:click="payment($event, item)"
             >Thanh toán</b-button>
           </div>
         </div>
@@ -81,17 +81,19 @@ export default {
     }
   },
   methods: {
-    remove(event, id) {
+    remove(event, item) {
       event.preventDefault();
+      localStorage.setItem('nnoUserDoi', item.tendoi);
+      localStorage.setItem('nnoUserBiDoi', item.tenbidoi);
       location.href =
-        `http://localhost:8080/#/customer/debtmanagement/delete/` + id;
+        `http://localhost:8080/#/customer/debtmanagement/delete/` + item.id;
     },
-    payment(event, id) {
+    payment(event, item) {
       event.preventDefault();
       this.$store.dispatch("callApiGetOTP");
-
+      localStorage.setItem('ttnnoUserDoi', item.tendoi);
       location.href =
-        `http://localhost:8080/#/customer/debtmanagement/thanhtoan/` + id;
+        `http://localhost:8080/#/customer/debtmanagement/thanhtoan/` + item.id;
     },
     format(val) {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
