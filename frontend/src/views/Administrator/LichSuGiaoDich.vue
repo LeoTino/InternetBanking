@@ -15,7 +15,7 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <div class="content">
-      <datatable title="Lịch sử giao dịch" :columns="tableColumns1" :rows="tableRows1" />
+      <datatable title="Lịch sử giao dịch" :columns="columnLichSu" :rows="rowDataLichSu" />
     </div>
   </div>
 </template>
@@ -24,71 +24,50 @@
 import axios from "axios";
 import DataTable from "vue-materialize-datatable";
 export default {
-  name: "getAccountsList",
   data() {
     return {
-      selected: "vcb",
-      options: [
+      stkKhachHang: "",
+      rowDataLichSu: [{}],
+      options: [],
+      selected: "",
+      fromDate: "",
+      toDate: "",
+      columnLichSu: [
         {
-          value: "vcb",
-          text: "VIetcombank"
-        },
-        {
-          value: "hb",
-          text: "HD Bank"
-        }
-      ],
-      list: [],
-      tableColumns1: [
-        {
-          label: "Người gửi",
-          field: "charName",
+          label: "Số tài khoản người gửi",
+          field: "stkGui",
           numeric: false,
           html: true
         },
         {
-          label: "Người nhận",
-          field: "firstAppearance",
+          label: "Tên tài khoản người gửi",
+          field: "tenGui",
           numeric: false,
-          html: false
+          html: true
+        },
+        {
+          label: "Số tài khoản người nhận",
+          field: "stkNhan",
+          numeric: false,
+          html: true
+        },
+        {
+          label: "Tên tài khoản người nhận",
+          field: "tenNhan",
+          numeric: false,
+          html: true
         },
         {
           label: "Số tiền",
-          field: "createdBy",
+          field: "sotien",
           numeric: false,
-          html: false
+          html: true
         },
         {
-          label: "Ngày thực hiện",
-          field: "voicedBy",
+          label: "Ghi chú",
+          field: "ghichu",
           numeric: false,
-          html: false
-        },
-        {
-          label: "Loại giao dịch",
-          field: "voicedBy",
-          numeric: false,
-          html: false
-        }
-      ],
-      tableRows1: [
-        {
-          charName: '<div style="color:red;">Abu</div>',
-          firstAppearance: "Alladin (1992)",
-          createdBy: "Joe Grant",
-          voicedBy: "Frank Welker"
-        },
-        {
-          charName: "Magic Carpet",
-          firstAppearance: "Peter (1994)",
-          createdBy: "Randy Cartwright",
-          voicedBy: "N/A"
-        },
-        {
-          charName: "The Sultan",
-          firstAppearance: "John (1995)",
-          createdBy: "Navid Negahban",
-          voicedBy: "Douglas Seale"
+          html: true
         }
       ]
     };
@@ -97,37 +76,70 @@ export default {
     datatable: DataTable
   },
   mounted() {
-    this.fetchData(this.$route.params.MaKhachHang);
+    // this.fetchData("","","");
+    this.genLstNganHang();
   },
 
-  watch: {
-    $route(to) {
-      this.fetchData(to.params.MaKhachHang);
-    }
-  },
+  watch: {},
 
   methods: {
     format(val) {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
-    fetchData(MaKhachHang) {
+    fetchData(manganhang, from, to) {
       axios
-        .get(`http://localhost:3000/customer/getAccounts/${MaKhachHang}`)
+        .post("http://localhost:3000/admin/get-history", {
+          maNganHang: manganhang,
+          tuNgay: from,
+          denNgay: to
+        })
         .then(res => {
-          this.listTT = res.data.filter(i => i.LoaiTaiKhoan == 1);
-          this.listTK = res.data.filter(i => i.LoaiTaiKhoan == 2);
-          this.empty = res.data.length === 0;
-          console.log(axios.defaults.headers.common);
+          console.log(res.data);
+          var arr = [{}];
+          debugger;
+          if (res.data.length > 0) {
+            debugger;
+            arr = res.data.map(function(val) {
+              return {
+                id: val.ID,
+                stkGui: val.SO_TAI_KHOAN_NGUOI_GUI,
+                tenGui: val.TEN_TAI_KHOAN_NGUOI_GUI,
+                stkNhan: val.SO_TAI_KHOAN_NGUOI_NHAN,
+                tenNhan: val.TEN_TAI_KHOAN_NGUOI_NHAN,
+                sotien: val.SOTIEN,
+                ghichu: val.GHICHU
+              };
+            });
+          }
+          console.log(JSON.stringify(arr));
+          this.rowDataLichSu = arr;
         })
         .catch(err => {
-          this.listTT = [];
-          this.listTK = [];
-          this.empty = true;
           console.log(err);
         });
     },
     onSubmit() {
-      return true;
+      event.preventDefault();
+      this.rowDataLichSu = [{}];
+      this.fetchData(this.selected, this.fromDate, this.toDate);
+    },
+    genLstNganHang() {
+      axios
+        .get("http://localhost:3000/api/ib-hn/get-list-info-bank")
+        .then(res => {
+          var arr = [];
+          arr = res.data.map(function(val) {
+            return {
+              id: val.MA_NGAN_HANG,
+              text: val.MA_NGAN_HANG + " - " + val.TEN_NGAN_HANG,
+              value: val.MA_NGAN_HANG
+            };
+          });
+          this.options = arr;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
