@@ -43,7 +43,7 @@ exports.refill = infoTransfer => {
     var sqlNguoiNhan = `UPDATE TAI_KHOAN T
         left join KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang
         set T.SoTien = T.SoTien + ${infoTransfer.soTien}
-        WHERE (K.TenDangNhap = '${infoTransfer.inforUser}' and T.LoaiTaiKhoan='1') or T.SoTaiKhoan ='${infoTransfer.inforUser}'`;
+        WHERE (K.TenDangNhap = '${infoTransfer.inforUser}' and T.LoaiTaiKhoan='0') or T.SoTaiKhoan ='${infoTransfer.inforUser}'`;
     var sqlNguoiChuyen = `UPDATE TAI_KHOAN T
         left join KHACH_HANG K ON T.MaKhachHang = K.MaKhachHang
         set T.SoTien = T.SoTien + ${infoTransfer.soTien}
