@@ -77,10 +77,13 @@ exports.manageEmpl = data => {
 // }
 exports.getHistTransaction = data => {
      var sqlLichSuGD = `SELECT * FROM lich_su_giao_dich 
-        WHERE MaNganHang ='${data.MaNganHang}'
-        AND THOIGIAN BETWEEN CAST ('${data.tuNgay}' AS DATE) AND CAST ('${data.denNgay}' AS DATE) ` ;
+        WHERE MaNganHang ='${data.maNganHang}'
+        AND THOIGIAN BETWEEN CAST('${data.tuNgay}' AS DATE) AND CAST('${data.denNgay}' AS DATE) ` ;
         var sqlNoDate = `SELECT * FROM lich_su_giao_dich 
-       WHERE MaNganHang='${data.MaNganHang}'`;
+       WHERE MaNganHang='${data.maNganHang}'`;
+       console.log("sql la:"+sqlLichSuGD);
+       console.log("sql la: sqlNoDate "+sqlNoDate);
+
        if(data.tuNgay!=""){
          return db.load(sqlLichSuGD);
        }else{
