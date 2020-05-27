@@ -11,6 +11,7 @@ var db = require('../fn/mysql-db');
 // Load danh sách giao dịch
 exports.loadDanhSachGd = (data)=> {
     return new Promise((resolve,reject)=>{
+        var sqlngay = `AND THOIGIAN BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW()`;
         var sqlNhanTien = `SELECT * FROM lich_su_giao_dich
         WHERE (SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}' AND LOAIGIAODICH='${data.loaiGiaoDich}')`;
         var sqlChuyenTien = `SELECT * FROM lich_su_giao_dich
@@ -19,6 +20,10 @@ exports.loadDanhSachGd = (data)=> {
         WHERE LOAIGIAODICH='${data.loaiGiaoDich}' 
         AND (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}' OR SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}')`;
         var sqlAll = `SELECT * FROM lich_su_giao_dich WHERE SO_TAI_KHOAN_NGUOI_NHAN ='${data.soTaiKhoan}' OR SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}'`
+        sqlNhanTien = sqlNhanTien + sqlngay;
+        sqlChuyenTien = sqlChuyenTien + sqlngay;
+        sqlTienNo = sqlTienNo + sqlngay;
+        sqlAll = sqlAll + sqlngay;
         if(data.loaiGiaoDich==='NHAN_TIEN'){
            db.load(sqlNhanTien).then(resultSql=>{
                console.log("nhanh tien"+resultSql);

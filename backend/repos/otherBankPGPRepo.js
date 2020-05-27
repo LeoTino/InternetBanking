@@ -95,7 +95,7 @@ exports.withdraw = data=> {
 
 
 //json request :
-//Post : localhost:3000/api/ib-hn//payInto
+//Post : localhost:3000/api/ib-hn-gpg/payInto
 // {
 //     "tenNganHangGui": "Ngân hàng Sài Gòn",
 //     "maNganHangGui":"nhom7",
@@ -131,6 +131,12 @@ exports.payInto = data=> {
                 if (valid) {
                     var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien + ${data.soTienChuyen}
                     WHERE SoTaiKhoan = ${data.soTaiKhoanNhan}`;
+                    var sqlSaveHist = `INSERT INTO lich_su_giao_dich
+                    (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
+                        TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU,MaNganHang,LienNganHang)
+                        VALUES ('${data.soTaiKhoanGui}','${data.tenNguoiGui}','${data.soTaikhoanNhan}','${data.tenNguoiNhan}',
+                        NOW(),'${data.soTienChuyen}','${data.noiDung}','nhom7',1)`
+                    db.insert(sqlSaveHist);
                     return db.update2(sqlNguoiChuyen);
                 } else {
                     resolve(false);

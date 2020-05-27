@@ -81,9 +81,6 @@ exports.getHistTransaction = data => {
         AND THOIGIAN BETWEEN CAST('${data.tuNgay}' AS DATE) AND CAST('${data.denNgay}' AS DATE) ` ;
         var sqlNoDate = `SELECT * FROM lich_su_giao_dich 
        WHERE MaNganHang='${data.maNganHang}'`;
-       console.log("sql la:"+sqlLichSuGD);
-       console.log("sql la: sqlNoDate "+sqlNoDate);
-
        if(data.tuNgay!=""){
          return db.load(sqlLichSuGD);
        }else{

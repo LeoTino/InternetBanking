@@ -1,9 +1,11 @@
 var express = require('express');
-var bankRepo = require('../repos/otherBankRepo');
+var bankRepo = require('../repos/otherBankPGPRepo');
 var bcrypt = require('bcrypt');
 var userRepo = require('../repos/userRepo'),
 authRepo = require('../repos/authRepo');
 var router = express.Router();
+var CryptoJS = require("crypto-js");
+
 //Try vấn thông tin tài khoản
 router.post('/info-account', (req, res) => {
     bankRepo.queryInfoAccount(req.body).then(rows => {

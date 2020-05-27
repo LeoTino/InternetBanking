@@ -16,7 +16,8 @@ var categoryCtrl = require('./apiControllers/categoryController'),
 	debtCtr = require('./apiControllers/debtController');
 	notifyCtr = require('./apiControllers/notifyController');
 	adminCtr = require('./apiControllers/adminController');
-
+	otherBankLoginCtrl = require('./apiControllers/otherBankLoginController');
+	otherBankGPGCtrl = require('./apiControllers/otherBankGPGController');
 	
 var verifyAccessToken = require('./repos/authRepo').verifyAccessToken;
 
@@ -44,19 +45,21 @@ app.use('/products', productCtrl);
 
 //app.use('/orders', verifyAccessToken, orderCtrl);
 app.use('/customer',verifyAccessToken,  customerCtrl);
-app.use('/transfer',  verifyAccessToken,transferCtrl);
-app.use('/transfer-history',verifyAccessToken,  transferHistoryCtrl);
+app.use('/transfer',transferCtrl);
+app.use('/transfer-history',  transferHistoryCtrl);
 
 
 //Employment
-app.use('/employment',verifyAccessToken,accountCtrl);
+app.use('/employment',accountCtrl);
 app.use('/otp',otpCtrl);
 
 //Other bank
-app.use('/api/ib-hn',otherBankCtrl);
+app.use('/api/ib-hn',verifyAccessToken,otherBankCtrl);
+app.use('/api/auth',otherBankLoginCtrl);
+app.use('/api/ib-hn-gpg',otherBankGPGCtrl);
 
 //Manager debt
-app.use('/debt',verifyAccessToken,debtCtr);
+app.use('/debt',debtCtr);
 
 //Notify
 app.use('/notify',verifyAccessToken,notifyCtr);

@@ -36,19 +36,18 @@ exports.transferInternal = data=> {
 //  "soTaikhoanNhan":"0281434",
 //  "tenTaikhoanNhan":"Tran Van B",
 //  "soTienChuyen":100000,
-//  "maNganhang":"nhom9",
 //  "noiDungChuyen":"chuyen tien toi ngan hang abc",
 //  "phi":0 }
 exports.truTien = data=> {
     var sqlNguoiNhan = `UPDATE tai_khoan SET SoTien=SoTien+${data.soTienChuyen}
-        WHERE SoTaiKhoan = ${data.taiKhoanNguon}`;
+        WHERE SoTaiKhoan = ${data.soTaikhoanNhan}`;
     var sqlSaveHist = `INSERT INTO lich_su_giao_dich
     (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
-         TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU,MaNganHang,LienNganHang)
+         TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU)
           VALUES ('${data.taiKhoanNguon}','${data.tentaiKhoanNguon}','${data.soTaikhoanNhan}','${data.tenTaikhoanNhan}',
-          NOW(),'${data.soTienChuyen}','${data.noiDungChuyen}','${data.maNganhang}',1)`
+          NOW(),'${data.soTienChuyen}','${data.noiDungChuyen}')`
     db.insert(sqlSaveHist);
-    return db.update2(sqlNguoiNhan);
+    return db.update(sqlNguoiNhan);
 }
 exports.insert = (userID, poco) => {
     return new Promise((resolve, reject) => {

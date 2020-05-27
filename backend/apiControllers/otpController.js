@@ -21,8 +21,8 @@ router.post('/send', (req, res) => {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'internetbanking.hn@gmail.com',
-          pass: 'n12345678@'
+          user: 'anhlanguoingungoc3@gmail.com',
+          pass: '16081997'
         }
       });
       otpRepo.add(req.body.tenDangNhap,otpCode);
@@ -33,7 +33,7 @@ router.post('/send', (req, res) => {
                      <div>Why you received this email. Apple requires verification whenever an email address</div>
                      <div>If you did not make this request, you can ignore this email</div>`
       var mailOptions = {
-        from: 'internetbanking.hn@gmail.com',
+        from: 'anhlanguoingungoc3@gmail.com',
         to: `${user.Email}`,
         subject: 'OTP Code',
         html: content

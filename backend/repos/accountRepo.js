@@ -69,9 +69,9 @@ exports.refill = infoTransfer => {
             db.update(sqlNguoiNhan);
             var sqlSaveHist = `INSERT INTO lich_su_giao_dich
             (SO_TAI_KHOAN_NGUOI_GUI, TEN_TAI_KHOAN_NGUOI_GUI, SO_TAI_KHOAN_NGUOI_NHAN,
-                TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU)
+                TEN_TAI_KHOAN_NGUOI_NHAN, THOIGIAN, SOTIEN, GHICHU,LOAIGIAODICH)
                 VALUES ('${infoTransfer.maGiaoDichVien}','Ngân hàng IB-HN','${soTaiKhoan}','${tenTaiKhoan}',
-                NOW(),'${infoTransfer.soTien}','Nạp tiền từ ngân hàng')`
+                NOW(),'${infoTransfer.soTien}','Nạp tiền từ ngân hàng','NHAN_TIEN')`
             db.insert(sqlSaveHist);
             db.update2(sqlNguoiChuyen).then(dataUpdate=>{
                 resolve(true);

@@ -21,9 +21,10 @@ router.post('/info-account', (req, res) => {
         var hashString = req.body.soTk+req.body.timer+"nhom21";
         console.log("hashString:"+hashString);
         bcrypt.compare(hashString, req.body.hashCode, function(err, result) {
-            console.log("result la:"+result);
             if(result){
-                res.json(mockupData);
+                bankRepo.queryInfoAccount(req.body).then(dataResp=>{
+                    res.json(dataResp);
+                })
             }else{
                 res.json({status:"false"});
             }
