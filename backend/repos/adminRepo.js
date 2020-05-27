@@ -69,20 +69,29 @@ exports.manageEmpl = data => {
 
 }
 
-//localhost:3000/employment/history-account
+//localhost:3000/admin/history-account
 // {
-//     "soTaiKhoan":"0281000232299",
-//     "loaiGd":"NHAN_TIEN",
+//     "maNganHang":"nhom9",
+//     "tuNgay":"2020-05-27",
+//     "denNgay":"2020-05-29"
 // }
 exports.getHistTransaction = data => {
      var sqlLichSuGD = `SELECT * FROM lich_su_giao_dich 
-        WHERE (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}' OR SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}') 
-        AND LOAIGIAODICH ='${data.loaiGd}' ORDER BY LOAIGIAODICH DESC` 
-        return db.load(sqlNguoiChuyen);
+        WHERE MaNganHang ='${data.MaNganHang}'
+        AND THOIGIAN BETWEEN CAST ('${data.tuNgay}' AS DATE) AND CAST ('${data.denNgay}' AS DATE) ` ;
+        var sqlNoDate = `SELECT * FROM lich_su_giao_dich 
+       WHERE MaNganHang='${data.MaNganHang}'`;
+       if(data.tuNgay!=""){
+         return db.load(sqlLichSuGD);
+       }else{
+        return db.load(sqlNoDate);
+       }
+        
+    
 }
 
 
-// localhost:3000/employment/add-debit-account
+// localhost:3000/admin/add-debit-account
 // {
 //     "infoCustomer":"admin",//Ma khach hang hoac user dang nhap
 //     "soTien":100000

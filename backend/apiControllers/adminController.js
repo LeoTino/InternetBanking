@@ -51,4 +51,17 @@ router.post('/manage-empl', (req, res) => {
         });
 });
 
+router.post('/get-history', (req, res) => {
+    adminRepo.getHistTransaction(req.body)
+        .then(rows => {
+            res.statusCode = 200;
+            res.json(rows);
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
+
 module.exports = router;

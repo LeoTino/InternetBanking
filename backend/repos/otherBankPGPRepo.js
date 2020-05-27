@@ -119,7 +119,6 @@ exports.payInto = data=> {
     return new Promise((resolve,reject)=>{
         db.load(sqlFindPrivateKey).then(obj=>{
             var sqlFindPublicKey = "";
-            if(data.maNganHangGui==="nhom7"){
                 sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='nhom7'`;
                 const wordArray2 = CryptoJS.enc.Base64.parse(data.signature); //signatureBase64 là signature nhóm tui gửi qua nhóm ông
                 const cleartext = CryptoJS.enc.Utf8.stringify(wordArray2);
@@ -130,34 +129,13 @@ exports.payInto = data=> {
                 });
                 const { valid } = verified.signatures[0];
                 if (valid) {
-                    console.log('signed by key id ' + verified.signatures[0].keyid.toHex());
-                } else {
-                    throw new Error('signature could not be verified');
-                }
-            }else{
-               sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
-            
-            var publickey ;
-            db.load(sqlFindPublicKey).then(pubKeyRows=>{
-                var  key = new NodeRSA(null, {signingScheme: 'sha512'});
-                key.importKey(pubKeyRows[0].Value);
-                console.log("signuatre :"+data.signature);
-                var checkSignature = key.verify('nhom9', data.signature,{signingScheme: 'sha512'},"base64");
-                console.log(checkSignature);
-                if(checkSignature===true){
-                    console.log("vo if")
                     var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien + ${data.soTienChuyen}
                     WHERE SoTaiKhoan = ${data.soTaiKhoanNhan}`;
                     return db.update2(sqlNguoiChuyen);
-                }else{
-                    console.log("vo else")
-                    resolve(false)
+                } else {
+                    resolve(false);
                 }
-            }).then(result =>{
-                resolve(true);
-            })
-            .catch(err=>reject(err));
-        }
+           
             // })
         });
     });
