@@ -14,7 +14,10 @@ const state = {
     isMatchOTP: "none",
     gdrsaSelectedNganHang: "",
     constNganHangRSA: "NHOM_21_BANK",
+    constNganHangPGP: "",
     isSaveNguoiNhan: false,
+    hashStr: "",
+    signature:""
 };
 const getters = {
     srcAccount: state => {
@@ -56,8 +59,17 @@ const getters = {
     constNganHangRSA: state => {
         return state.constNganHangRSA;
     },
+    constNganHangPGP: state => {
+        return state.constNganHangPGP;
+    },
     isSaveNguoiNhan: state => {
         return state.isSaveNguoiNhan;
+    },
+    hashStr: state => {
+        return state.hashStr;
+    },
+    signature: state => {
+        return state.signature;
     },
 };
 const mutations = {
@@ -100,6 +112,12 @@ const mutations = {
     isSaveNguoiNhan: (state, payload) => {
         state.isSaveNguoiNhan = payload;
     },
+    hashStr: (state, payload) => {
+        state.hashStr = payload;
+    },
+    signature: (state, payload) => {
+        state.signature = payload;
+    },
     callApiChuyenTien: (state) => {
         axios
             .post('http://localhost:3000/transfer/internal', {
@@ -133,7 +151,7 @@ const mutations = {
                 console.log(err);
             });
         state.isSendOTP = true;
-    }
+    },
 };
 const actions = {
     srcAccount: ({ commit }, payload) => {
@@ -283,6 +301,26 @@ const actions = {
                 console.log(err);
             })
     },
+    getInfoUserReceiveLienNganHangPGP: ({ commit }) => {
+        axios
+            .post('https://cors-anywhere.herokuapp.com/http://internetbankingapi.somee.com/api/NganHangLienKet/GetThongTinTaiKhoan', {
+                soTaiKhoan: state.receiveAccount,
+                timer: "20200521",
+                hashStr: "$2b$12$5vkn.Qwl774rNOIOWmGDr.MoaNcHyWIDzFev.ZEHfQcE9ugs385L2"
+            })
+            .then(res => {
+                commit("infoName", "Tài khoản không tồn tại");
+                if (res.data.tenTaiKhoan == undefined) {
+                    commit("infoName", "Tài khoản không tồn tại");
+                } else {
+                    commit("infoName", res.data.tenTaiKhoan);
+                }
+                console.log(res.data.tenTaiKhoan);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
     genLstReceiveLienNganHang: ({ commit }) => {
         axios
             .post('http://localhost:3000/transfer/load-list-info-receive', {
@@ -305,6 +343,23 @@ const actions = {
             .catch(err => {
                 console.log(err);
             })
+    },
+    callApiGetHashString: ({ commit }) => {
+        var date = new Date();
+        var timer = date.getFullYear().toString() +"0"+ (date.getMonth()+1).toString()+date.getDate().toString() +date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
+        axios
+            .post('http://localhost:3000/transfer/create-hash', {
+                soTaiKhoan: state.receiveAccount,
+                timer: timer,
+                tenNganHang: state.gdrsaSelectedNganHang
+            })
+            .then(res => {
+                console.log(res);
+                commit("hashStr", res.data.hashStr);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     },
 };
 function format(val) {
