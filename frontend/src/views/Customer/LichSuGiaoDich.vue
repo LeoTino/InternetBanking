@@ -114,7 +114,7 @@ export default {
       //chuyen khoan
       axios
         .post("http://localhost:3000/transfer-history/getHistory", {
-          loaiGiaoDich: "NHAN_TIEN",
+          loaiGiaoDich: "CHUYEN_TIEN",
           soTaiKhoan: soTKKhachHang
         })
         .then(res => {
@@ -152,7 +152,7 @@ export default {
       //thanh toan nhac no
       axios
         .post("http://localhost:3000/transfer-history/getHistory", {
-          loaiGiaoDich: "NHAN_TIEN",
+          loaiGiaoDich: "THANH_TOAN_NHAC_NO",
           soTaiKhoan: soTKKhachHang
         })
         .then(res => {
