@@ -16,9 +16,9 @@ var db = require('../fn/mysql-db');
 exports.addDebt = data=> {
     var sql = `INSERT INTO thong_tin_no
     (TEN_NGUOI_DOI, SO_TAI_KHOAN_DOI, 
-    TEN_NGUOI_BI_DOI, SO_TAI_KHOAN_BI_DOI,SOTIEN,NOIDUNG) 
+    TEN_NGUOI_BI_DOI, SO_TAI_KHOAN_BI_DOI,SOTIEN,NOIDUNG,TRANG_THAI) 
     VALUES ('${data.tenNguoiDoi}','${data.soTaiKhoanDoi}','${data.tenNguoiBiDoi}','${data.soTaiKhoanBiDoi}',
-    '${data.soTien}','${data.noiDung}')`;
+    '${data.soTien}','${data.noiDung}',0)`;
     return db.update2(sql);
 }
 
@@ -55,8 +55,8 @@ exports.loadDebt = data=> {
         db.load(truyVanAccount).then(account=>{
             console.log("data la :"+account[0].SoTaiKhoan);
             var sql = `SELECT * FROM thong_tin_no 
-             WHERE SO_TAI_KHOAN_DOI = '${account[0].SoTaiKhoan}' OR SO_TAI_KHOAN_BI_DOI ='${account[0].SoTaiKhoan}'
-             AND TRANG_THAI = 0`;
+             WHERE (SO_TAI_KHOAN_DOI = '${account[0].SoTaiKhoan}' OR SO_TAI_KHOAN_BI_DOI ='${account[0].SoTaiKhoan}')
+             AND TRANG_THAI = '0'`;
              db.load(sql).then(thongTinNo=>{
                  resolve(thongTinNo);
              });

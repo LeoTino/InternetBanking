@@ -97,6 +97,7 @@ exports.withdraw = data=> {
 //Post : localhost:3000/api/ib-hn//payInto
 // {
 //     "tenNganHangGui": "Ngân hàng Sài Gòn",
+//     "maNganHangGui":"nhom7",
 //     "soTaiKhoanGui":"028100023333",
 //     "soTaiKhoanNhan":"028143434343",
 //     "tenNguoiNhan":"Tran Van B",
@@ -116,7 +117,13 @@ exports.payInto = data=> {
     var sqlFindPrivateKey = `SELECT * FROM system_config WHERE KeyValue='private_key'`;
     return new Promise((resolve,reject)=>{
         db.load(sqlFindPrivateKey).then(obj=>{
-            var sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
+            var sqlFindPublicKey = "";
+            if(data.maNganHangGui==="nhom7"){
+                sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='nhom7'`;
+                
+            }else{
+               sqlFindPublicKey = `SELECT * FROM system_config WHERE KeyValue='key_NM'`;
+            
             var publickey ;
             db.load(sqlFindPublicKey).then(pubKeyRows=>{
                 var  key = new NodeRSA(null, {signingScheme: 'sha512'});
@@ -137,7 +144,7 @@ exports.payInto = data=> {
                 resolve(true);
             })
             .catch(err=>reject(err));
-                
+        }
             // })
         });
     });
