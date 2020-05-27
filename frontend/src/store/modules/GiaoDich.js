@@ -125,6 +125,9 @@ const mutations = {
             })
             .then(res => {
                 console.log(res);
+                if(res.data.tenDangNhap == `${localStorage.getItem("username")}`){
+                    alert("OTP has sent!");
+                }
             })
             .catch(err => {
                 console.log(err);

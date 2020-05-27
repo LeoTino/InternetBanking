@@ -13,6 +13,7 @@
 
 <script>
 import axios from "axios"
+import router from '@/router'
 export default {
   data() {
     return {
@@ -34,6 +35,8 @@ export default {
           console.log(res.data);
           if (res.data != null) {
             alert("Xoá thành công");
+            router.push(`customer/debtmanagement`);
+            window.location.reload(true);
             return true;
           }
           alert("Không xoá được");

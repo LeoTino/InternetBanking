@@ -9,7 +9,12 @@
         </b-card-text>
       </b-card>
       <b-form-group id="nnoSoTK" label="Số tài khoản người nợ" label-for="nnoSoTK">
-        <b-form-input id="nnoSoTK" v-model="nnoSoTK" v-on:input="findNguoiNo()" placeholder="Số tài khoản"></b-form-input>
+        <b-form-input
+          id="nnoSoTK"
+          v-model="nnoSoTK"
+          v-on:input="findNguoiNo()"
+          placeholder="Số tài khoản"
+        ></b-form-input>
       </b-form-group>
       <b-form-group id="lstNguoiNo" label="Danh sách người nợ" label-for="lstNguoiNo">
         <b-form-select id="lstNguoiNo" v-model="nnoSoTK" :options="nnoLstNguoiNo" :select-size="4"></b-form-select>
@@ -30,11 +35,11 @@
 export default {
   data() {
     return {
-      temp:""
+      temp: ""
     };
   },
   mounted() {
-    this.$store.dispatch("getLstNguoiNo");
+    //this.$store.dispatch("getLstNguoiNoDoBanThanTao");
   },
   computed: {
     nnoSoTK: {
@@ -76,25 +81,27 @@ export default {
       set(nnoInfo) {
         this.$store.dispatch("nnoInfo", nnoInfo);
       }
-    },
+    }
   },
   methods: {
     onSubmitTaoNguoiNo() {
       event.preventDefault();
-      if(this.$store.getters.nnoInfo == "" || this.$store.getters.nnoInfo == "Tài khoản không tồn tại"){
+      if (
+        this.$store.getters.nnoInfo == "" ||
+        this.$store.getters.nnoInfo == "Tài khoản không tồn tại"
+      ) {
         alert("Số tài khoản bị đòi nợ không tồn tại!");
       } else {
-        alert("tét");
         this.$store.dispatch("taoNguoiNo");
+        // window.location.reload(true);
+        // window.href = "http://localhost:8080/#/customer/debtmanagement";
       }
     },
-    findNguoiNo(){
+    findNguoiNo() {
       this.$store.dispatch("getInfoNguoiNo");
     }
   }
 };
-
-
 </script>
 
 <style scoped>
