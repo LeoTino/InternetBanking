@@ -114,6 +114,8 @@ export default {
     this.$store.dispatch("genLstSrc");
     //this.$store.dispatch("genLstReceiveLienNganHang");
     this.$store.dispatch("getLstNganHang");
+    this.$store.dispatch("callApiGetHashString");
+    this.$store.dispatch("callApiGetSignature");
   },
   watch: {
     isMatchOTP: function() {

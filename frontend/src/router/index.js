@@ -17,7 +17,8 @@ const ifNotAuthenticated = (to, from, next) => {
 const ifAuthenticated = (to, from, next) => {
   let token = localStorage.getItem("token");
   if (token) {
-    axios.defaults.headers.common['x-access-token'] = token
+    axios.defaults.headers.common['x-access-token'] = token;
+    axios.defaults.headers.common['Authorization'] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaG9tMjEiLCJlbWFpbCI6Im5ob20yMUBnbWFpbC5jb20iLCJqdGkiOiJuaGxrMjEiLCJleHAiOjE1OTA1ODIwNDMsImlzcyI6ImRvdG5ldGNvcmVrZXkuY29tIiwiYXVkIjoiZG90bmV0Y29yZWtleS5jb20ifQ.7YnqzBmwVS96qme2xInRcGIPmyXDEK6lIPT3m_kAb64";
     next()
     return
   }

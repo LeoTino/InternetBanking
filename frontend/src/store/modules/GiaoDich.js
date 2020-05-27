@@ -1,5 +1,4 @@
 import axios from "axios"
-
 const state = {
     srcAccount: "",
     lstSrc: [],
@@ -13,11 +12,11 @@ const state = {
     infoName: "",
     isMatchOTP: "none",
     gdrsaSelectedNganHang: "",
-    constNganHangRSA: "NHOM_21_BANK",
+    constNganHangRSA: "18HCB BANK",
     constNganHangPGP: "",
     isSaveNguoiNhan: false,
     hashStr: "",
-    signature:""
+    signature: ""
 };
 const getters = {
     srcAccount: state => {
@@ -143,7 +142,7 @@ const mutations = {
             })
             .then(res => {
                 console.log(res);
-                if(res.data.tenDangNhap == `${localStorage.getItem("username")}`){
+                if (res.data.tenDangNhap == `${localStorage.getItem("username")}`) {
                     alert("OTP has sent!");
                 }
             })
@@ -192,7 +191,7 @@ const actions = {
             .post('https://cors-anywhere.herokuapp.com/http://internetbankingapi.somee.com/api/NganHangLienKet/GiaoDichKhacNganHang', {
                 soTKGui: state.srcAccount,
                 tenNganHangGui: "NHOM_21_BANK",
-                soTKNhan: "44233946496",
+                soTKNhan: state.receiveAccount,
                 tenNganHangNhan: "18HCB BANK",
                 soTien: state.soTienChuyen,
                 noiDung: state.messageTransfer,
@@ -201,8 +200,24 @@ const actions = {
             })
             .then(res => {
                 console.log(res);
-                if(res.data.mesError == "request success"){
+                if (res.data.mesError == "request success") {
                     alert("Chuyển tiền thành công");
+                    axios
+                        .post('localhost:3000/transfer/tru-tien', {
+                            taiKhoanNguon: state.srcAccount,
+                            tentaiKhoanNguon: `${localStorage.getItem("username")}`,
+                            soTaikhoanNhan: state.receiveAccount,
+                            tenTaikhoanNhan: state.infoName,
+                            soTienChuyen: state.soTienChuyen,
+                            noiDungChuyen: state.noiDungChuyen,
+                            phi: 0
+                        })
+                        .then(res => {
+                            console.log(res);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
                 }
             })
             .catch(err => {
@@ -346,7 +361,7 @@ const actions = {
     },
     callApiGetHashString: ({ commit }) => {
         var date = new Date();
-        var timer = date.getFullYear().toString() +"0"+ (date.getMonth()+1).toString()+date.getDate().toString() +date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
+        var timer = date.getFullYear().toString() + "0" + (date.getMonth() + 1).toString() + date.getDate().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString();
         axios
             .post('http://localhost:3000/transfer/create-hash', {
                 soTaiKhoan: state.receiveAccount,
@@ -356,6 +371,17 @@ const actions = {
             .then(res => {
                 console.log(res);
                 commit("hashStr", res.data.hashStr);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
+    callApiGetSignature: ({ commit }) => {
+        axios
+            .get(`http://localhost:3000/transfer/create-signature`)
+            .then(res => {
+                console.log(res);
+                commit("signature", res.data);
             })
             .catch(err => {
                 console.log(err);
