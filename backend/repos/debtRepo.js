@@ -47,10 +47,22 @@ exports.updateDebt = data=> {
 // }
 
 exports.loadDebt = data=> {
-    var sql = `SELECT * FROM thong_tin_no `;
-    // WHERE (TaiKhoanNo = '${data.taiKhoanHienTai}' OR TAI_KHOAN_DOI_NO ='${data.taiKhoanHienTai}')
-    // AND TRANG_THAI = 0`;
-    return db.load(sql);
+    return new Promise((resolve,reject)=>{
+        var truyVanAccount =`SELECT T.SoTaiKhoan
+                             FROM khach_hang K 
+                            LEFT JOIN tai_khoan T ON K.MaKhachHang = T.MaKhachHang
+                             WHERE T.LoaiTaiKhoan ='0' AND K.TenDangNhap='${data.taiKhoanHienTai}'`
+        db.load(truyVanAccount).then(account=>{
+            console.log("data la :"+account[0].SoTaiKhoan);
+            var sql = `SELECT * FROM thong_tin_no 
+             WHERE SO_TAI_KHOAN_DOI = '${account[0].SoTaiKhoan}' OR SO_TAI_KHOAN_BI_DOI ='${account[0].SoTaiKhoan}'
+             AND TRANG_THAI = 0`;
+             db.load(sql).then(thongTinNo=>{
+                 resolve(thongTinNo);
+             });
+        })
+    })
+    
 }
 
 //Xóa danh sách nhắc nợ : 
