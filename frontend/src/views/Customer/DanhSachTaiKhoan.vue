@@ -74,6 +74,22 @@ export default {
     format(val) {
       return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ` VND`;
     },
+    remove(event, stk){
+      axios
+            .post('http://localhost:3000/employment/close-account', {
+                soTaiKhoan: stk
+            })
+            .then(res => {
+                console.log(res);
+                if(res.data == "success"){
+                  alert("Đóng thành công!");
+                  window.location.reload(true);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },
     fetchData(MaKhachHang) {
       axios
         .get(`http://localhost:3000/customer/getAccounts/${MaKhachHang}`)
