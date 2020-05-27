@@ -12,9 +12,9 @@ var db = require('../fn/mysql-db');
 exports.loadDanhSachGd = (data)=> {
     return new Promise((resolve,reject)=>{
         var sqlNhanTien = `SELECT * FROM lich_su_giao_dich
-        WHERE (SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}')`;
+        WHERE (SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}' AND LOAIGIAODICH='${data.loaiGiaoDich}')`;
         var sqlChuyenTien = `SELECT * FROM lich_su_giao_dich
-        WHERE (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}')`;
+        WHERE (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}' AND LOAIGIAODICH='${data.loaiGiaoDich}')`;
         var sqlTienNo = `SELECT * FROM lich_su_giao_dich
         WHERE LOAIGIAODICH='${data.loaiGiaoDich}' 
         AND (SO_TAI_KHOAN_NGUOI_GUI='${data.soTaiKhoan}' OR SO_TAI_KHOAN_NGUOI_NHAN='${data.soTaiKhoan}')`;
