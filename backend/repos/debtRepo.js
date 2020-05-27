@@ -91,6 +91,7 @@ exports.deleteDebt = data=> {
 exports.paymentDebt = data=> {
     return new Promise((resolve,reject)=>{
         var sqlLoad = `SELECT * FROM thong_tin_no WHERE ID=${data.idNhacNo}`;
+        var idNhacNo = data.idNhacNo;
         db.load(sqlLoad).then(dataResp=>{
             var data = dataResp[0];
             if(data!==undefined){
@@ -105,6 +106,8 @@ exports.paymentDebt = data=> {
                 WHERE SoTaiKhoan = ${data.SO_TAI_KHOAN_DOI}`;
                 var sqlNguoiChuyen = `UPDATE tai_khoan SET SoTien=SoTien-${data.SOTIEN}
                 WHERE SoTaiKhoan = ${data.SO_TAI_KHOAN_BI_DOI}`;
+                var sqlUpdateNhacNo  = `UPDATE thong_tin_no SET TRANG_THAI=1 WHERE ID=${idNhacNo}`
+                db.update(sqlUpdateNhacNo);
                 db.update(sqlNguoiNhan);
                 db.update2(sqlNguoiChuyen).then(updateResult=>{
                     resolve(true);
