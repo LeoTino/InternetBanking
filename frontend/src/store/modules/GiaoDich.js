@@ -209,7 +209,7 @@ const actions = {
                             soTaikhoanNhan: state.receiveAccount,
                             tenTaikhoanNhan: state.infoName,
                             soTienChuyen: state.soTienChuyen,
-                            noiDungChuyen: state.noiDungChuyen,
+                            noiDungChuyen: state.messageTransfer,
                             phi: 0
                         })
                         .then(res => {
