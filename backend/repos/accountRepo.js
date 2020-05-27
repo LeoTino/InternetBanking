@@ -17,11 +17,11 @@ exports.createAccount = infoAcc => {
                 var maKhachHang = date.getFullYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
                 var maTaiKhoan = date.getYear().toString() + date.getMonth().toString() + date.getDay().toString()+date.getHours().toString()+date.getMinutes().toString()+date.getSeconds().toString();
                 var soTaiKhoan = "0281"+maKhachHang;
-                var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien,Role) 
-                values('${maTaiKhoan}', '${maKhachHang}','${soTaiKhoan}', '0', '0','user')`;
-                var sql = `insert into khach_hang(Ten, DiaChi,MaKhachHang, TenDangNhap,MatKhau,Email,Phone) 
-                            values('${infoAcc.ten}', '${infoAcc.diaChi}','${maKhachHang}', '${infoAcc.tenDangNhap}', '${infoAcc.matKhau}', '${infoAcc.phone}', '${infoAcc.email}')`;
-                db.sqlCreateAcc(sqlCreateAcc);
+                var sqlCreateAcc = `insert into tai_khoan(MaTaiKhoan, MaKhachHang,SoTaiKhoan, LoaiTaiKhoan,SoTien) 
+                values('${maTaiKhoan}', '${maKhachHang}','${soTaiKhoan}', '0', '0')`;
+                var sql = `insert into khach_hang(Ten, DiaChi,MaKhachHang, TenDangNhap,MatKhau,Email,Phone,Role) 
+                            values('${infoAcc.ten}', '${infoAcc.diaChi}','${maKhachHang}', '${infoAcc.tenDangNhap}', '${infoAcc.matKhau}', '${infoAcc.phone}', '${infoAcc.email}','user')`;
+                db.insert(sqlCreateAcc);
                 db.insert(sql).then(insertResult=>{
                     resole(insertResult);
                 }).catch(err=>reject(err));
