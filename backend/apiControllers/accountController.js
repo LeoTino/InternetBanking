@@ -78,4 +78,18 @@ router.post('/add-debit-account', (req, res) => {
             res.end('View error log on console.');
         });
 });
+
+router.post('/close-account', (req, res) => {
+    accountRepo.closeAccount(req.body)
+        .then(insertId => {
+            
+            res.statusCode = 201;
+            res.json("success");
+        })
+        .catch(err => {
+            console.log(err);
+            res.statusCode = 500;
+            res.end('View error log on console.');
+        });
+});
 module.exports = router;
