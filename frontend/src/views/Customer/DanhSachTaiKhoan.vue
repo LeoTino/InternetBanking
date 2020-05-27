@@ -78,8 +78,8 @@ export default {
       axios
         .get(`http://localhost:3000/customer/getAccounts/${MaKhachHang}`)
         .then(res => {
-          this.listTT = res.data.filter(i => i.LoaiTaiKhoan == 1);
-          this.listTK = res.data.filter(i => i.LoaiTaiKhoan == 2);
+          this.listTT = res.data.filter(i => i.LoaiTaiKhoan == 0);
+          this.listTK = res.data.filter(i => i.LoaiTaiKhoan == 1);
           this.empty = res.data.length === 0;
           console.log(axios.defaults.headers.common);
         })

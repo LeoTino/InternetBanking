@@ -62,18 +62,18 @@ const mutations = {
                 console.log(res);
                 if (res.data.status == "success") {
                     // tạo tài khoản thanh toán
-                    axios
-                        .post('localhost:3000/employment/add-debit-account', {
-                            infoCustomer: state.tenDangNhap,
-                            soTien: 0,
-                            loaiTaiKhoan: 1
-                        })
-                        .then(res => {
-                            console.log("tạo tài khoản thanh toán 0đ" + res);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    // axios
+                    //     .post('http://localhost:3000/employment/add-debit-account', {
+                    //         infoCustomer: state.tenDangNhap,
+                    //         soTien: 0,
+                    //         loaiTaiKhoan: 1
+                    //     })
+                    //     .then(res => {
+                    //         console.log("tạo tài khoản thanh toán 0đ" + res);
+                    //     })
+                    //     .catch(err => {
+                    //         console.log(err);
+                    //     });
                     alert("Create account success!");
                 } else {
                     alert("Create account failed! Please check again or contact administrator!");

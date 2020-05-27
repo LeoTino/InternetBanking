@@ -39,7 +39,7 @@ export default {
     onSubmit() {
       event.preventDefault();
       axios
-        .post("http://localhost:3000/debt/update-debt", {
+        .post("http://localhost:3000/employment/refill", {
           inforUser: this.userOrSTK,
           soTien: this.soTien,
           maGiaoDichVien: `${localStorage.getItem("username")}`
@@ -47,10 +47,10 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data != null) {
-            alert("Xoá thành công");
+            alert("Thêm thành công");
             return true;
           }
-          alert("Không xoá được");
+          alert("Không thêm được");
         })
         .catch(err => {
           console.log(err);
