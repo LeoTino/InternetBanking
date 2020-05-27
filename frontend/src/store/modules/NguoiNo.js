@@ -144,10 +144,10 @@ const actions = {
                     })
                     .then(res => {
                         console.log(res.data);
-                        if(res.data.success == "success"){
+                        if (res.data.success == "success") {
                             alert("Thêm thành công!");
                         }
-                        
+
                     })
                     .catch(err => {
                         console.log(err);

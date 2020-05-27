@@ -93,8 +93,6 @@ export default {
         alert("Số tài khoản bị đòi nợ không tồn tại!");
       } else {
         this.$store.dispatch("taoNguoiNo");
-        // window.location.reload(true);
-        // window.href = "http://localhost:8080/#/customer/debtmanagement";
       }
     },
     findNguoiNo() {
