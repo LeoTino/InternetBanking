@@ -17,10 +17,10 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group id="lstNguoiNo" label="Danh sách người nợ" label-for="lstNguoiNo">
-        <b-form-select id="lstNguoiNo" v-model="nnoSoTK" :options="nnoLstNguoiNo" :select-size="4"></b-form-select>
+        <b-form-select id="lstNguoiNo" v-on:input="findNguoiNo()" v-model="nnoSoTK" :options="lstDoBanThanTao" :select-size="4"></b-form-select>
       </b-form-group>
       <b-form-group id="nnoSoTien" label="Số tiền" label-for="nnoSoTien">
-        <b-form-input id="nnoSoTien" type="number" v-model="nnoSoTien" placeholder="Số tiền"></b-form-input>
+        <b-form-input id="nnoSoTien" type="number" required v-model="nnoSoTien" placeholder="Số tiền"></b-form-input>
       </b-form-group>
       <b-form-group id="nnoNoiDung" label="Nội dung" label-for="nnoNoiDung">
         <b-form-input id="nnoNoiDung" v-model="nnoNoiDung" placeholder="Nội dung"></b-form-input>
@@ -32,14 +32,16 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   data() {
     return {
-      temp: ""
+      temp: "",
+      lstDoBanThanTao: []
     };
   },
   mounted() {
-    //this.$store.dispatch("getLstNguoiNoDoBanThanTao");
+    this.getLstNguoiNo();
   },
   computed: {
     nnoSoTK: {
@@ -97,6 +99,49 @@ export default {
     },
     findNguoiNo() {
       this.$store.dispatch("getInfoNguoiNo");
+    },
+    getLstNguoiNo(){
+      axios
+        .post("http://localhost:3000/debt/load-debt", {
+          taiKhoanHienTai: `${localStorage.getItem("username")}`
+        })
+        .then(res => {
+          console.log(res.data);
+          var arr = [];
+          arr = res.data.map(function(val) {
+            return {
+              "id": val.ID,
+              "text": val.TEN_NGUOI_BI_DOI,
+              "name": val.TEN_NGUOI_BI_DOI,
+              "value": val.SO_TAI_KHOAN_BI_DOI,
+              noidung: val.NOIDUNG,
+              tendoi: val.TEN_NGUOI_DOI,
+              stkdoi: val.SO_TAI_KHOAN_DOI,
+              tenbidoi: val.TEN_NGUOI_BI_DOI,
+              stkbidoi: val.SO_TAI_KHOAN_BI_DOI,
+              status: val.TRANG_THAI,
+              phanhoi: val.PhanHoi,
+              sotien: val.SOTIEN
+            };
+          });
+          //xu li thanh 2 lst
+          var user = `${localStorage.getItem("username")}`;
+          var arr1 = [];
+          // var arr2 = [];
+          arr.forEach(function(item) {
+            if (item.tendoi == user) {
+              arr1.push(item);
+            }
+            // if (item.tenbidoi == user) {
+            //   arr2.push(item);
+            // }
+          });
+          // this.lstDoNguoiKhacGui = arr2;
+          this.lstDoBanThanTao = arr1;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
